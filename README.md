@@ -1,3 +1,5 @@
+# earlywarnings
+
 This repository contains the R package toolbox for analysing Early Warning Signals for Critical Transitions. The Toolbox exists for download under different operating systems in R Forge (http://earlywarnings.r-forge.r-project.org/) and also is submitted to CRAN.
 
 From this repository it will be also possible to install the toolbox directly to R by install_git(devtools).
@@ -11,10 +13,18 @@ More can be found on http://www.early-warning-signals.org/
 ## Installing the package
 
 ### Install the package from Github in R
-library(devtools); install_github(repo = "earlywarnings-R", username = "earlywarningtoolbox", subdir = "earlywarnings"
+```{r}
+library(devtools); 
+install_github(repo = "earlywarnings-R", username = "earlywarningtoolbox", subdir = "earlywarnings"
+```
 
 ### Clone the repository & install locally:
+
+Run on command line:
+<pre><code>strong {
+    font-weight: bold;
+}
 git clone git@github.com:earlywarningtoolbox/earlywarnings-R.git
 ./build.sh
-
+</pre></code>
 
