@@ -1,29 +1,32 @@
-# Description: Plot Potential
-#
-# Visualization of the potential function from the movpotential function
-#
-#  Arguments:
-#    @param res output from movpotential function
-#    @param title title text
-#    @param xlab.text xlab text
-#    @param ylab.text ylab text
-#    @param cutoff parameter determining the upper limit of potential for visualizations
-# 
-# Returns:
-#   @return \item{ggplot2}{potential plotted}
-#
-# @export
-#
-# @references Dakos, V., et al (2012)."Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data." \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
-# @author L. Lahti
-# @examples #
-#
-# @keywords early-warning
+#' Description: Plot Potential
+#'
+#' Visualization of the potential function from the movpotential function
+#'
+#'  Arguments:
+#'    @param res output from movpotential function
+#'    @param title title text
+#'    @param xlab.text xlab text
+#'    @param ylab.text ylab text
+#'    @param cutoff parameter determining the upper limit of potential for visualizations
+#' 
+#' importFrom akima interp
+#' importFrom ggplot2 ggplot
+#'
+#' Returns:
+#'   @return \item{ggplot2}{potential plotted}
+#'
+#' @export
+#'
+#' @references Dakos, V., et al (2012)."Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data." \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+#' @author Leo Lahti \email{leo.lahti@@iki.fi}
+#' @examples #
+#'
+#' @keywords early-warning
 
 PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) {
 
-  library(akima)
-  library(ggplot2)
+  #require(akima)
+  #require(ggplot2)
   cut.potential <- max(apply(res$pots, 1, min)) + cutoff*abs(max(apply(res$pots, 1, min))) # Ensure all minima are visualized
   pots <- res$pots
   pots[pots > cut.potential] <- cut.potential
@@ -35,11 +38,12 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
   z <- as.vector(intp$z)
   z[is.na(z)] <- max(na.omit(z))
 
+  potential <- NULL
   df <- data.frame(list(bg.var = xy[,1], phylotype = xy[,2], potential = z))
   bg.var <- NULL
   phylotype <- NULL
 
-  p <- ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + stat_contour(binwidth = 0.2)
+  p <- ggplot2::ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + stat_contour(binwidth = 0.2)
 
   p <- p + xlab(xlab.text) + ylab(ylab.text) + labs(title = title)
 
@@ -89,8 +93,8 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 
 livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), grid.size = 200) {
 
-  library(stats)
-  x=data.frame(x)
+  #require(stats)
+  x <- data.frame(x)
   
   if (is.null(xi)) {
     xi <- seq(min(x), max(x), length = grid.size)

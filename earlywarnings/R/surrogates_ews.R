@@ -44,15 +44,19 @@
 
 surrogates_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","cv","returnrate","densratio"),winsize=50,detrending=c("no","gaussian","linear","first-diff"),bandwidth=NULL,boots=100,logtransform=FALSE,interpolate=FALSE){
 	
-	require(lmtest)
-	require(nortest)
-	require(stats)
-	require(som)
-	require(Kendall)
-	require(KernSmooth)
-	require(moments)
+	#require(lmtest)
+	#require(nortest)
+	#require(stats)
+	#require(som)
+	#require(Kendall)
+	#require(KernSmooth)
+	#require(moments)
 	
-#timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
+	#timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
+
+	skewness <- moments::skewness
+	kurtosis <- moments::kurtosis
+
 	timeseries<-data.matrix(timeseries)
   if (dim(timeseries)[2]==1){
 		Y=timeseries

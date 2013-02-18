@@ -23,6 +23,10 @@
 #'  
 #' @export
 #' 
+#' @importFrom moments skewness
+#' @importFrom moments kurtosis
+#' @importFrom fields image.plot
+#'
 #' @author Vasilis Dakos \email{vasilis.dakos@@gmail.com}
 #' @references Dakos, V., et al (2008). "Slowing down as an early warning signal for abrupt climate change." \emph{Proceedings of the National Academy of Sciences} 105(38): 14308-14312 
 #' 
@@ -40,16 +44,20 @@
 
 sensitivity_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","cv","returnrate","densratio"),winsizerange=c(25,75),incrwinsize=25,detrending=c("no","gaussian","linear","first-diff"),bandwidthrange=c(5,100),incrbandwidth=20,logtransform=FALSE,interpolate=FALSE){
 	
-	require(lmtest)
-	require(nortest)
-	require(stats)
-	require(som)
-	require(Kendall)
-	require(KernSmooth)
-	require(moments)
-	require(fields)
+	#require(lmtest)
+	#require(nortest)
+	#require(stats)
+	#require(som)
+	#require(Kendall)
+	#require(KernSmooth)
+	#require(moments)
+	#require(fields)
+
+  kurtosis <- moments::kurtosis
+  skewness <- moments::skewness
 	
 #timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
+
 	  timeseries<-data.matrix(timeseries)
     if (dim(timeseries)[2]==1){
 		Y=timeseries
@@ -136,11 +144,11 @@ sensitivity_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","
 		# Plot
 		layout(matrix(1:4,2,2))
 		par(font.main=10,mar=(c(4.6,4,0.5,2)+0.2),mgp=c(2,1,0),oma=c(0.5,1,2,1))
-		image.plot(width,tw,Ktauestind,zlim=c(-1,1),xlab="filtering bandwidth",ylab="rolling window size",main="Kendall tau estimate",cex.main=0.8,log="y",nlevel=20,col=rainbow(20))
+		fields::image.plot(width,tw,Ktauestind,zlim=c(-1,1),xlab="filtering bandwidth",ylab="rolling window size",main="Kendall tau estimate",cex.main=0.8,log="y",nlevel=20,col=rainbow(20))
 		ind=which(Ktauestind==max(Ktauestind),arr.ind=TRUE)
 		lines(width[ind[1]],tw[ind[2]],type="p",cex=1.2,pch=17,col=1)
 		hist(Ktauestind,breaks=12,col="lightblue",main=NULL, xlab="Kendall tau estimate", ylab="occurence",border="black",xlim=c(-1,1))
-		image.plot(width,tw,Ktaupind,zlim=c(0,max(Ktaupind)),xlab="filtering bandwidth",ylab="rolling window size",main="Kendall tau p-value",log="y",cex.main=0.8,nlevel=20,col=rainbow(20))
+		fields::image.plot(width,tw,Ktaupind,zlim=c(0,max(Ktaupind)),xlab="filtering bandwidth",ylab="rolling window size",main="Kendall tau p-value",log="y",cex.main=0.8,nlevel=20,col=rainbow(20))
 		lines(width[ind[1]],tw[ind[2]],type="p",cex=1.2,pch=17,col=1)
 		hist(Ktaupind,breaks=12,col="yellow",main=NULL, xlab="Kendall tau p-value", ylab="occurence", border="black",xlim=c(0,max(Ktaupind)))
 		mtext(paste("Indicator ",toupper(indicator)),side=3,line=0.2, outer=TRUE)

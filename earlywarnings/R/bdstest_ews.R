@@ -12,7 +12,7 @@ neps <- length(epsvec)
 print('***********************************************',quote=FALSE)
 print(c('BDS test for ',varname),quote=FALSE)
 print(c('Embedding dimension = ',emb),quote=FALSE)
-BDS.data <- bds.test(StdEpsAll,m=emb,epsvec)
+BDS.data <- tseries::bds.test(StdEpsAll,m=emb,epsvec)
 print('BDS statistics for Nominal Data at each Epsilon',quote=FALSE)
 print(round(BDS.data$statistic,3))
 print('P value based on standard normal',quote=FALSE)
@@ -22,7 +22,7 @@ nobs <- length(StdEpsAll)
 bootmat <- matrix(0,nrow=emb-1,ncol=neps)  # matrix to count extreme BDS values
 for(i in 1:nboot) { # start bootstrap loop
  epsboot <- sample(StdEpsAll,nobs,replace=TRUE)
- BDS.boot <- bds.test(epsboot,m=emb,epsvec)
+ BDS.boot <- tseries::bds.test(epsboot,m=emb,epsvec)
  for(im in 1:(emb-1)) {  # loop over embedding dimensions
    bootvec <- BDS.boot$statistic[im,]
    N.above <- ifelse(bootvec>BDS.data$statistic[im,],1,0)
@@ -48,7 +48,7 @@ print('**********************************************************',quote=FALSE)
 
 #' Description: BDS test Early Warning Signals
 #'
-#' \code{bdstest_ews} is used to estimate the BDS statistic to detect nonlinearity in the residuals of a timeseries after first-difference detrending, fitting an ARMA(p,q) model, and fitting a GARCH(0,1) model. The function is making use of \code{bds.test}.
+#' \code{bdstest_ews} is used to estimate the BDS statistic to detect nonlinearity in the residuals of a timeseries after first-difference detrending, fitting an ARMA(p,q) model, and fitting a GARCH(0,1) model. The function is making use of \code{bds.test} from the tseries package.
 #'
 # Details:
 #' See also \code{bds.test{tseries}} for more details. The function requires the installation of packages \code{tseries} and \code{quadprog} that are not available under Linux and need to be manually installed under Windows.
@@ -91,19 +91,18 @@ print('**********************************************************',quote=FALSE)
 #' \code{\link{movpotential_ews}}; 
 #' \code{\link{livpotential_ews}}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
-# @examples 
-# data(foldbif)
-# bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5,
-# boots=200,logtransform=FALSE,interpolate=FALSE)
+#' @importFrom tseries garch
+#' @examples #
+#' #data(foldbif)
+#' #bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5, boots=200,logtransform=FALSE,interpolate=FALSE)
 #' @keywords early-warning
 #' 
-# MAIN FUNCTION
 bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,1),embdim=3,epsilon=c(0.5,0.75,1),boots=1000,logtransform=FALSE,interpolate=FALSE){
 	
-	require(quadprog)
+	#require(quadprog)
 	
 	timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
-	if (dim(timeseries)[2]==1){
+	if (ncol(timeseries)==1){
 		Y=timeseries
 		timeindex=1:dim(timeseries)[1]
 		}else if(dim(timeseries)[2]==2){
@@ -130,7 +129,7 @@ bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,
 	# Define BDS parameters
 	nboot <- boots
 	emb <- embdim # embedding dimension
-	eps.sd <- sd(Eps1)
+	eps.sd <- sd(as.vector(Eps1))
 	epsvec <- round(eps.sd* epsilon,6)
 
 	# Run BDS with bootstrapping
@@ -160,14 +159,14 @@ bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,
 	# Define BDS parameters
 	nboot <- boots
 	emb <- embdim # embedding dimension
-	eps.sd <- sd(Eps2)
+	eps.sd <- sd(as.vector(Eps2))
 	epsvec <- round(eps.sd*epsilon,6)
 
 	# Run BDS with bootstrapping
 	BDSboot(Eps2,c('ARMA model residuals'),nboot,epsvec,emb)
 
 	# Fit GARCH(0,1) model to detrended data
-	Gfit <- garch(Y,order=c(GARCHorder[1],GARCHorder[2]))
+	Gfit <- tseries::garch(Y,order=c(GARCHorder[1],GARCHorder[2]))
 	print('GARCH(0,1) model fit to detrended data',quote=FALSE)
 	print(Gfit,digits=4)
 
@@ -176,7 +175,7 @@ bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,
 	# Define BDS parameters
 	nboot <- boots
 	emb <- embdim # embedding dimension
-	eps.sd <- sd(Eps3)
+	eps.sd <- sd(as.vector(Eps3))
 	epsvec <- round(eps.sd*epsilon,6)
 
 	# Run BDS with bootstrapping

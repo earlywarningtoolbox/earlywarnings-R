@@ -37,9 +37,11 @@
 #' Dakos, V., et al (2008). "Slowing down as an early warning signal for abrupt climate change." \emph{Proceedings of the National Academy of Sciences} 105(38): 14308-14312 
 #' 
 #' Dakos, V., et al (2012)."Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data." \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010 
-#' @seealso 
-#' \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}}; \code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{\link{movpotential_ews}}; \code{\link{livpotential_ews}}
-# ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
+#' @seealso \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}}; \code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{\link{movpotential_ews}}; \code{\link{livpotential_ews}}; 
+#'
+#' @importFrom moments skewness
+#' @importFrom moments kurtosis
+#'
 #' @examples 
 #'  data(foldbif)
 #'  out=generic_ews(foldbif,winsize=50,detrending="gaussian",
@@ -132,8 +134,8 @@ generic_ews<-function(timeseries,winsize=50,detrending=c("no","gaussian","linear
 		nYR<-ar.ols(nMR[,i],aic= FALSE, order.max=1, dmean=FALSE, 		intercept=FALSE)
 		nARR[i]<-nYR$ar
 # 		nSD[i]<-sapply(nMR[,i], sd, na.rm = TRUE)#sd(nMR[,i], na.rm = TRUE)
-		nSK[i]<-abs(skewness(nMR[,i],na.rm=TRUE))
-	nKURT[i]<-kurtosis(nMR[,i],na.rm=TRUE)
+		nSK[i]<-abs(moments::skewness(nMR[,i],na.rm=TRUE))
+	nKURT[i]<-moments::kurtosis(nMR[,i],na.rm=TRUE)
 	nCV[i]<-nSD[i]/mean(nMR[,i])
 	ACF<-acf(nMR[,i], lag.max = 1, type = c("correlation"), plot=FALSE)
 	nACF[i]<-ACF$acf[2]

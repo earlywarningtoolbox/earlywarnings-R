@@ -141,7 +141,7 @@ ddjnonparam_ews<-function(timeseries,bandwidth=0.6,na=500,logtransform=TRUE,inte
 	dXvec1 <- diff(Y)
 
 	DT <- Tvec1[2]-Tvec1[1]
-	bw <- bandwidth*sd(Xvec1) # bandwidth 
+	bw <- bandwidth*sd(as.vector(Xvec1)) # bandwidth 
 	alow <- min(Xvec1)
 	ahigh <- max(Xvec1)
 	na <- na
