@@ -13,6 +13,9 @@ More can be found on http://www.early-warning-signals.org/
 ## Installing the package
 
 ### Install the package from Github in R
+
+Note: if dependencies are missing you may wish to run the installation.script first
+
 ```{r}
 library(devtools); 
 install_github(repo = "earlywarnings-R", username = "earlywarningtoolbox", subdir = "earlywarnings"
