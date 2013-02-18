@@ -1,0 +1,6 @@
+*.Rout
+*~
+*.tar.gz
+build.wur.sh
+*.Rcheck
+
