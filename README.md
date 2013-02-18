@@ -21,8 +21,7 @@ install_github(repo = "earlywarnings-R", username = "earlywarningtoolbox", subdi
 ### Clone the repository & install locally:
 
 Run on command line:
-<pre><code>
-git clone git@github.com:earlywarningtoolbox/earlywarnings-R.git
+<pre><code>git clone git@github.com:earlywarningtoolbox/earlywarnings-R.git
 ./build.sh
 </pre></code>
 
