@@ -1,0 +1,1108 @@
+\nonstopmode{}
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8,latin1]{inputenc}
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `earlywarnings'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Early Warning Signals Toolbox for Detecting Critical Transitions
+in Timeseries}
+\item[Version]\AsIs{1.0.3}
+\item[Date]\AsIs{2013-02-13}
+\item[Author]\AsIs{Vasilis Dakos }\email{vasilis.dakos@gmail.com}\AsIs{, with contributions from S.R.
+Carpenter, T. Cline, L. Lahti}
+\item[Maintainer]\AsIs{Vasilis Dakos }\email{vasilis.dakos@gmail.com}\AsIs{}
+\item[Description]\AsIs{The Early-Warning-Signals Toolbox provides methods for estimating
+statistical changes in timeseries that can be used for identifying nearby
+critical transitions. Based on Dakos et al (2012) Methods for Detecting
+Early Warnings of Critical Transitions in Time Series Illustrated Using
+Simulated Ecological Data. PLoS ONE 7(7):e41010}
+\item[Depend]\AsIs{R (>+ 2.14.0), lmtest, nortest, stats, som, Kendall,
+KernSmooth, moments, fields, spam, tseries, quadprog, fractal,
+akima, ggplot2}
+\item[LazyLoad]\AsIs{yes}
+\item[URL]\AsIs{}\url{http://www.early-warning-signals.org,}\AsIs{ }\url{http://www.vasilisdakos.net}\AsIs{}
+\item[License]\AsIs{GPL (>= 2)}
+\item[Collate]\AsIs{'BDSboot.R' 'bdstest\_ews.R' 'ch\_ews.R' 'ddjnonparam\_ews.R'
+'earlywarnings-internal.R' 'generic\_ews.R' 'sensitivity\_ews.R'
+'surrogates\_ews.R' 'potential\_ews.R'}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{bdstest\_ews}{Description: BDS test Early Warning Signals}{bdstest.Rul.ews}
+\keyword{early-warning}{bdstest\_ews}
+%
+\begin{Description}\relax
+\code{bdstest\_ews} is used to estimate the BDS statistic
+to detect nonlinearity in the residuals of a timeseries
+after first-difference detrending, fitting an ARMA(p,q)
+model, and fitting a GARCH(0,1) model. The function is
+making use of \code{bds.test}.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  bdstest_ews(timeseries, ARMAoptim = TRUE,
+    ARMAorder = c(1, 0), GARCHorder = c(0, 1), embdim = 3,
+    epsilon = c(0.5, 0.75, 1), boots = 1000,
+    logtransform = FALSE, interpolate = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{timeseries}] a numeric vector of the observed
+univariate timeseries values or a numeric matrix where
+the first column represents the time index and the second
+the observed timeseries values. Use vectors/matrices with
+headings.
+
+\item[\code{ARMAoptim}] is the order of the \code{ARMA(p,q)}
+model to be fitted on the original timeseries. If TRUE
+the best ARMA model based on AIC is applied. If FALSE the
+\code{ARMAorder} is used.
+
+\item[\code{ARMAorder}] is the order of the \code{AR(p)} and
+\code{MA(q)} process to be fitted on the original
+timeseries. Default is \code{p=1} \code{q=0}.
+
+\item[\code{GARCHorder}] fits a GARCH model on the original
+timeseries where \code{GARCHorder[1]} is the GARCH part
+and \code{GARCHorder[2]} is the ARCH part.
+
+\item[\code{embdim}] is the embedding dimension (2, 3,...
+\code{embdim}) up to which the BDS test will be estimated
+(must be numeric). Default value is 3.
+
+\item[\code{epsilon}] is a numeric vector that is used to scale
+the standard deviation of the timeseries. The BDS test is
+computed for each element of epsilon. Default is 0.5,
+0.75 and 1.
+
+\item[\code{boots}] is the number of bootstraps performed to
+estimate significance p values for the BDS test. Default
+is 1000.
+
+\item[\code{logtransform}] logical. If TRUE data are
+logtransformed prior to analysis as log(X+1). Default is
+FALSE.
+
+\item[\code{interpolate}] logical. If TRUE linear interpolation
+is applied to produce a timeseries of equal length as the
+original. Default is FALSE (assumes there are no gaps in
+the timeseries).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+See also \code{bds.test\{tseries\}} for more details. The
+function requires the installation of packages
+\code{tseries} and \code{quadprog} that are not available
+under Linux and need to be manually installed under
+Windows.
+
+Example to run after installing the mentioned packages:
+
+data(foldbif)
+bdstest\_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5,
+boots=200,logtransform=FALSE,interpolate=FALSE)
+\end{Details}
+%
+\begin{Value}
+\code{bdstest\_ews} returns output on the R console that
+summarizes the BDS test statistic for all embedding
+dimensions and \code{epsilon} values used, and for
+first-differenced data, ARMA(p.q) residuals, and
+GARCH(0,1) residuals). Also the significance p values are
+returned estimated both by comparing to a standard normal
+distribution and by bootstrapping.
+
+In addition, \code{bdstest\_ews} returns a plot with the
+original timeseries, the residuals after
+first-differencing, and fitting the ARMA(p,q) and
+GARCH(0,1) models. Also the autocorrelation
+\code{\LinkA{acf}{acf}} and partial autocorrelation
+\code{\LinkA{pacf}{pacf}} functions are estimated serving as
+guides for the choice of lags of the linear models fitted
+to the data.
+\end{Value}
+%
+\begin{Author}\relax
+S. R. Carpenter, modified by V. Dakos
+\end{Author}
+%
+\begin{References}\relax
+J. B. Cromwell, W. C. Labys and M. Terraza (1994):
+Univariate Tests for Time Series Models, Sage, Thousand
+Oaks, CA, pages 32-36.
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}}; \code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};
+\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}}; \code{\LinkA{ch\_ews}{ch.Rul.ews}};
+\code{\LinkA{movpotential\_ews}{movpotential.Rul.ews}};
+\code{\LinkA{livpotential\_ews}{livpotential.Rul.ews}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{ch\_ews}{Description: Conditional Heteroskedasticity}{ch.Rul.ews}
+\keyword{early-warning}{ch\_ews}
+%
+\begin{Description}\relax
+\code{ch\_ews} is used to estimate changes in conditional
+heteroskedasticity within rolling windows along a
+timeseries
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  ch_ews(timeseries, winsize = 10, alpha = 0.1,
+    optim = TRUE, lags = 4, logtransform = FALSE,
+    interpolate = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{timeseries}] a numeric vector of the observed
+timeseries values or a numeric matrix where the first
+column represents the time index and the second the
+observed timeseries values. Use vectors/matrices with
+headings.
+
+\item[\code{winsize}] is length of the rolling window expressed
+as percentage of the timeseries length (must be numeric
+between 0 and 100). Default is 10\%.
+
+\item[\code{alpha}] is the significance threshold (must be
+numeric). Default is 0.1.
+
+\item[\code{optim}] logical. If TRUE an autoregressive model is
+fit to the data within the rolling window using AIC
+optimization. Otherwise an autoregressive model of
+specific order \code{lags} is selected.
+
+\item[\code{lags}] is a parameter that determines the specific
+order of an autoregressive model to fit the data. Default
+is 4.
+
+\item[\code{logtransform}] logical. If TRUE data are
+logtransformed prior to analysis as log(X+1). Default is
+FALSE.
+
+\item[\code{interpolate}] logical. If TRUE linear interpolation
+is applied to produce a timeseries of equal length as the
+original. Default is FALSE (assumes there are no gaps in
+the timeseries).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+see ref below
+\end{Details}
+%
+\begin{Value}
+\code{ch\_ews} returns a matrix that contains:
+
+\begin{ldescription}
+\item[\code{time}] the time index.
+
+\item[\code{r.squared}] the R2 values of the regressed
+residuals.
+
+\item[\code{critical.value}] the chi-square critical value based
+on the desired \code{alpha} level for 1 degree of freedom
+divided by the number of residuals used in the
+regression.
+
+\item[\code{test.result}] logical. It indicates whether
+conditional heteroskedasticity was significant.
+
+\item[\code{ar.fit.order}] the order of the specified
+autoregressive model- only informative if \code{optim}
+FALSE was selected.
+
+\end{ldescription}
+In addition, \code{ch\_ews} plots the original timeseries
+and the R2 where the level of significance is also
+indicated.
+\end{Value}
+%
+\begin{Author}\relax
+T. Cline, modified by V. Dakos
+\end{Author}
+%
+\begin{References}\relax
+Seekell, D. A., et al (2011). "Conditional
+heteroscedasticity as a leading indicator of ecological
+regime shifts." \emph{American Naturalist} 178(4):
+442-451
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}}; \code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};
+\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}}; \code{\LinkA{ch\_ews}{ch.Rul.ews}};
+\code{movpotential\_ews}; \code{livpotential\_ews}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(foldbif)
+out=ch_ews(foldbif, winsize=50, alpha=0.05, optim=TRUE, lags)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{circulation}{Overturning of thermolhaline circulation}{circulation}
+\keyword{datasets}{circulation}
+%
+\begin{Description}\relax
+Simulated timeseries of salinity from an ocean circulation model
+
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(circulation)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with 783 observations on the following 2 variables.
+\begin{description}
+
+\item[\code{time}] a numeric vector
+\item[\code{x}] a numeric vector
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+Simulated timeseries of salinity from an ocean circulation model as used in Dakos et al (2008), see source below. At the end of the timeseries a critical transition occurs that simulates the overturning of the thermohalien circulation.
+
+\end{Details}
+%
+\begin{Source}\relax
+Dakos et al (2008), Slowing down as an early warning signal for abrup climate change, PNAS 105(38), 14308-14312.
+
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{ddjnonparam\_ews}{Description: Drift Diffusion Jump Nonparametrics Early Warning Signals}{ddjnonparam.Rul.ews}
+\keyword{early-warning}{ddjnonparam\_ews}
+%
+\begin{Description}\relax
+\code{ddjnonparam\_ews} is used to compute
+nonparametrically conditional variance, drift, diffusion
+and jump intensity in a timeseries. It also interpolates
+to obtain the evolution of the nonparametric statistics
+in time.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  ddjnonparam_ews(timeseries, bandwidth = 0.6, na = 500,
+    logtransform = TRUE, interpolate = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{timeseries}] a numeric vector of the observed
+univariate timeseries values or a numeric matrix where
+the first column represents the time index and the second
+the observed timeseries values. Use vectors/matrices with
+headings.
+
+\item[\code{bandwidth}] is the bandwidht of the kernel regressor
+(must be numeric). Default is 0.6.
+
+\item[\code{na}] is the number of points for computing the
+kernel (must be numeric). Default is 500.
+
+\item[\code{logtransform}] logical. If TRUE data are
+logtransformed prior to analysis as log(X+1). Default is
+FALSE.
+
+\item[\code{interpolate}] logical. If TRUE linear interpolation
+is applied to produce a timeseries of equal length as the
+original. Default is FALSE (assumes there are no gaps in
+the timeseries).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+The approach is based on estimating terms of a
+drift-diffusion-jump model as a surrogate for the unknown
+true data generating process: [1] \eqn{dx = f(x,\theta)dt
+  + g(x,\theta)dW + dJ}{} Here x is the state variable, f()
+and g() are nonlinear functions, dW is a Wiener process
+and dJ is a jump process. Jumps are large, one-step,
+positive or negative shocks that are uncorrelated in
+time.
+\end{Details}
+%
+\begin{Value}
+\code{ddjnonparam\_ews} returns an object with elements:
+
+\begin{ldescription}
+\item[\code{avec}] is the mesh for which values of the
+nonparametric statistics are estimated.
+
+\item[\code{S2.vec}] is the conditional variance of the
+timeseries \code{x} over \code{avec}.
+
+\item[\code{TotVar.dx.vec}] is the total variance of \code{dx}
+over \code{avec}.
+
+\item[\code{Diff2.vec}] is the diffusion estimated as
+\code{total variance - jumping intensity} vs
+\code{avec}.
+
+\item[\code{LamdaZ.vec}] is the jump intensity over
+\code{avec}.
+
+\item[\code{Tvec1}] is the timeindex.
+
+\item[\code{S2.t}] is the conditional variance of the timeseries
+\code{x} data over \code{Tvec1}.
+
+\item[\code{TotVar.t}] is the total variance of \code{dx} over
+\code{Tvec1}.
+
+\item[\code{Diff2.t}] is the diffusion over \code{Tvec1}.
+
+\item[\code{Lamda.t}] is the jump intensity over \code{Tvec1}.
+
+\end{ldescription}
+In addition, \code{ddjnonparam\_ews} returns a first plot
+with the original timeseries and the residuals after
+first-differencing. A second plot shows the nonparametric
+conditional variance, total variance, diffusion and jump
+intensity over the data, and a third plot the same
+nonparametric statistics over time.
+\end{Value}
+%
+\begin{Author}\relax
+S. R. Carpenter, modified by V. Dakos
+\end{Author}
+%
+\begin{References}\relax
+Carpenter, S. R. and W. A. Brock (2011). "Early warnings
+of unknown nonlinear shifts: a nonparametric approach."
+\emph{Ecology} 92(12): 2196-2201
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}};
+\code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}};
+\code{\LinkA{ch\_ews}{ch.Rul.ews}}; \code{\LinkA{movpotential\_ews}{movpotential.Rul.ews}};
+\code{\LinkA{livpotential\_ews}{livpotential.Rul.ews}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(foldbif)
+output<-ddjnonparam_ews(foldbif,bandwidth=0.6,na=500,
+logtransform=TRUE,interpolate=FALSE)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{foldbif}{Simulated fold bifurcation time series}{foldbif}
+\keyword{datasets}{foldbif}
+%
+\begin{Description}\relax
+Simulated time series of a transition to an alternative state.
+
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(foldbif)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with 970 observations on the following variable.
+\begin{description}
+
+\item[\code{x}] a numeric vector
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+Simulated time series of a transition to an alternative state derived from a simple overharvesting model as used in Dakos et al (2012), see source below.
+
+\end{Details}
+%
+\begin{Source}\relax
+Dakos et al (2012) Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data. PLoS ONE 7(7):e41010
+
+\end{Source}
+\inputencoding{utf8}
+\HeaderA{generic\_ews}{Description: Generic Early Warning Signals}{generic.Rul.ews}
+\keyword{early-warning}{generic\_ews}
+%
+\begin{Description}\relax
+\code{generic\_ews} is used to estimate statistical
+moments within rolling windows along a timeserie
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  generic_ews(timeseries, winsize = 50,
+    detrending = c("no", "gaussian", "linear", "first-diff"),
+    bandwidth = NULL, logtransform = FALSE,
+    interpolate = FALSE, AR_n = FALSE,
+    powerspectrum = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{timeseries}] a numeric vector of the observed
+univariate timeseries values or a numeric matrix where
+the first column represents the time index and the second
+the observed timeseries values. Use vectors/matrices with
+headings. If the powerspectrum is to be plotted as well,
+the timeseries lenght should be even number.
+
+\item[\code{winsize}] is the size of the rolling window
+expressed as percentage of the timeseries length (must be
+numeric between 0 and 100). Default is 50\%.
+
+\item[\code{bandwidth}] is the bandwidth used for the Gaussian
+kernel when gaussian filtering is applied. It is
+expressed as percentage of the timeseries length (must be
+numeric between 0 and 100). Alternatively it can be given
+by the bandwidth selector \code{\LinkA{bw.nrd0}{bw.nrd0}}
+(Default).
+
+\item[\code{detrending}] the timeseries can be
+detrended/filtered prior to analysis. There are four
+options: \code{gaussian} filtering, \code{linear}
+detrending and \code{first-differencing}. Default is
+\code{no} detrending.
+
+\item[\code{logtransform}] logical. If TRUE data are
+logtransformed prior to analysis as log(X+1). Default is
+FALSE.
+
+\item[\code{interpolate}] logical. If TRUE linear interpolation
+is applied to produce a timeseries of equal length as the
+original. Default is FALSE (assumes there are no gaps in
+the timeseries).
+
+\item[\code{AR\_n}] logical. If TRUE the best fitted AR(n) model
+is fitted to the data. Default is FALSE.
+
+\item[\code{powerspectrum}] logical. If TRUE the power spectrum
+within each rolling window is plotted. Default is FALSE.
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+see ref below
+\end{Details}
+%
+\begin{Value}
+\code{generic\_ews} returns a matrix that contains:
+
+\begin{ldescription}
+\item[\code{tim}] the time index.
+
+\item[\code{ar1}] the \code{autoregressive coefficient ar(1)} of
+a first order AR model fitted on the data within the
+rolling window.
+
+\item[\code{sd}] the \code{standard deviation} of the data
+estimated within each rolling window.
+
+\item[\code{sk}] the \code{skewness} of the data estimated
+within each rolling window.
+
+\item[\code{kurt}] the \code{kurtosis} of the data estimated
+within each rolling window.
+
+\item[\code{cv}] the \code{coefficient of variation} of the data
+estimated within each rolling window.
+
+\item[\code{returnrate}] the return rate of the data estimated
+as \code{1-ar(1)} cofficient within each rolling window.
+
+\item[\code{densratio}] the \code{density ratio} of the power
+spectrum of the data estimated as the ratio of low
+frequencies over high frequencies within each rolling
+window.
+
+\item[\code{acf1}] the \code{autocorrelation at first lag} of
+the data estimated within each rolling window.
+
+\end{ldescription}
+In addition, \code{generic\_ews} returns three plots. The
+first plot contains the original data, the
+detrending/filtering applied and the residuals (if
+selected), and all the moment statistics. For each
+statistic trends are estimated by the nonparametric
+Kendall tau correlation.  The second plot, if asked,
+quantifies resilience indicators fitting AR(n) selected
+by the Akaike Information Criterion. The third plot, if
+asked, is the power spectrum estimated by
+\code{\LinkA{spec.ar}{spec.ar}} for all frequencies within each
+rolling window.
+\end{Value}
+%
+\begin{Author}\relax
+Vasilis Dakos \email{vasilis.dakos@gmail.com}
+\end{Author}
+%
+\begin{References}\relax
+Ives, A. R. (1995). "Measuring resilience in stochastic
+systems." \emph{Ecological Monographs} 65: 217-233
+
+Dakos, V., et al (2008). "Slowing down as an early
+warning signal for abrupt climate change."
+\emph{Proceedings of the National Academy of Sciences}
+105(38): 14308-14312
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}}; \code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};
+\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}}; \code{\LinkA{ch\_ews}{ch.Rul.ews}};
+\code{\LinkA{movpotential\_ews}{movpotential.Rul.ews}};
+\code{\LinkA{livpotential\_ews}{livpotential.Rul.ews}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(foldbif)
+ out=generic_ews(foldbif,winsize=50,detrending="gaussian",
+ bandwidth=5,logtransform=FALSE,interpolate=FALSE)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{livpotential\_ews}{Description: Potential Analysis}{livpotential.Rul.ews}
+\keyword{early-warning}{livpotential\_ews}
+%
+\begin{Description}\relax
+\code{livpotential\_ews} performs one-dimensional
+potential estimation derived from a uni-variate
+timeseries
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  livpotential_ews(x, std = 1, bw = -1, xi = NULL,
+    weights = c(), grid.size = 200)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] data vector
+
+\item[\code{std}] the standard deviation of the noise (defaults
+to 1, so then you use scaled potentials
+
+\item[\code{bw}] bandwidth for kernel estimation
+
+\item[\code{xi}] x values at which the potential is estimated
+
+\item[\code{weights}] optional weights in ksdensity (used by
+movpotentials).
+
+\item[\code{grid.size}] grid size
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+see ref below
+\end{Details}
+%
+\begin{Value}
+\code{livpotential} returns a list with the following
+elements:
+
+\begin{ldescription}
+\item[\code{xi}] the grid of points on which the potential is
+estimated
+
+\item[\code{pot}] the actual value of the potential
+
+\item[\code{minima}] the grid points at which the potential has
+minimum values
+
+\item[\code{maxima}] the grid points at which the potential has
+maximum values
+
+\item[\code{bw}] bandwidth of kernel used
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Based on Matlab code from Egbert van Nes modified by Leo
+Lahti. Implemented in early warnings package by V. Dakos.
+\end{Author}
+%
+\begin{References}\relax
+Livina, VN, F Kwasniok, and TM Lenton, 2010. Potential
+analysis reveals changing number of climate states during
+the last 60 kyr . \emph{Climate of the Past}, 6, 77-82.
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}};
+\code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}};
+\code{\LinkA{ch\_ews}{ch.Rul.ews}};\code{\LinkA{movpotential\_ews}{movpotential.Rul.ews}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(foldbif)
+res <- livpotential_ews(foldbif)
+plot(res$xi, res$pot)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{movpotential\_ews}{Description: Moving Average Potential}{movpotential.Rul.ews}
+\keyword{early-warning}{movpotential\_ews}
+%
+\begin{Description}\relax
+\code{movpotential\_ews} reconstructs a potential derived
+from data along a gradient of a given parameter the
+\code{movpotential\_ews} calculates the potential for
+values that correspond to a particular parameter. see ref
+below
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  movpotential_ews(X, param, sdwindow = NULL, bw = -1,
+    minparam = NULL, maxparam = NULL, npoints = 50,
+    thres = 0.002, std = 1, grid.size = 200, cutoff = 0.5)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{X}] a vector of the X observations of the state
+variable of interest
+
+\item[\code{param}] parameter values that correspond to the X
+observations
+
+\item[\code{sdwindow}] window for smoothing kernels (over the
+\code{param} axis)
+
+\item[\code{bw}] bandwidth used for smoothing kernels
+
+\item[\code{minparam}] minimum value of parameter on which to
+estimate potential
+
+\item[\code{maxparam}] maximum value of parameter on which to
+estimate potential
+
+\item[\code{npoints}] number of potentials
+
+\item[\code{thres}] threshold for local minima to be discarded
+
+\item[\code{std}] std
+
+\item[\code{grid.size}] number of evaluation points
+
+\item[\code{cutoff}] the cuttof value to estimate minima and
+maxima in the potential
+
+Returns:
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+A list with the following elements:
+
+\begin{ldescription}
+\item[\code{pars}] values of the covariate parameter as matrix
+
+\item[\code{xis}] values of the x as matrix
+
+\item[\code{pots}] smoothed potentials
+
+\item[\code{mins}] minima in the densities (-potentials;
+neglecting local optima)
+
+\item[\code{maxs}] maxima in densities (-potentials; neglecting
+local optima)
+
+\item[\code{plot}] an object that displays the potential
+estimated in 2D
+\end{ldescription}
+\end{Value}
+%
+\begin{Author}\relax
+Based on Matlab code from Egbert van Nes modified by Leo
+Lahti. Implemented in early warnings package by V. Dakos.
+\end{Author}
+%
+\begin{References}\relax
+Hirota, M., Holmgren, M., van Nes, E.H. \& Scheffer, M.
+(2011). Global resilience of tropical forest and savanna
+to critical transitions. \emph{Science}, 334, 232-235.
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}};
+\code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}};
+\code{\LinkA{ch\_ews}{ch.Rul.ews}}; \code{livpotential\_ews}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
+ param = seq(0,5,length=3000)
+ res <- movpotential_ews(X, param, npoints = 100, thres = 0.003)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{sensitivity\_ews}{Description: Sensitivity Early Warning Signals}{sensitivity.Rul.ews}
+\keyword{early-warning}{sensitivity\_ews}
+%
+\begin{Description}\relax
+\code{sensitivity\_ews} is used to estimate trends in
+statistical moments for different sizes of rolling
+windows along a timeseries. The trends are estimated by
+the nonparametric Kendall tau correlation coefficient.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  sensitivity_ews(timeseries,
+    indicator = c("ar1", "sd", "acf1", "sk", "kurt", "cv", "returnrate", "densratio"),
+    winsizerange = c(25, 75), incrwinsize = 25,
+    detrending = c("no", "gaussian", "linear", "first-diff"),
+    bandwidthrange = c(5, 100), incrbandwidth = 20,
+    logtransform = FALSE, interpolate = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{timeseries}] a numeric vector of the observed
+univariate timeseries values or a numeric matrix where
+the first column represents the time index and the second
+the observed timeseries values. Use vectors/matrices with
+headings.
+
+\item[\code{indicator}] is the statistic (leading indicator)
+selected for which the sensitivity analysis is perfomed.
+Currently, the indicators supported are: \code{ar1}
+autoregressive coefficient of a first order AR model,
+\code{sd} standard deviation, \code{acf1} autocorrelation
+at first lag, \code{sk} skewness, \code{kurt} kurtosis,
+\code{cv} coeffcient of variation, \code{returnrate}, and
+\code{densratio} density ratio of the power spectrum at
+low frequencies over high frequencies.
+
+\item[\code{winsizerange}] is the range of the rolling window
+sizes expressed as percentage of the timeseries length
+(must be numeric between 0 and 100). Default is 25\% -
+75\%.
+
+\item[\code{incrwinsize}] increments the rolling window size
+(must be numeric between 0 and 100). Default is 25.
+
+\item[\code{detrending}] the timeseries can be
+detrended/filtered. There are three options:
+\code{gaussian} filtering, \code{linear} detrending and
+\code{first-differencing}. Default is \code{no}
+detrending.
+
+\item[\code{bandwidthrange}] is the range of the bandwidth used
+for the Gaussian kernel when gaussian filtering is
+selected. It is expressed as percentage of the timeseries
+length (must be numeric between 0 and 100). Default is
+5\% - 100\%.
+
+\item[\code{incrbandwidth}] is the size to increment the
+bandwidth used for the Gaussian kernel when gaussian
+filtering is applied. It is expressed as percentage of
+the timeseries length (must be numeric between 0 and
+100). Default is 20.
+
+\item[\code{logtransform}] logical. If TRUE data are
+logtransformed prior to analysis as log(X+1). Default is
+FALSE.
+
+\item[\code{interpolate}] logical. If TRUE linear interpolation
+is applied to produce a timeseries of equal length as the
+original. Default is FALSE (assumes there are no gaps in
+the timeseries).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+see ref below
+\end{Details}
+%
+\begin{Value}
+\code{sensitivity\_ews} returns a matrix that contains the
+Kendall tau rank correlation estimates for the rolling
+window sizes (rows) and bandwidths (columns), if
+\code{gaussian filtering} is selected.
+
+In addition, \code{sensitivity\_ews} returns a plot with
+the Kendall tau estimates and their p-values for the
+range of rolling window sizes used, together with a
+histogram of the distributions of the statistic and its
+significance. When \code{gaussian filtering} is chosen, a
+contour plot is produced for the Kendall tau estimates
+and their p-values for the range of both rolling window
+sizes and bandwidth used. A reverse triangle indicates
+the combination of the two parameters for which the
+Kendall tau was the highest
+\end{Value}
+%
+\begin{Author}\relax
+Vasilis Dakos \email{vasilis.dakos@gmail.com}
+\end{Author}
+%
+\begin{References}\relax
+Dakos, V., et al (2008). "Slowing down as an early
+warning signal for abrupt climate change."
+\emph{Proceedings of the National Academy of Sciences}
+105(38): 14308-14312
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}}; \code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};
+\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}}; \code{\LinkA{ch\_ews}{ch.Rul.ews}};
+\code{\LinkA{movpotential\_ews}{movpotential.Rul.ews}};
+\code{\LinkA{livpotential\_ews}{livpotential.Rul.ews}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(foldbif)
+output=sensitivity_ews(foldbif,indicator="sd",detrending="gaussian",
+incrwinsize=25,incrbandwidth=20)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{surrogates\_ews}{Description: Surrogates Early Warning Signals}{surrogates.Rul.ews}
+\keyword{early-warning}{surrogates\_ews}
+%
+\begin{Description}\relax
+\code{surrogates\_ews} is used to estimate distributions
+of trends in statistical moments from different surrogate
+timeseries generated after fitting an ARMA(p,q) model on
+the data. The trends are estimated by the nonparametric
+Kendall tau correlation coefficient and can be compared
+to the trends estimated in the original timeseries to
+produce probabilities of false positives.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+  surrogates_ews(timeseries,
+    indicator = c("ar1", "sd", "acf1", "sk", "kurt", "cv", "returnrate", "densratio"),
+    winsize = 50,
+    detrending = c("no", "gaussian", "linear", "first-diff"),
+    bandwidth = NULL, boots = 100, logtransform = FALSE,
+    interpolate = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{timeseries}] a numeric vector of the observed
+univariate timeseries values or a numeric matrix where
+the first column represents the time index and the second
+the observed timeseries values. Use vectors/matrices with
+headings.
+
+\item[\code{indicator}] is the statistic (leading indicator)
+selected for which the surrogate timeseries are produced.
+Currently, the indicators supported are: \code{ar1}
+autoregressive coefficient of a first order AR model,
+\code{sd} standard deviation, \code{acf1} autocorrelation
+at first lag, \code{sk} skewness, \code{kurt} kurtosis,
+\code{cv} coeffcient of variation, \code{returnrate}, and
+\code{densratio} density ratio of the power spectrum at
+low frequencies over high frequencies.
+
+\item[\code{winsize}] is the size of the rolling window
+expressed as percentage of the timeseries length (must be
+numeric between 0 and 100). Default valuise 50\%.
+
+\item[\code{detrending}] the timeseries can be
+detrended/filtered prior to analysis. There are three
+options: \code{gaussian} filtering, \code{linear}
+detrending and \code{first-diff}erencing. Default is
+\code{no} detrending.
+
+\item[\code{bandwidth}] is the bandwidth used for the Gaussian
+kernel when gaussian filtering is selected. It is
+expressed as percentage of the timeseries length (must be
+numeric between 0 and 100). Alternatively it can be given
+by the bandwidth selector \code{\LinkA{bw.nrd0}{bw.nrd0}}
+(Default).
+
+\item[\code{boots}] the number of surrogate data. Default is
+100.
+
+\item[\code{logtransform}] logical. If TRUE data are
+logtransformed prior to analysis as log(X+1). Default is
+FALSE.
+
+\item[\code{interpolate}] logical. If TRUE linear interpolation
+is applied to produce a timeseries of equal length as the
+original. Default is FALSE (assumes there are no gaps in
+the timeseries).
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+see ref below
+\end{Details}
+%
+\begin{Value}
+\code{surrogates\_ews} returns a matrix that contains:
+
+\begin{ldescription}
+\item[\code{Kendall tau estimate original}] the trends of the
+original timeseries.
+
+\item[\code{Kendall tau p-value original}] the p-values of the
+trends of the original timeseries.
+
+\item[\code{Kendall tau estimate surrogates}] the trends of the
+surrogate timeseries.
+
+\item[\code{Kendall tau p-value surrogates}] the associated
+p-values of the trends of the surrogate timeseries.
+
+\item[\code{significance p}] the p-value for the original
+Kendall tau rank correlation estimate compared to the
+surrogates.
+
+\end{ldescription}
+In addition, \code{surrogates\_ews} returns a plot with
+the distribution of the surrogate Kendall tau estimates
+and the Kendall tau estimate of the original series.
+Vertical lines indicate the 5\% and 95\% significance
+levels.
+\end{Value}
+%
+\begin{Author}\relax
+Vasilis Dakos \email{vasilis.dakos@gmail.com}
+\end{Author}
+%
+\begin{References}\relax
+Dakos, V., et al (2008). "Slowing down as an early
+warning signal for abrupt climate change."
+\emph{Proceedings of the National Academy of Sciences}
+105(38): 14308-14312
+
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series
+Illustrated Using Simulated Ecological Data." \emph{PLoS
+ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{generic\_ews}{generic.Rul.ews}}; \code{\LinkA{ddjnonparam\_ews}{ddjnonparam.Rul.ews}};
+\code{\LinkA{bdstest\_ews}{bdstest.Rul.ews}}; \code{\LinkA{sensitivity\_ews}{sensitivity.Rul.ews}};
+\code{\LinkA{surrogates\_ews}{surrogates.Rul.ews}}; \code{\LinkA{ch\_ews}{ch.Rul.ews}};
+\code{\LinkA{movpotential\_ews}{movpotential.Rul.ews}};
+\code{\LinkA{livpotential\_ews}{livpotential.Rul.ews}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+data(foldbif);
+output=surrogates_ews(foldbif,indicator="sd",winsize=50,detrending="gaussian",
+bandwidth=10,boots=200,logtransform=FALSE,interpolate=FALSE)
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{YD2PB\_grayscale}{Younger Dryas to PreBoreal transition}{YD2PB.Rul.grayscale}
+\keyword{datasets}{YD2PB\_grayscale}
+%
+\begin{Description}\relax
+Grayscale paleodata of the exit from the Younger Dryas
+
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+data(YD2PB_grayscale)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Format}
+A data frame with 2111 observations on the following 2 variables.
+\begin{description}
+
+\item[\code{time}] a numeric vector
+\item[\code{x}] a numeric vector
+
+\end{description}
+
+\end{Format}
+%
+\begin{Details}\relax
+Grayscale paleodata as proxy of exit from Younger Dryas as used in Dakos et al (2008), see source below.
+
+\end{Details}
+%
+\begin{Source}\relax
+Dakos et al (2008), Slowing down as an early warning signal for abrup climate change, PNAS 105(38), 14308-14312.
+
+\end{Source}
+\printindex{}
+\end{document}

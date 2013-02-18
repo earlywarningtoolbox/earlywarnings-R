@@ -1,0 +1,295 @@
+
+R version 2.15.1 (2012-06-22) -- "Roasted Marshmallows"
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-apple-darwin9.8.0/x86_64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "earlywarnings"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> library('earlywarnings')
+> 
+> assign(".oldSearch", search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("ch_ews")
+> ### * ch_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ch_ews
+> ### Title: Description: Conditional Heteroskedasticity
+> ### Aliases: ch_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> data(foldbif)
+> out=ch_ews(foldbif, winsize=50, alpha=0.05, optim=TRUE, lags)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("ddjnonparam_ews")
+> ### * ddjnonparam_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: ddjnonparam_ews
+> ### Title: Description: Drift Diffusion Jump Nonparametrics Early Warning
+> ###   Signals
+> ### Aliases: ddjnonparam_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> data(foldbif)
+> output<-ddjnonparam_ews(foldbif,bandwidth=0.6,na=500,
++ logtransform=TRUE,interpolate=FALSE)
+Warning: sd(<matrix>) is deprecated.
+ Use apply(*, 2, sd) instead.
+Loading required package: KernSmooth
+KernSmooth 2.23 loaded
+Copyright M. P. Wand 1997-2009
+dev.new(): using pdf(file="Rplots1.pdf")
+dev.new(): using pdf(file="Rplots2.pdf")
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:KernSmooth’
+
+> nameEx("generic_ews")
+> ### * generic_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: generic_ews
+> ### Title: Description: Generic Early Warning Signals
+> ### Aliases: generic_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> data(foldbif)
+>  out=generic_ews(foldbif,winsize=50,detrending="gaussian",
++  bandwidth=5,logtransform=FALSE,interpolate=FALSE)
+Loading required package: lmtest
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following object(s) are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Loading required package: nortest
+Loading required package: som
+Loading required package: Kendall
+Loading required package: KernSmooth
+Loading required package: moments
+dev.new(): using pdf(file="Rplots3.pdf")
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:moments’, ‘package:KernSmooth’, ‘package:Kendall’,
+  ‘package:som’, ‘package:nortest’, ‘package:lmtest’, ‘package:zoo’
+
+> nameEx("livpotential_ews")
+> ### * livpotential_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: livpotential_ews
+> ### Title: Description: Potential Analysis
+> ### Aliases: livpotential_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> data(foldbif)
+> res <- livpotential_ews(foldbif)
+> plot(res$xi, res$pot)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("movpotential_ews")
+> ### * movpotential_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: movpotential_ews
+> ### Title: Description: Moving Average Potential
+> ### Aliases: movpotential_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
+>  param = seq(0,5,length=3000)
+>  res <- movpotential_ews(X, param, npoints = 100, thres = 0.003)
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:ggplot2’, ‘package:akima’
+
+> nameEx("sensitivity_ews")
+> ### * sensitivity_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: sensitivity_ews
+> ### Title: Description: Sensitivity Early Warning Signals
+> ### Aliases: sensitivity_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> data(foldbif)
+> output=sensitivity_ews(foldbif,indicator="sd",detrending="gaussian",
++ incrwinsize=25,incrbandwidth=20)
+Loading required package: lmtest
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following object(s) are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Loading required package: nortest
+Loading required package: som
+Loading required package: Kendall
+Loading required package: KernSmooth
+Loading required package: moments
+Loading required package: fields
+Loading required package: spam
+Package 'spam' is loaded. Spam version 0.28-0 (2012-01-11).
+Type demo( spam) for some demos, help( Spam) for an overview
+of this package.
+Help for individual functions is optained by adding the
+suffix '.spam' to the function name, e.g. 'help(chol.spam)'.
+
+Attaching package: ‘spam’
+
+The following object(s) are masked from ‘package:base’:
+
+    backsolve, forwardsolve, norm
+
+> 
+> 
+> 
+> cleanEx()
+
+detaching ‘package:fields’, ‘package:spam’, ‘package:moments’,
+  ‘package:KernSmooth’, ‘package:Kendall’, ‘package:som’,
+  ‘package:nortest’, ‘package:lmtest’, ‘package:zoo’
+
+> nameEx("surrogates_ews")
+> ### * surrogates_ews
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: surrogates_ews
+> ### Title: Description: Surrogates Early Warning Signals
+> ### Aliases: surrogates_ews
+> ### Keywords: early-warning
+> 
+> ### ** Examples
+> 
+> data(foldbif);
+> output=surrogates_ews(foldbif,indicator="sd",winsize=50,detrending="gaussian",
++ bandwidth=10,boots=200,logtransform=FALSE,interpolate=FALSE)
+Loading required package: lmtest
+Loading required package: zoo
+
+Attaching package: ‘zoo’
+
+The following object(s) are masked from ‘package:base’:
+
+    as.Date, as.Date.numeric
+
+Loading required package: nortest
+Loading required package: som
+Loading required package: Kendall
+Loading required package: KernSmooth
+Loading required package: moments
+[1] AR MA AIC
+[1] 1 0 -195.380400502478
+[1] AR MA AIC
+[1] 1 1 -214.662828113498
+[1] AR MA AIC
+[1] 1 2 -213.747326966278
+[1] AR MA AIC
+[1] 1 3 -212.051598960386
+[1] AR MA AIC
+[1] 1 4 -210.361596727722
+[1] AR MA AIC
+[1] 2 0 -209.883194121052
+[1] AR MA AIC
+[1] 2 1 -213.573769840948
+[1] AR MA AIC
+[1] 2 2 -211.88433324999
+[1] AR MA AIC
+[1] 2 3 -210.172667973122
+[1] AR MA AIC
+[1] 2 4 -208.732413128198
+[1] AR MA AIC
+[1] 3 0 -213.52159474171
+[1] AR MA AIC
+[1] 3 1 -212.112971527322
+[1] AR MA AIC
+[1] 3 2 -210.216698071315
+[1] AR MA AIC
+[1] 3 3 -208.625837496798
+[1] AR MA AIC
+[1] 3 4 -227.957317612584
+[1] AR MA AIC
+[1] 4 0 -212.352667028306
+[1] AR MA AIC
+[1] 4 1 -210.737174096981
+[1] AR MA AIC
+[1] 4 2 -208.732524735192
+[1] AR MA AIC
+[1] 4 3 -212.325831787492
+[1] AR MA AIC
+[1] 4 4 -213.552322509058
+[1] "significance p =  0.085  estimated from  200  surrogate ARMA timeseries"
+dev.new(): using pdf(file="Rplots4.pdf")
+Warning in data.frame(Ktauestindorig, Ktaupindorig, Ktauestind, Ktaupind,  :
+  row names were found from a short variable and have been discarded
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cat("Time elapsed: ", proc.time() - get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  101.673 1.515 103.688 0 0 
+> grDevices::dev.off()
+pdf 
+  2 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

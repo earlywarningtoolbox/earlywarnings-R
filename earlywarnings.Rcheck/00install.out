@@ -1,0 +1,12 @@
+* installing *source* package ‘earlywarnings’ ...
+** R
+** data
+** preparing package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded
+*** arch - i386
+*** arch - x86_64
+
+* DONE (earlywarnings)
