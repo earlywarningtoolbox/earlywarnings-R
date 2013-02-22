@@ -19,7 +19,7 @@ Note: if dependencies are missing you may wish to run the installation.script fi
 
 ```{r}
 library(devtools); 
-install_github(repo = "earlywarnings-R", username = "earlywarningtoolbox", subdir = "earlywarnings"
+install_github(repo = "earlywarnings-R", username = "earlywarningtoolbox", subdir = "earlywarnings", ref = "master")
 ```
 
 ### Clone the repository & install locally:
