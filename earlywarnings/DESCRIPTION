@@ -25,7 +25,6 @@ Depends:
     spam,
     tseries,
     quadprog,
-    fractal,
     akima,
     ggplot2
 LazyLoad: yes
