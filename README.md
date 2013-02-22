@@ -1,6 +1,6 @@
 # earlywarnings
 
-This repository contains the R package toolbox for analysing Early Warning Signals for Critical Transitions. The Toolbox exists for download under different operating systems in R Forge (http://earlywarnings.r-forge.r-project.org/) and also is submitted to CRAN.
+This repository contains the R package toolbox for analysing Early Warning Signals for Critical Transitions that is also submitted to CRAN.
 
 From this repository it will be also possible to install the toolbox directly to R by install_git(devtools).
 
