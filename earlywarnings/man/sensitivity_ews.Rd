@@ -88,7 +88,7 @@
   see ref below
 }
 \examples{
-data(foldbif)
+load("~/foldbif.rda")
 output=sensitivity_ews(foldbif,indicator="sd",detrending="gaussian",
 incrwinsize=25,incrbandwidth=20)
 }

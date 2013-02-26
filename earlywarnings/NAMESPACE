@@ -1,4 +1,3 @@
-export(PlotPotential)
 export(bdstest_ews)
 export(ch_ews)
 export(ddjnonparam_ews)

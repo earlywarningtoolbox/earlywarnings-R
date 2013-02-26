@@ -43,9 +43,9 @@
 #' @importFrom moments kurtosis
 #'
 #' @examples 
-#'  data(foldbif)
-#'  out=generic_ews(foldbif,winsize=50,detrending="gaussian",
-#'  bandwidth=5,logtransform=FALSE,interpolate=FALSE)
+#' load("~/foldbif.rda")
+#' out=generic_ews(foldbif,winsize=50,detrending="gaussian",
+#' bandwidth=5,logtransform=FALSE,interpolate=FALSE)
 #' @keywords early-warning
 
 # Author: Vasilis Dakos, January 2, 2012

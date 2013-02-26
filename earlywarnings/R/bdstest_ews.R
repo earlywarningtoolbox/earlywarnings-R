@@ -52,12 +52,6 @@ print('**********************************************************',quote=FALSE)
 #'
 # Details:
 #' See also \code{bds.test{tseries}} for more details. The function requires the installation of packages \code{tseries} and \code{quadprog} that are not available under Linux and need to be manually installed under Windows.
-#' 
-#' Example to run after installing the mentioned packages:
-#' 
-#' data(foldbif)
-#' bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5,
-#' boots=200,logtransform=FALSE,interpolate=FALSE)
 #'
 # Arguments:
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
@@ -93,8 +87,8 @@ print('**********************************************************',quote=FALSE)
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @importFrom tseries garch
 #' @examples #
-#' #data(foldbif)
-#' #bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5, boots=200,logtransform=FALSE,interpolate=FALSE)
+#' load("~/foldbif.rda")
+#' bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5, boots=200,logtransform=FALSE,interpolate=FALSE)
 #' @keywords early-warning
 #' 
 bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,1),embdim=3,epsilon=c(0.5,0.75,1),boots=1000,logtransform=FALSE,interpolate=FALSE){
