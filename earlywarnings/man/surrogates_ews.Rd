@@ -93,7 +93,7 @@
   see ref below
 }
 \examples{
-load("~/foldbif.rda")
+data(foldbif)
 output=surrogates_ews(foldbif,indicator="sd",winsize=50,detrending="gaussian",
 bandwidth=10,boots=200,logtransform=FALSE,interpolate=FALSE)
 }

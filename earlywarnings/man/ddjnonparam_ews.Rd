@@ -83,7 +83,7 @@
   time.
 }
 \examples{
-load("~/foldbif.rda")
+data(foldbif)
 output<-ddjnonparam_ews(foldbif,bandwidth=0.6,na=500,
 logtransform=TRUE,interpolate=FALSE)
 }

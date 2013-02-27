@@ -35,7 +35,7 @@
 #' \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}}; \code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{\link{movpotential_ews}}; \code{\link{livpotential_ews}}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @examples 
-#' load("~/foldbif.rda")
+#' data(foldbif)
 #' output=sensitivity_ews(foldbif,indicator="sd",detrending="gaussian",
 #' incrwinsize=25,incrbandwidth=20)
 #' @keywords early-warning

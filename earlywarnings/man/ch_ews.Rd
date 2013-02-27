@@ -71,7 +71,7 @@
   see ref below
 }
 \examples{
-load("~/foldbif.rda")
+data(foldbif)
 out=ch_ews(foldbif, winsize=50, alpha=0.05, optim=TRUE, lags)
 }
 \author{

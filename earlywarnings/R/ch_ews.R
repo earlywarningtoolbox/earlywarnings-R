@@ -34,7 +34,7 @@
 #' \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}}; \code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{movpotential_ews}; \code{livpotential_ews} 
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @examples 
-#' load("~/foldbif.rda")
+#' data(foldbif)
 #' out=ch_ews(foldbif, winsize=50, alpha=0.05, optim=TRUE, lags)
 #' @keywords early-warning
 # Author: Timothy Cline, October 25, 2011.
