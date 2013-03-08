@@ -8,8 +8,8 @@
 \arguments{
   \item{x}{data vector}
 
-  \item{std}{the standard deviation of the noise (defaults
-  to 1, so then you use scaled potentials}
+  \item{std}{Standard deviation of the noise (defaults to
+  1; this will set scaled potentials)}
 
   \item{bw}{bandwidth for kernel estimation}
 

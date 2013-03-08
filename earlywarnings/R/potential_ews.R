@@ -25,8 +25,6 @@
 
 PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) {
 
-  #require(akima)
-  #require(ggplot2)
   cut.potential <- max(apply(res$pots, 1, min)) + cutoff*abs(max(apply(res$pots, 1, min))) # Ensure all minima are visualized
   pots <- res$pots
   pots[pots > cut.potential] <- cut.potential
@@ -62,7 +60,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #' 
 #  Arguments:
 #'    @param x data vector
-#'    @param std the standard deviation of the noise (defaults to 1, so then you use scaled potentials
+#'    @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
 #'    @param bw bandwidth for kernel estimation
 #'    @param xi x values at which the potential is estimated
 #'    @param weights optional weights in ksdensity (used by movpotentials).
@@ -93,7 +91,6 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 
 livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), grid.size = 200) {
 
-  #require(stats)
   x <- data.frame(x)
   
   if (is.null(xi)) {
@@ -102,7 +99,6 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
 
   if (bw < 0) {
    # following Silverman, B. W.: Density estimation for statistics and data analysis,Chapman and Hall, 1986.
-    
    bw <- 1.06 * sapply(x,sd) / nrow(x)^(1/5);
   }
 
@@ -139,16 +135,12 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
 #'
 # Arguments:
 #'  @param X a vector of the X observations of the state variable of interest
-#'  @param param parameter values that correspond to the X observations
-#'  @param sdwindow window for smoothing kernels (over the \code{param} axis)
-#'  @param bw bandwidth used for smoothing kernels
-#'  @param minparam minimum value of parameter on which to estimate potential
-#'  @param maxparam maximum value of parameter on which to estimate potential
-#'  @param npoints number of potentials
-#'  @param thres threshold for local minima to be discarded
+#'  @param param parameter values corresponding to the observations in X 
+#'  @param bw Bandwidth for smoothing kernels. Automatically determined by default.
+#'  @param detection.threshold Threshold for local minima to be discarded
 #'  @param std std
-#'  @param grid.size number of evaluation points 
-#'  @param cutoff the cuttof value to estimate minima and maxima in the potential
+#'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
+#'  @param plot.cutoff cuttoff for potential minima and maxima in visualization
 #'
 #' Returns:
 #'   @return A list with the following elements:
@@ -161,60 +153,45 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
 #' 
 #' @export
 #'
-#' @references  Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M. (2011). Global resilience of tropical forest and savanna to critical transitions. \emph{Science}, 334, 232-235.
+#' @references Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M. (2011). Global resilience of tropical forest and savanna to critical transitions. \emph{Science}, 334, 232-235.
 #' @author Based on Matlab code from Egbert van Nes modified by Leo Lahti. Implemented in early warnings package by V. Dakos.
 #' @seealso \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{livpotential_ews}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @examples 
 #'  X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
 #'  param = seq(0,5,length=3000)
-#'  res <- movpotential_ews(X, param, npoints = 100, thres = 0.003)
+#'  res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
-movpotential_ews <- function (X, param, sdwindow = NULL, bw = -1, minparam = NULL, maxparam = NULL, npoints = 50, thres = 0.002, std = 1, grid.size = 200, cutoff=0.5) {
+movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.002, std = 1, grid.size = 50, plot.cutoff = 0.5) {
 
-  # To debug:
-  # set.seed(1324); X <- dat[, pt]; param <- annot[, varname]; npoints <- 100; thres <- 0.003; sdwindow <- NULL; bw = -1; minparam = NULL; maxparam = NULL; res <- movpotential(dat[, pt], annot[, varname], npoints = 100, thres = 0.003); std <- 1; cut.potential <- NULL
-
-  if (is.null(minparam)) { 
-    minparam <- min(param)
+  if (is.null(param)) {
+    param <- seq(1, nrow(X), 1)
   }
-
-  if (is.null(maxparam)) { 
-    maxparam <- max(param)
-  }
-
-  if (is.null(sdwindow)) {
-    sdwindow <- (maxparam - minparam) * 0.05
-  }
-
-  # Place evaluation points evenly across data range 
-  xi <- seq(min(X), max(X), length = 200)
+  minparam <- min(param)    
+  maxparam <- max(param)
 
   # Determine step size
-  step <- (maxparam - minparam) / npoints
+  sdwindow <- step <- (maxparam - minparam) / grid.size
+
+  # Place evaluation points evenly across data range 
+  xi <- seq(min(X), max(X), length = grid.size)
 
   # Initialize
-  xis <- pars <- pots <- matrix(0, nrow = npoints, ncol = length(xi))
-  maxs <- mins <- matrix(0, nrow = npoints, ncol = length(xi))
+  xis <- pars <- pots <- matrix(0, nrow = grid.size, ncol = length(xi))
+  maxs <- mins <- matrix(0, nrow = grid.size, ncol = length(xi))
   
-  for (i in 1:npoints) {
+  for (i in 1:grid.size) {
 
-    # print(i)
-  
     # Increase the parameter at each step
     par <- minparam + (i - 0.5) * step
 
     # Check which elements in evaluation range (param) are within 2*sd of par
-    param2 <- abs(par - param) / sdwindow
-    #index <- which(param2 < 2)
-    index <- 1:length(param2) # Use all. LL converted into this after getting into problems with occasionally sparse data.    
-
-    weights <- exp(-param2[index]^2 / 2)
-    weights <- weights/sum(weights) # LL needed to add normalization in the R implementation 16.5.2012
+    weights <- exp(-.5*(abs(par - param) / sdwindow)^2)
+    weights <- weights/sum(weights) # LL added normalization in the R implementation 16.5.2012
 
     # Calculate the potential
-    tmp <- livpotential_ews(X[index], std, bw, xi, weights, grid.size)
+    tmp <- livpotential_ews(X, std, bw, xi, weights, grid.size)
 
     # Store variables
     pots[i, ] <- tmp$pot
@@ -224,15 +201,17 @@ movpotential_ews <- function (X, param, sdwindow = NULL, bw = -1, minparam = NUL
     # Mark the final minima and maxima for this evaluation point
     # (minima and maxima are for the density)    
     fpot <- exp(-2*tmp$pot/std^2) # backtransform to density distribution
-    ops  <- find.optima(tmp$minima, tmp$maxima, fpot, thres)
+    ops  <- find.optima(tmp$minima, tmp$maxima, fpot, detection.threshold)
     mins[i, ops$min] <- 1
     maxs[i, ops$max] <- 1
 
   }  
 
-  res=list(pars = pars, xis = xis, pots = pots, mins = mins, maxs = maxs, std = std)
-  p=PlotPotential(res, title = "Moving Average Potential", 'parameter', 'state variable', cutoff = cutoff)
-  list(res=res,plot=p)
+  res <- list(pars = pars, xis = xis, pots = pots, mins = mins, maxs = maxs, std = std)
+  p <- PlotPotential(res, title = "Moving Average Potential", 'parameter', 'state variable', cutoff = plot.cutoff)
+
+  list(res = res, plot = p)
+
 }
 
 

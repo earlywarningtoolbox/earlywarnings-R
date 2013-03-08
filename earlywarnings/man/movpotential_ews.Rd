@@ -2,38 +2,31 @@
 \alias{movpotential_ews}
 \title{Description: Moving Average Potential}
 \usage{
-  movpotential_ews(X, param, sdwindow = NULL, bw = -1,
-    minparam = NULL, maxparam = NULL, npoints = 50,
-    thres = 0.002, std = 1, grid.size = 200, cutoff = 0.5)
+  movpotential_ews(X, param = NULL, bw = -1,
+    detection.threshold = 0.002, std = 1, grid.size = 50,
+    plot.cutoff = 0.5)
 }
 \arguments{
   \item{X}{a vector of the X observations of the state
   variable of interest}
 
-  \item{param}{parameter values that correspond to the X
-  observations}
+  \item{param}{parameter values corresponding to the
+  observations in X}
 
-  \item{sdwindow}{window for smoothing kernels (over the
-  \code{param} axis)}
+  \item{bw}{Bandwidth for smoothing kernels. Automatically
+  determined by default.}
 
-  \item{bw}{bandwidth used for smoothing kernels}
-
-  \item{minparam}{minimum value of parameter on which to
-  estimate potential}
-
-  \item{maxparam}{maximum value of parameter on which to
-  estimate potential}
-
-  \item{npoints}{number of potentials}
-
-  \item{thres}{threshold for local minima to be discarded}
+  \item{detection.threshold}{Threshold for local minima to
+  be discarded}
 
   \item{std}{std}
 
-  \item{grid.size}{number of evaluation points}
+  \item{grid.size}{number of evaluation points; number of
+  steps between min and max potential; also used as kernel
+  window size}
 
-  \item{cutoff}{the cuttof value to estimate minima and
-  maxima in the potential
+  \item{plot.cutoff}{cuttoff for potential minima and
+  maxima in visualization
 
   Returns:}
 }
@@ -65,7 +58,7 @@
 \examples{
 X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
  param = seq(0,5,length=3000)
- res <- movpotential_ews(X, param, npoints = 100, thres = 0.003)
+ res <- movpotential_ews(X, param)
 }
 \author{
   Based on Matlab code from Egbert van Nes modified by Leo
