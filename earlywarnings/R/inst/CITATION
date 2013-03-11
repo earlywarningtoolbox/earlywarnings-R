@@ -1,0 +1,24 @@
+citHeader("To cite earlywarnings in publications use:")
+
+citEntry(entry="article",
+         title = "",
+         author = personList(
+	 	person(first ="Vasilis", last="Dakos", email = ""),
+	 	person(first ="Second", last="Author", email = "")
+	 	  ),
+	 journal = "",
+	 year = "",
+	 volume = "",
+	 issue = "",
+	 pages = "",
+         note         = "CRAN URL here",
+         url          = "Publication URL here",
+
+         textVersion =
+         paste("Vasilis Dakos et al. ",
+               "Publication title",
+               "journalname vol(number):pp-pp, year. ",
+               "See URL",
+               sep="")
+         )
+
