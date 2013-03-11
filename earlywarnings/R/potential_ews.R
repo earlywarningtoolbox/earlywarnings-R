@@ -9,7 +9,7 @@
 #    @param ylab.text ylab text
 #    @param cutoff parameter determining the upper limit of potential for visualizations
 # 
-# importFrom akima interp
+# importFrom tgp interp.loess
 # importFrom ggplot2 ggplot
 #
 # Returns:
@@ -31,7 +31,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 
   # Static contour
   # Interpolate potential grid
-  intp <- akima::interp(as.vector(res$pars), as.vector(res$xis), as.vector(pots))
+  intp <- tgp::interp.loess(as.vector(res$pars), as.vector(res$xis), as.vector(pots))
   xy <- expand.grid(intp$x, intp$y)
   z <- as.vector(intp$z)
   z[is.na(z)] <- max(na.omit(z))
@@ -48,6 +48,10 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
   p
 
 }
+
+
+
+
 
 
 

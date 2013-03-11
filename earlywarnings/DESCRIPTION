@@ -2,8 +2,8 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals Toolbox for Detecting Critical Transitions in
     Timeseries
-Version: 1.0.33
-Date: 2013-03-08
+Version: 1.0.34
+Date: 2013-03-11
 Author: Vasilis Dakos <vasilis.dakos@gmail.com>, with contributions from S.R.
     Carpenter, T. Cline, L. Lahti
 Maintainer: Vasilis Dakos <vasilis.dakos@gmail.com>
@@ -14,19 +14,19 @@ Description: The Early-Warning-Signals Toolbox provides methods for estimating
     Simulated Ecological Data. PLoS ONE 7(7):e41010
 Depends:
     R (>= 2.14.0),
-    lmtest,
-    nortest,
-    stats,
-    som,
+    fields,
+    ggplot2,
     Kendall,
     KernSmooth,
+    lmtest,
     moments,
-    fields,
-    spam,
-    tseries,
+    nortest,
     quadprog,
-    akima,
-    ggplot2
+    som,
+    spam,
+    stats,
+    tgp,
+    tseries
 LazyLoad: yes
 URL: http://www.early-warning-signals.org, http://www.vasilisdakos.net
 License: GPL (>= 2)
