@@ -4,7 +4,7 @@ citEntry(entry="article",
          title = "R Early Warning Signals Toolbox",
          author = personList(
 	 	person(first ="Vasilis", last="Dakos", email = "vasilis.dakos@gmail.com"),
-	 	person(first ="Leo", last="Lahti", email = "Leo Lahti <leo.lahti@iki.fi>")
+	 	person(first ="Leo", last="Lahti", email = "leo.lahti@iki.fi")
 	 	  ),
 	 journal = "The R Project for Statistical Computing",
 	 year = "2013",
