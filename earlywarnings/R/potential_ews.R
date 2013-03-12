@@ -212,7 +212,7 @@ movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.
   }  
 
   res <- list(pars = pars, xis = xis, pots = pots, mins = mins, maxs = maxs, std = std)
-  p <- PlotPotential(res, title = "Moving Average Potential", 'parameter', 'state variable', cutoff = plot.cutoff)
+  p <- PlotPotential(res, title = "Moving Average Potential", 'parameter/time', 'state variable', cutoff = plot.cutoff)
 
   list(res = res, plot = p)
 
