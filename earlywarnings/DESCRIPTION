@@ -22,6 +22,7 @@ Depends:
     moments,
     nortest,
     quadprog,
+    shiny,
     som,
     spam,
     stats,
@@ -29,7 +30,7 @@ Depends:
     tseries
 LazyLoad: yes
 URL: http://www.early-warning-signals.org, http://www.vasilisdakos.net
-License: GPL (>= 2)
+License: FreeBSD
 Collate:
     'data.R'
     'BDSboot.R'
@@ -41,3 +42,6 @@ Collate:
     'sensitivity_ews.R'
     'surrogates_ews.R'
     'potential_ews.R'
+    'firstlib.R'
+    'qda_RShiny.R'
+    'qda_ews.R'

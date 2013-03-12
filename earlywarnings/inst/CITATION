@@ -1,17 +1,17 @@
 citHeader("To cite earlywarnings in publications use:")
 
 citEntry(entry="article",
-         title = "",
+         title = "R Early Warning Signals Toolbox",
          author = personList(
-	 	person(first ="Vasilis", last="Dakos", email = ""),
-	 	person(first ="Second", last="Author", email = "")
+	 	person(first ="Vasilis", last="Dakos", email = "vasilis.dakos@gmail.com"),
+	 	person(first ="Leo", last="Lahti", email = "Leo Lahti <leo.lahti@iki.fi>")
 	 	  ),
-	 journal = "",
-	 year = "",
+	 journal = "The R Project for Statistical Computing",
+	 year = "2013",
 	 volume = "",
 	 issue = "",
 	 pages = "",
-         note         = "CRAN URL here",
+         note         = "http://cran.r-project.org/web/packages/earlywarnings/index.html",
          url          = "Publication URL here",
 
          textVersion =
