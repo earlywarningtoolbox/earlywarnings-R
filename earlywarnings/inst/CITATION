@@ -16,9 +16,9 @@ citEntry(entry="article",
 
          textVersion =
          paste("Vasilis Dakos et al. ",
-               "Publication title",
-               "journalname vol(number):pp-pp, year. ",
-               "See URL",
+               "Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data",
+               "PLoS One 7(7):e41010, 2012. ",
+               "See http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0041010",
                sep="")
          )
 

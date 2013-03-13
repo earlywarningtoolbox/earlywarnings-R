@@ -2,8 +2,8 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals Toolbox for Detecting Critical Transitions in
     Timeseries
-Version: 1.0.36
-Date: 2013-03-12
+Version: 1.0.37
+Date: 2013-03-14
 Author: Vasilis Dakos <vasilis.dakos@gmail.com>, with contributions from S.R.
     Carpenter, T. Cline, L. Lahti
 Maintainer: Vasilis Dakos <vasilis.dakos@gmail.com>
@@ -22,14 +22,13 @@ Depends:
     moments,
     nortest,
     quadprog,
-    shiny,
     som,
     spam,
     stats,
     tgp,
     tseries
 LazyLoad: yes
-URL: http://www.early-warning-signals.org, http://www.vasilisdakos.net
+URL: http://www.early-warning-signals.org, http://vasilisdakos.wordpress.com
 License: FreeBSD
 Collate:
     'data.R'
@@ -43,5 +42,4 @@ Collate:
     'surrogates_ews.R'
     'potential_ews.R'
     'firstlib.R'
-    'qda_RShiny.R'
     'qda_ews.R'
