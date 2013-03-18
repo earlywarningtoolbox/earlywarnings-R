@@ -1,24 +1,31 @@
 \name{livpotential_ews}
 \alias{livpotential_ews}
-\title{Description: Potential Analysis}
+\title{Description: Potential Analysis for univariate data}
 \usage{
-  livpotential_ews(x, std = 1, bw = -1, xi = NULL,
-    weights = c(), grid.size = 200)
+  livpotential_ews(x, grid.points = NULL, std = 1, bw = -1,
+    weights = c(), grid.size = 200,
+    detection.threshold = 0.002)
 }
 \arguments{
-  \item{x}{data vector}
+  \item{x}{Univariate data (vector) for which the
+  potentials shall be estimated}
+
+  \item{grid.points}{Data points at which the potential is
+  estimated. If not provided, equally sized grid with
+  grid.size is used.}
 
   \item{std}{Standard deviation of the noise (defaults to
   1; this will set scaled potentials)}
 
   \item{bw}{bandwidth for kernel estimation}
 
-  \item{xi}{x values at which the potential is estimated}
-
   \item{weights}{optional weights in ksdensity (used by
   movpotentials).}
 
-  \item{grid.size}{grid size}
+  \item{grid.size}{Grid size for potential estimation.}
+
+  \item{detection.threshold}{Threshold for local minima to
+  be discarded.}
 }
 \value{
   \code{livpotential} returns a list with the following
@@ -29,26 +36,33 @@
 
   \item{pot}{the actual value of the potential}
 
-  \item{minima}{the grid points at which the potential has
-  minimum values}
+  \item{min.inds}{indices of the grid points at which the
+  density has minimum values; (-potentials; neglecting
+  local optima)}
 
-  \item{maxima}{the grid points at which the potential has
-  maximum values}
+  \item{max.inds}{indices the grid points at which the
+  density has maximum values; (-potentials; neglecting
+  local optima)}
 
   \item{bw}{bandwidth of kernel used}
+
+  \item{min.points}{grid point values at which the density
+  has minimum values; (-potentials; neglecting local
+  optima)}
+
+  \item{max.points}{grid point values at which the density
+  has maximum values; (-potentials; neglecting local
+  optima)}
 }
 \description{
   \code{livpotential_ews} performs one-dimensional
   potential estimation derived from a uni-variate
   timeseries
 }
-\details{
-  see ref below
-}
 \examples{
 data(foldbif)
 res <- livpotential_ews(foldbif)
-plot(res$xi, res$pot)
+plot(res$grid.points, res$pot)
 }
 \author{
   Based on Matlab code from Egbert van Nes modified by Leo
