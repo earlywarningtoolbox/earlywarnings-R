@@ -55,28 +55,28 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 
 
 
-#' Description: Potential Analysis
+#' Description: Potential Analysis for univariate data
 #'
 #' \code{livpotential_ews} performs one-dimensional potential estimation derived from a uni-variate timeseries
 #'
-# Details:
-#' see ref below
-#' 
 #  Arguments:
-#'    @param x data vector
+#'    @param x Univariate data (vector) for which the potentials shall be estimated
+#'    @param grid.points Data points at which the potential is estimated. If not provided, equally sized grid with grid.size is used.
 #'    @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
 #'    @param bw bandwidth for kernel estimation
-#'    @param xi x values at which the potential is estimated
 #'    @param weights optional weights in ksdensity (used by movpotentials).
-#'    @param grid.size grid size
+#'    @param grid.size Grid size for potential estimation.
+#'    @param detection.threshold Threshold for local minima to be discarded.
 #'
 # Returns:
 #'   @return \code{livpotential} returns a list with the following elements:
 #'   @return \item{xi}{the grid of points on which the potential is estimated}
 #'   @return \item{pot}{the actual value of the potential}
-#'   @return \item{minima}{the grid points at which the potential has minimum values}
-#'   @return \item{maxima}{the grid points at which the potential has maximum values}
+#'   @return \item{min.inds}{indices of the grid points at which the density has minimum values; (-potentials; neglecting local optima)}
+#'   @return \item{max.inds}{indices the grid points at which the density has maximum values; (-potentials; neglecting local optima)}
 #'   @return \item{bw}{bandwidth of kernel used}
+#'   @return \item{min.points}{grid point values at which the density has minimum values; (-potentials; neglecting local optima)}
+#'   @return \item{max.points}{grid point values at which the density has maximum values; (-potentials; neglecting local optima)}
 #'
 #' @export
 #'
@@ -90,15 +90,15 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #' @examples 
 #' data(foldbif)
 #' res <- livpotential_ews(foldbif)
-#' plot(res$xi, res$pot) 
+#' plot(res$grid.points, res$pot) 
 #' @keywords early-warning
 
-livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), grid.size = 200) {
+livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = -1, weights = c(), grid.size = 200, detection.threshold = 0.002) {
 
   x <- data.frame(x)
   
-  if (is.null(xi)) {
-    xi <- seq(min(x), max(x), length = grid.size)
+  if (is.null(grid.points)) {
+    grid.points <- seq(min(x), max(x), length = grid.size)
   } 
 
   if (bw < 0) {
@@ -107,26 +107,29 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
   }
 
   # Density estimation
-  # Matlab version: res <- ksdensity(x, xi, 'width', bw, 'npoints', 500, 'weights', weights);
-  de <- density(ts(x), bw = bw, adjust = 1, kernel = "gaussian",
-        weights = weights, window = kernel, n = length(xi), 
-	from = min(x), to = max(x), cut = 3, na.rm = FALSE)
+  # Matlab version: res <- ksdensity(x, grid.points, 'width', bw, 'npoints', 500, 'weights', weights);
+  de <- density(ts(x), bw = bw, adjust = 1, kernel = "gaussian", weights = weights, window = kernel, n = length(grid.points), from = min(x), to = max(x), cut = 3, na.rm = FALSE)
 
   # Estimated density
   f <- de$y
 
   # Final grid points and bandwidth
-  xi <- de$x
+  grid.points <- de$x
   bw <- de$bw
-
-  # Detect minima and maxima of the density (see Livina et al.)
-  minima <- which(diff(sign(diff(c(0, f, 0)))) > 0)
-  maxima <- which(diff(sign(diff(c(0, f, 0)))) < 0)
 
   # Compute potential
   U <- -log(f)*std^2/2
 
-  list(xi = xi, pot = U, minima = minima, maxima = maxima, bw = bw)
+  # Mark the final minima and maxima for this evaluation point
+  # (minima and maxima for the density; note this is conversely to potential!)    
+  fpot <- exp(-2*U/std^2) # backtransform to density distribution
+
+  # Identify and store optima, given detection threshold (ie. ignore very local optima)
+  ops  <- find.optima(fpot, detection.threshold)
+  min.points <- grid.points[ops$min]
+  max.points <- grid.points[ops$max]
+  
+  list(grid.points = grid.points, pot = U, min.inds = ops$min, max.inds = ops$max, bw = bw, min.points = min.points, max.points = max.points)
 
 }
 
@@ -141,7 +144,7 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
 #'  @param X a vector of the X observations of the state variable of interest
 #'  @param param parameter values corresponding to the observations in X 
 #'  @param bw Bandwidth for smoothing kernels. Automatically determined by default.
-#'  @param detection.threshold Threshold for local minima to be discarded
+#'  @param detection.threshold Threshold for local optima to be discarded.
 #'  @param std std
 #'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
 #'  @param plot.cutoff cuttoff for potential minima and maxima in visualization
@@ -158,7 +161,7 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
 #' @export
 #'
 #' @references Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M. (2011). Global resilience of tropical forest and savanna to critical transitions. \emph{Science}, 334, 232-235.
-#' @author Based on Matlab code from Egbert van Nes modified by Leo Lahti. Implemented in early warnings package by V. Dakos.
+#' @author L. Lahti, E. van Nes, V. Dakos.
 #' @seealso \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{livpotential_ews}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @examples 
@@ -170,7 +173,7 @@ livpotential_ews <- function (x, std = 1, bw = -1, xi = NULL, weights = c(), gri
 movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.002, std = 1, grid.size = 50, plot.cutoff = 0.5) {
 
   if (is.null(param)) {
-    param <- seq(1, nrow(X), 1)
+    param <- seq(1, length(X), 1)
   }
   minparam <- min(param)    
   maxparam <- max(param)
@@ -195,19 +198,14 @@ movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.
     weights <- weights/sum(weights) # LL added normalization in the R implementation 16.5.2012
 
     # Calculate the potential
-    tmp <- livpotential_ews(X, std, bw, xi, weights, grid.size)
+    tmp <- livpotential_ews(x = X, grid.points = xi, std = std, bw = bw, weights = weights, grid.size = grid.size)
 
     # Store variables
     pots[i, ] <- tmp$pot
-     xis[i, ] <- tmp$xi 
-    pars[i, ] <- par + rep(0, length(tmp$xi))
-
-    # Mark the final minima and maxima for this evaluation point
-    # (minima and maxima are for the density)    
-    fpot <- exp(-2*tmp$pot/std^2) # backtransform to density distribution
-    ops  <- find.optima(tmp$minima, tmp$maxima, fpot, detection.threshold)
-    mins[i, ops$min] <- 1
-    maxs[i, ops$max] <- 1
+     xis[i, ] <- tmp$grid.points
+    pars[i, ] <- par + rep(0, length(tmp$grid.points))
+    mins[i, tmp$min.inds] <- 1
+    maxs[i, tmp$max.inds] <- 1
 
   }  
 
@@ -222,13 +220,11 @@ movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.
 
 # Description: find.optima
 #
-# Detect optima from the potential
+# Detect optima from the potential, excluding very local optima below detection.threshold
 #
 #  Arguments:
-#    @param minima minima
-#    @param maxima maxima
 #    @param fpot potential
-#    @param thres threshold
+#    @param detection.threshold threshold
 #
 # Returns:
 #   @return A list with the following elements:
@@ -243,76 +239,80 @@ movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.
 #
 # @keywords utilities
 
-find.optima <- function (minima, maxima, fpot, thres) {
+find.optima <- function (fpot, detection.threshold = 0) {
 
-    # Remove minima and maxima that are too shallow
-    delmini <- logical(length(minima))
-    delmaxi <- logical(length(maxima))
+  # Detect minima and maxima _of the density_ (see Livina et al.)
+  # these correspond to maxima and minima of the potential, respectively
+  # and include the end points of the vector	   
+  maxima <- which(diff(sign(diff(c(-Inf, fpot, -Inf))))==-2)
+  minima <- which(diff(sign(diff(c(Inf, -fpot, Inf))))==-2)
 
-    for (j in 1:length(maxima)) {
+  # Remove minima and maxima that are too shallow
+  delmini <- logical(length(minima))
+  delmaxi <- logical(length(maxima))
 
-      # Calculate distance of this maximum to all minima
-      s <- minima - maxima[[j]]
+  for (j in 1:length(maxima)) {
 
-      # Set distances to deleted minima to zero
-      s[delmini] <- 0
+    # Calculate distance of this maximum to all minima
+    s <- minima - maxima[[j]]
 
-      # identify the closest minima
-      i1 <- i2 <- NULL
-      if (length(s)>0) {
+    # Set distances to deleted minima to zero
+    s[delmini] <- 0
 
-        minima.spos <- minima[s > 0]
-	minima.sneg <- minima[s < 0]
+    # identify the closest remaining minima
+    i1 <- i2 <- NULL
+    if (length(s)>0) {
 
-        if (length(minima.spos) > 0) {i1 <- min(minima.spos)}
-        if (length(minima.sneg) > 0) {i2 <- max(minima.sneg)}
+      minima.spos <- minima[s > 0]
+      minima.sneg <- minima[s < 0]
 
-      } 
+      if (length(minima.spos) > 0) {i1 <- min(minima.spos)}
+      if (length(minima.sneg) > 0) {i2 <- max(minima.sneg)}
+
+    } 
         
-      # if no positive differences available, set it to same value with i2
-      if (is.null(i1) && !is.null(i2)) {
-         i1 <- i2
-      }
+    # if no positive differences available, set it to same value with i2
+    if (is.null(i1) && !is.null(i2)) {
+       i1 <- i2
+    } else if (is.null(i2) && !is.null(i1)) {
+       # if no negative differences available, set it to same value with i1
+       i2 <- i1
+    }
 
-      # if no negative differences available, set it to same value with i1
-      if (is.null(i2) && !is.null(i1)) {
-         i2 <- i1
-      }
-
-      # If a closest minimum exists, check differences and remove if difference is under threshold
-      if (!is.null(i1)) {
+    # If a closest minimum exists, check differences and remove if difference is under threshold
+    if (!is.null(i1)) {
   
-        # Smallest difference between this maximum and the closest minima
-        diff <- min( abs(fpot[i1] - fpot[maxima[[j]]]), 
-	     	     abs(fpot[i2] - fpot[maxima[[j]]]))
+      # Smallest difference between this maximum and the closest minima
+      diff <- min( abs(fpot[i1] - fpot[maxima[[j]]]), 
+	     	   abs(fpot[i2] - fpot[maxima[[j]]]))
 
-        if (diff < thres) {
+      if (diff < detection.threshold) {
 
-	  # If difference is below threshold, delete this maximum 
-          delmaxi[[j]] <- 1
+	# If difference is below threshold, delete this maximum 
+        delmaxi[[j]] <- TRUE
 
-	  # Delete the larger of the two neighboring minima 
-          if (fpot[[i1]] > fpot[[i2]]) {
-            delmini[minima == i1] <- TRUE
-	  } else {
-            delmini[minima == i2] <- TRUE
-	  }
-        }   
-      } else {
-        # if both i1 and i2 are NULL, do nothing	 
-      }
-
+	# Delete the larger of the two neighboring minima 
+        if (fpot[[i1]] > fpot[[i2]]) {
+          delmini[minima == i1] <- TRUE
+	} else {
+          delmini[minima == i2] <- TRUE
+	}
+      }  
+ 
+    } else {
+      # if both i1 and i2 are NULL, do nothing	 
     }
+  }
 
-    # Delete the shallow minima and maxima 
-    if (length(minima) > 0 && sum(delmini)>0) {
-      minima <- minima[-delmini]
-    }
-    if (length(maxima) > 0 && sum(delmaxi)>0) {
-      maxima <- maxima[-delmaxi]
-    }
+  # Delete the shallow minima and maxima 
+  if (length(minima) > 0 && sum(delmini)>0) {
+    minima <- minima[!delmini]
+  }
 
+  if (length(maxima) > 0 && sum(delmaxi)>0) {
+    maxima <- maxima[!delmaxi]
+  }
 
-    list(min = minima, max = maxima)
+  list(min = minima, max = maxima)
   
 }

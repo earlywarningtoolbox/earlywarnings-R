@@ -16,8 +16,8 @@
   \item{bw}{Bandwidth for smoothing kernels. Automatically
   determined by default.}
 
-  \item{detection.threshold}{Threshold for local minima to
-  be discarded}
+  \item{detection.threshold}{Threshold for local optima to
+  be discarded.}
 
   \item{std}{std}
 
@@ -61,8 +61,7 @@ X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
  res <- movpotential_ews(X, param)
 }
 \author{
-  Based on Matlab code from Egbert van Nes modified by Leo
-  Lahti. Implemented in early warnings package by V. Dakos.
+  L. Lahti, E. van Nes, V. Dakos.
 }
 \references{
   Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M.
