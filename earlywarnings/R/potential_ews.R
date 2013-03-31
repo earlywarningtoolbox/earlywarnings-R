@@ -112,7 +112,7 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
   }
 
   # Density estimation
-  de <- density(ts(x), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, window = kernel, n = grid.size, from = min(x), to = max(x), cut = 3, na.rm = FALSE)
+  de <- density(ts(x), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, window = kernel, n = length(grid.points), from = min(x), to = max(x), cut = 3, na.rm = FALSE)
 
   # Estimated density
   f <- de$y
