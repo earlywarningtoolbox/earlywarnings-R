@@ -67,6 +67,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #'    @param weights optional weights in ksdensity (used by movpotentials).
 #'    @param grid.size Grid size for potential estimation.
 #'    @param detection.threshold Threshold for local minima to be discarded.
+#'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
 #'
 # Returns:
 #'   @return \code{livpotential} returns a list with the following elements:
@@ -93,10 +94,14 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #' plot(res$grid.points, res$pot) 
 #' @keywords early-warning
 
-livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = -1, weights = c(), grid.size = 200, detection.threshold = 0.002) {
+livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.002, bw.adjust = 1) {
 
   x <- data.frame(x)
-  
+
+  if (is.null(grid.size)) {
+    grid.size <- floor(nrow(x)/10)
+  }
+
   if (is.null(grid.points)) {
     grid.points <- seq(min(x), max(x), length = grid.size)
   } 
@@ -107,8 +112,7 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = -1, weights =
   }
 
   # Density estimation
-  # Matlab version: res <- ksdensity(x, grid.points, 'width', bw, 'npoints', 500, 'weights', weights);
-  de <- density(ts(x), bw = bw, adjust = 1, kernel = "gaussian", weights = weights, window = kernel, n = length(grid.points), from = min(x), to = max(x), cut = 3, na.rm = FALSE)
+  de <- density(ts(x), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, window = kernel, n = grid.size, from = min(x), to = max(x), cut = 3, na.rm = FALSE)
 
   # Estimated density
   f <- de$y

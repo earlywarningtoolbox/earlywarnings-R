@@ -1,3 +1,4 @@
+export(UnivariateGrouping)
 export(bdstest_ews)
 export(ch_ews)
 export(ddjnonparam_ews)

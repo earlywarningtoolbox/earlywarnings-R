@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @author Leo Lahti \email{leo.lahti@@iki.fi}
-#' @examples
+#' @examples #
 #'
 #' @keywords early-warning
 

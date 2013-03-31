@@ -2,9 +2,9 @@
 \alias{livpotential_ews}
 \title{Description: Potential Analysis for univariate data}
 \usage{
-  livpotential_ews(x, grid.points = NULL, std = 1, bw = -1,
-    weights = c(), grid.size = 200,
-    detection.threshold = 0.002)
+  livpotential_ews(x, grid.points = NULL, std = 1,
+    bw = "nrd", weights = c(), grid.size = NULL,
+    detection.threshold = 0.002, bw.adjust = 1)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -26,6 +26,9 @@
 
   \item{detection.threshold}{Threshold for local minima to
   be discarded.}
+
+  \item{bw.adjust}{The real bandwidth will be bw.adjust*bw;
+  defaults to 1}
 }
 \value{
   \code{livpotential} returns a list with the following
