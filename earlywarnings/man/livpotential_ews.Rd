@@ -25,8 +25,8 @@
   \item{grid.size}{Grid size for potential estimation.}
 
   \item{detection.threshold}{this scalar will be multiplied
-  with grid interval and kernel density peak dnorm(0, sd =
-  bandwidth) to get the final detection threshold}
+  with (grid interval / bandwidth) to get the final
+  detection threshold}
 
   \item{bw.adjust}{The real bandwidth will be bw.adjust*bw;
   defaults to 1}

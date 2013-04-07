@@ -66,7 +66,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #'    @param bw bandwidth for kernel estimation
 #'    @param weights optional weights in ksdensity (used by movpotentials).
 #'    @param grid.size Grid size for potential estimation.
-#'    @param detection.threshold this scalar will be multiplied with grid interval and kernel density peak dnorm(0, sd = bandwidth) to get the final detection threshold
+#'    @param detection.threshold this scalar will be multiplied with (grid interval / bandwidth) to get the final detection threshold
 #'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
 #'
 # Returns:
@@ -135,7 +135,7 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
   # function that increases with grid interval and density kernel peak. 
   # Relate the final threshold to these two variables.
   grid.interval <-  diff(grid.points[1:2])
-  det.th <- detection.threshold * grid.interval * dnorm(0, sd = bw)
+  det.th <- detection.threshold * grid.interval / bw
 
   # Identify and store optima, given detection threshold (ie. ignore very local optima)
   ops  <- find.optima(fpot, det.th)
