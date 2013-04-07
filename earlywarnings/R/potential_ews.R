@@ -128,6 +128,12 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
   # (minima and maxima for the density; note this is conversely to potential!)    
   fpot <- exp(-2*U/std^2) # backtransform to density distribution
 
+  print(bw)
+  if (is.null(detection.threshold)) {
+    detection.threshold <- 0.002
+    #detection.threshold <- 0.001/bw
+  }
+
   # Identify and store optima, given detection threshold (ie. ignore very local optima)
   ops  <- find.optima(fpot, detection.threshold)
   min.points <- grid.points[ops$min]
@@ -244,7 +250,7 @@ movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.
 # @keywords utilities
 
 find.optima <- function (fpot, detection.threshold = 0) {
-
+ 	  
   # Detect minima and maxima _of the density_ (see Livina et al.)
   # these correspond to maxima and minima of the potential, respectively
   # and include the end points of the vector	   
