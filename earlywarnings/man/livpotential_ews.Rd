@@ -4,7 +4,7 @@
 \usage{
   livpotential_ews(x, grid.points = NULL, std = 1,
     bw = "nrd", weights = c(), grid.size = NULL,
-    detection.threshold = 0.002, bw.adjust = 1)
+    detection.threshold = 0.1, bw.adjust = 1)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -24,8 +24,9 @@
 
   \item{grid.size}{Grid size for potential estimation.}
 
-  \item{detection.threshold}{Threshold for local minima to
-  be discarded.}
+  \item{detection.threshold}{this scalar will be multiplied
+  with grid interval and kernel density peak dnorm(0, sd =
+  bandwidth) to get the final detection threshold}
 
   \item{bw.adjust}{The real bandwidth will be bw.adjust*bw;
   defaults to 1}

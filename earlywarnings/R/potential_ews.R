@@ -66,7 +66,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #'    @param bw bandwidth for kernel estimation
 #'    @param weights optional weights in ksdensity (used by movpotentials).
 #'    @param grid.size Grid size for potential estimation.
-#'    @param detection.threshold Threshold for local minima to be discarded.
+#'    @param detection.threshold this scalar will be multiplied with grid interval and kernel density peak dnorm(0, sd = bandwidth) to get the final detection threshold
 #'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
 #'
 # Returns:
@@ -94,7 +94,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #' plot(res$grid.points, res$pot) 
 #' @keywords early-warning
 
-livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.002, bw.adjust = 1) {
+livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.1, bw.adjust = 1) {
 
   x <- data.frame(x)
 
@@ -106,7 +106,7 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
     grid.points <- seq(min(x), max(x), length = grid.size)
   } 
 
-  if (bw < 0) {
+  if (is.null(bw)) {
    # following Silverman, B. W.: Density estimation for statistics and data analysis,Chapman and Hall, 1986.
    bw <- 1.06 * sapply(x,sd) / nrow(x)^(1/5);
   }
@@ -128,12 +128,21 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
   # (minima and maxima for the density; note this is conversely to potential!)    
   fpot <- exp(-2*U/std^2) # backtransform to density distribution
 
+  # Set detection threshold. 
+  # It should be a function of grid interval and bandwidth. With smaller bw the density kernel
+  # peaks (dnorm) become larger and fluctuations grow. The larger the interval, the larger the
+  # change between consecutive estimation points. Therefore, set detection threshold as 
+  # function that increases with grid interval and density kernel peak. 
+  # Relate the final threshold to these two variables.
+  grid.interval <-  diff(grid.points[1:2])
+  det.th <- detection.threshold * grid.interval * dnorm(0, sd = bw)
+
   # Identify and store optima, given detection threshold (ie. ignore very local optima)
-  ops  <- find.optima(fpot, detection.threshold)
+  ops  <- find.optima(fpot, det.th)
   min.points <- grid.points[ops$min]
   max.points <- grid.points[ops$max]
   
-  list(grid.points = grid.points, pot = U, min.inds = ops$min, max.inds = ops$max, bw = bw, min.points = min.points, max.points = max.points)
+  list(grid.points = grid.points, pot = U, min.inds = ops$min, max.inds = ops$max, bw = bw, min.points = min.points, max.points = max.points, detection.threshold = det.th)
 
 }
 
@@ -174,7 +183,7 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
 #'  res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
-movpotential_ews <- function (X, param = NULL, bw = -1, detection.threshold = 0.002, std = 1, grid.size = 50, plot.cutoff = 0.5) {
+movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold = 0.1, std = 1, grid.size = 50, plot.cutoff = 0.5) {
 
   if (is.null(param)) {
     param <- seq(1, length(X), 1)

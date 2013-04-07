@@ -2,8 +2,8 @@
 \alias{movpotential_ews}
 \title{Description: Moving Average Potential}
 \usage{
-  movpotential_ews(X, param = NULL, bw = -1,
-    detection.threshold = 0.002, std = 1, grid.size = 50,
+  movpotential_ews(X, param = NULL, bw = "nrd",
+    detection.threshold = 0.1, std = 1, grid.size = 50,
     plot.cutoff = 0.5)
 }
 \arguments{
