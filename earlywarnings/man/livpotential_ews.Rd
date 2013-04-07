@@ -2,17 +2,13 @@
 \alias{livpotential_ews}
 \title{Description: Potential Analysis for univariate data}
 \usage{
-  livpotential_ews(x, grid.points = NULL, std = 1,
-    bw = "nrd", weights = c(), grid.size = NULL,
-    detection.threshold = 0.1, bw.adjust = 1)
+  livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
+    grid.size = NULL, detection.threshold = 0.1,
+    bw.adjust = 1)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
   potentials shall be estimated}
-
-  \item{grid.points}{Data points at which the potential is
-  estimated. If not provided, equally sized grid with
-  grid.size is used.}
 
   \item{std}{Standard deviation of the noise (defaults to
   1; this will set scaled potentials)}
@@ -66,7 +62,6 @@
 \examples{
 data(foldbif)
 res <- livpotential_ews(foldbif)
-plot(res$grid.points, res$pot)
 }
 \author{
   Based on Matlab code from Egbert van Nes modified by Leo

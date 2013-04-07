@@ -61,7 +61,6 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #'
 #  Arguments:
 #'    @param x Univariate data (vector) for which the potentials shall be estimated
-#'    @param grid.points Data points at which the potential is estimated. If not provided, equally sized grid with grid.size is used.
 #'    @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
 #'    @param bw bandwidth for kernel estimation
 #'    @param weights optional weights in ksdensity (used by movpotentials).
@@ -91,10 +90,9 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #' @examples 
 #' data(foldbif)
 #' res <- livpotential_ews(foldbif)
-#' plot(res$grid.points, res$pot) 
 #' @keywords early-warning
 
-livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.1, bw.adjust = 1) {
+livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.1, bw.adjust = 1) {
 
   x <- data.frame(x)
 
@@ -102,17 +100,13 @@ livpotential_ews <- function (x, grid.points = NULL, std = 1, bw = "nrd", weight
     grid.size <- floor(nrow(x)/10)
   }
 
-  if (is.null(grid.points)) {
-    grid.points <- seq(min(x), max(x), length = grid.size)
-  } 
-
   if (is.null(bw)) {
    # following Silverman, B. W.: Density estimation for statistics and data analysis,Chapman and Hall, 1986.
    bw <- 1.06 * sapply(x,sd) / nrow(x)^(1/5);
   }
 
   # Density estimation
-  de <- density(ts(x), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, window = kernel, n = length(grid.points), from = min(x), to = max(x), cut = 3, na.rm = FALSE)
+  de <- density(ts(x), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, window = kernel, n = grid.size, from = min(x), to = max(x), cut = 3, na.rm = FALSE)
 
   # Estimated density
   f <- de$y
@@ -211,7 +205,7 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
     weights <- weights/sum(weights) # LL added normalization in the R implementation 16.5.2012
 
     # Calculate the potential
-    tmp <- livpotential_ews(x = X, grid.points = xi, std = std, bw = bw, weights = weights, grid.size = grid.size)
+    tmp <- livpotential_ews(x = X, std = std, bw = bw, weights = weights, grid.size = grid.size)
 
     # Store variables
     pots[i, ] <- tmp$pot
