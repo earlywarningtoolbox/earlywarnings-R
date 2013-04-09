@@ -134,18 +134,12 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
   # (minima and maxima for the density; note this is conversely to potential!)    fpot <- f
   # fpot <- exp(-2*U/std^2) # backtransform to density distribution
 
-  # Set detection threshold as fraction of the maximal observed density
-  #det.th <- detection.threshold * max(f)
-  det.th <- detection.threshold * dnorm(0, sd = bw) / length(x)
-  #det.th <- detection.threshold/(bw * length(x))
-  #det.th <- detection.threshold/bw
-  #det.th <- detection.threshold
-
   # Identify and store optima, given detection threshold (ie. ignore very local optima)
   # Note mins and maxs for density given here (not for potential, which has the opposite signs)
-  ops  <- find.optima(f, det.th)
+  ops  <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x)
   min.points <- grid.points[ops$min]
   max.points <- grid.points[ops$max]
+  det.th <- ops$detection.threshold
   
   list(grid.points = grid.points, pot = U, density = f, min.inds = ops$min, max.inds = ops$max, bw = bw, min.points = min.points, max.points = max.points, detection.threshold = det.th)
 
@@ -243,7 +237,9 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
 #  Arguments:
 #    @param fpot potential
 #    @param detection.threshold threshold
-#
+#'   @param bw bandwidth
+#'   @param x original data
+#'
 # Returns:
 #   @return A list with the following elements:
 #     min potential minima
@@ -257,7 +253,15 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
 #
 # @keywords utilities
 
-find.optima <- function (fpot, detection.threshold = 0) {
+find.optima <- function (fpot, detection.threshold = 0, bw, x) {
+
+  # Set detection threshold as fraction of the maximal observed density
+  #det.th <- detection.threshold * max(f)
+  kernel.height <- dnorm(0, sd = bw) / length(x)
+  detection.threshold <- detection.threshold * kernel.height
+  #det.th <- detection.threshold/(bw * length(x))
+  #det.th <- detection.threshold/bw
+  #det.th <- detection.threshold
  	  
   # Detect minima and maxima of the density (see Livina et al.)
   # these correspond to maxima and minima of the potential, respectively
@@ -267,7 +271,9 @@ find.optima <- function (fpot, detection.threshold = 0) {
 
   # First, set all maxima that are below detection threshold to the minimal density to 
   # ignore them in the later steps
-  fpot[maxima][fpot[maxima] < min(fpot) + detection.threshold] <- min(fpot)
+  #fpot[maxima][fpot[maxima] < min.density * kernel.height] <- min(fpot)
+  #fpot[maxima][fpot[maxima] < min.density * max(fpot)] <- min(fpot)
+  #fpot[maxima][fpot[maxima] < min.density * diff(range(x))] <- min(fpot)
 
   # Remove minima and maxima that are too shallow
   delmini <- logical(length(minima))
@@ -336,6 +342,6 @@ find.optima <- function (fpot, detection.threshold = 0) {
     maxima <- maxima[!delmaxi]
   }
 
-  list(min = minima, max = maxima)
+  list(min = minima, max = maxima, detection.threshold = detection.threshold)
   
 }

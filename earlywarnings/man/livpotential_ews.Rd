@@ -3,8 +3,8 @@
 \title{Description: Potential Analysis for univariate data}
 \usage{
   livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
-    grid.size = NULL, detection.threshold = 0.05,
-    bw.adjust = 1, density.smoothing = 0.001)
+    grid.size = NULL, detection.threshold = 0.01,
+    bw.adjust = 1, density.smoothing = 0.01)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -20,9 +20,9 @@
 
   \item{grid.size}{Grid size for potential estimation.}
 
-  \item{detection.threshold}{this scalar will be multiplied
-  with the maximum density to get the final detection
-  threshold}
+  \item{detection.threshold}{maximum detection threshold as
+  fraction of density kernel height dnorm(0, sd =
+  bandwidth)/N}
 
   \item{bw.adjust}{The real bandwidth will be bw.adjust*bw;
   defaults to 1}
