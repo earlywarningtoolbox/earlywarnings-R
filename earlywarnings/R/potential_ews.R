@@ -94,12 +94,12 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #' res <- livpotential_ews(foldbif)
 #' @keywords early-warning
 
-livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.05, bw.adjust = 1, density.smoothing = 0.001) {
+livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.01, bw.adjust = 1, density.smoothing = 0.01) {
 
   x <- data.frame(x)
 
   if (is.null(grid.size)) {
-    grid.size <- floor(nrow(x)/10)
+    grid.size <- floor(0.2*nrow(x))
   }
 
   if (is.null(bw)) {
