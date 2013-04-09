@@ -65,7 +65,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
 #'    @param bw bandwidth for kernel estimation
 #'    @param weights optional weights in ksdensity (used by movpotentials).
 #'    @param grid.size Grid size for potential estimation.
-#'    @param detection.threshold this scalar will be multiplied with the maximum density to get the final detection threshold
+#'    @param detection.threshold maximum detection threshold as fraction of density kernel height dnorm(0, sd = bandwidth)/N
 #'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
 #'    @param density.smoothing Add a small constant density across the whole observation range to regularize density estimation (and to avoid zero probabilities within the observation range). This parameter adds uniform density across the observation range, scaled by density.smoothing.
 #' 
