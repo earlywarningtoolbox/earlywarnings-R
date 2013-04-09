@@ -136,7 +136,7 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 
   # Identify and store optima, given detection threshold (ie. ignore very local optima)
   # Note mins and maxs for density given here (not for potential, which has the opposite signs)
-  ops  <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x)
+  ops  <- find.optima(f, detection.limit = detection.threshold, bw = bw, x = x)
   min.points <- grid.points[ops$min]
   max.points <- grid.points[ops$max]
   det.th <- ops$detection.threshold
@@ -253,12 +253,12 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
 #
 # @keywords utilities
 
-find.optima <- function (fpot, detection.threshold = 0, bw, x) {
+find.optima <- function (fpot, detection.limit = 0, bw, x) {
 
   # Set detection threshold as fraction of the maximal observed density
   #det.th <- detection.threshold * max(f)
   kernel.height <- dnorm(0, sd = bw) / length(x)
-  detection.threshold <- detection.threshold * kernel.height
+  detection.threshold <- detection.limit * kernel.height
   #det.th <- detection.threshold/(bw * length(x))
   #det.th <- detection.threshold/bw
   #det.th <- detection.threshold
