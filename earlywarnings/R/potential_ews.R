@@ -230,28 +230,28 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
 
 
 
-# Description: find.optima
-#
-# Detect optima from the potential, excluding very local optima below detection.threshold
-#
-#  Arguments:
-#    @param fpot potential
-#    @param detection.threshold threshold
+#' Description: find.optima
+#'
+#' Detect optima from the potential, excluding very local optima below detection.threshold
+#'
+#'  Arguments:
+#'    @param fpot potential
+#'    @param detection.limit detection threshold will be determined by multiplying this scalar with kernel height.
 #'   @param bw bandwidth
 #'   @param x original data
 #'
-# Returns:
-#   @return A list with the following elements:
-#     min potential minima
-#     max potential maxima
-#
-# @export
-#
-# @references See citation("TBA") 
-# @author Leo Lahti \email{leo.lahti@@iki.fi}
-# @examples #
-#
-# @keywords utilities
+#' Returns:
+#'   @return A list with the following elements:
+#'     min potential minima
+#'     max potential maxima
+#'
+#' @export
+#'
+#' @references See citation("TBA") 
+#' @author Leo Lahti \email{leo.lahti@@iki.fi}
+#' @examples #
+#'
+#' @keywords utilities
 
 find.optima <- function (fpot, detection.limit = 0, bw, x) {
 
