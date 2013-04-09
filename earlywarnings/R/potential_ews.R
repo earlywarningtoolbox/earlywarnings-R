@@ -111,6 +111,8 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
   # Estimated density
   f <- de$y
 
+  # Smooth the density
+
   # Final grid points and bandwidth
   grid.points <- de$x
   bw <- de$bw
