@@ -3,8 +3,8 @@
 \title{Description: Potential Analysis for univariate data}
 \usage{
   livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
-    grid.size = NULL, detection.threshold = 0.1,
-    bw.adjust = 1)
+    grid.size = NULL, detection.threshold = 0.05,
+    bw.adjust = 1, density.smoothing = 0.001)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -21,11 +21,18 @@
   \item{grid.size}{Grid size for potential estimation.}
 
   \item{detection.threshold}{this scalar will be multiplied
-  with (grid interval / bandwidth) to get the final
-  detection threshold}
+  with the maximum density to get the final detection
+  threshold}
 
   \item{bw.adjust}{The real bandwidth will be bw.adjust*bw;
   defaults to 1}
+
+  \item{density.smoothing}{Add a small constant density
+  across the whole observation range to regularize density
+  estimation (and to avoid zero probabilities within the
+  observation range). This parameter adds uniform density
+  across the observation range, scaled by
+  density.smoothing.}
 }
 \value{
   \code{livpotential} returns a list with the following
@@ -34,7 +41,11 @@
   \item{xi}{the grid of points on which the potential is
   estimated}
 
-  \item{pot}{the actual value of the potential}
+  \item{pot}{The estimated potential: -log(f)*std^2/2,
+  where f is the density.}
+
+  \item{density}{Density estimate corresponding to the
+  potential.}
 
   \item{min.inds}{indices of the grid points at which the
   density has minimum values; (-potentials; neglecting
