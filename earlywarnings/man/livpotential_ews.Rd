@@ -4,7 +4,8 @@
 \usage{
   livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
     grid.size = NULL, detection.threshold = 0.01,
-    bw.adjust = 1, density.smoothing = 0.01)
+    bw.adjust = 1, density.smoothing = 0.01,
+    detection.limit = 0.1)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -33,6 +34,9 @@
   observation range). This parameter adds uniform density
   across the observation range, scaled by
   density.smoothing.}
+
+  \item{detection.limit}{ignore maxima that are below
+  detection.limit * maximum density}
 }
 \value{
   \code{livpotential} returns a list with the following

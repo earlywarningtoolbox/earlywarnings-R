@@ -2,18 +2,22 @@
 \alias{find.optima}
 \title{Description: find.optima}
 \usage{
-  find.optima(fpot, detection.limit = 0, bw, x)
+  find.optima(fpot, detection.threshold = 0, bw, x,
+    detection.limit = 0)
 }
 \arguments{
   \item{fpot}{potential}
 
-  \item{detection.limit}{detection threshold will be
+  \item{detection.threshold}{detection threshold will be
   determined by multiplying this scalar with kernel
   height.}
 
   \item{bw}{bandwidth}
 
-  \item{x}{original data
+  \item{x}{original data}
+
+  \item{detection.limit}{ignore maxima that are below
+  detection.limit * maximum density
 
   Returns:}
 }
