@@ -9,7 +9,9 @@
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings. If the powerspectrum is to be plotted as well, the timeseries lenght should be even number.
 #'    @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 50\%.
 #'    @param bandwidth is the bandwidth used for the Gaussian kernel when gaussian filtering is applied. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Alternatively it can be given by the bandwidth selector \code{\link{bw.nrd0}} (Default).
-#'    @param detrending the timeseries can be detrended/filtered prior to analysis. There are four options: \code{gaussian} filtering, \code{linear} detrending and \code{first-differencing}. Default is \code{no} detrending.
+#'    @param detrending the timeseries can be detrended/filtered prior to analysis. There are four options: \code{gaussian} filtering, \code{loess} fitting, \code{linear} detrending and \code{first-differencing}. Default is \code{no} detrending.
+#'    @parma span parameter that controls the degree of smoothing (numeric between 0 and 100, Default 25). see more on loess{stats}
+#'    @param degree the degree of polynomial to be used for when loess fitting is applied, normally 1 or 2 (Default). see more on loess{stats}
 #'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.
 #'    @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
 #'    @param AR_n logical. If TRUE the best fitted AR(n) model is fitted to the data. Default is FALSE.
@@ -50,7 +52,7 @@
 
 # Author: Vasilis Dakos, January 2, 2012
   	
-generic_ews<-function(timeseries,winsize=50,detrending=c("no","gaussian","linear","first-diff"),bandwidth=NULL,logtransform=FALSE,interpolate=FALSE,AR_n=FALSE,powerspectrum=FALSE){	
+generic_ews<-function(timeseries,winsize=50,detrending=c("no","gaussian","loess","linear","first-diff"),bandwidth=NULL,span=NULL, degree=NULL, logtransform=FALSE,interpolate=FALSE,AR_n=FALSE,powerspectrum=FALSE){	
 	
 	require(lmtest)
 	require(nortest)
@@ -95,6 +97,16 @@ generic_ews<-function(timeseries,winsize=50,detrending=c("no","gaussian","linear
 	}else if(detrending=="linear"){
 		nsmY<-resid(lm(Y~timeindex))
 		smY<-fitted(lm(Y~timeindex))
+	}else if(detrending=="loess"){
+	  if (is.null(span)){
+	    span<-25/100}else{
+	      span<-span/100}
+	  if (is.null(degree)){
+	    degree<-2}else{
+	      degree<-degree}
+	  smYY<-loess(Y~timeindex,span = span, degree = degree, normalize = FALSE, family = "gaussian")
+	  smY<-predict(smYY, data.frame(x=timeindex), se = FALSE)
+    nsmY<-Y-smY
 	}else if(detrending=="first-diff"){
 		nsmY<-diff(Y)
 		timeindexdiff<-timeindex[1:(length(timeindex)-1)]
@@ -173,7 +185,9 @@ generic_ews<-function(timeseries,winsize=50,detrending=c("no","gaussian","linear
 	plot(timeindex,Y,type="l",ylab="",xlab="",xaxt="n",las=1,xlim=c(timeindex[1],timeindex[length(timeindex)]))
 	if(detrending=="gaussian"){
 		lines(timeindex,smY,type="l",ylab="",xlab="",xaxt="n",col=2,las=1,xlim=c(timeindex[1],timeindex[length(timeindex)]))
-
+	}
+	if(detrending=="loess"){
+	  lines(timeindex,smY,type="l",ylab="",xlab="",xaxt="n",col=2,las=1,xlim=c(timeindex[1],timeindex[length(timeindex)])) 
 	}
 	if(detrending=="no"){
 		plot(c(0,1),c(0,1),ylab="",xlab="",yaxt="n",xaxt="n",type="n",las=1)

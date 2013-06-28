@@ -9,8 +9,10 @@
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
 #'    @param indicator is the statistic (leading indicator) selected for which the surrogate timeseries are produced. Currently, the indicators supported are: \code{ar1} autoregressive coefficient of a first order AR model, \code{sd} standard deviation, \code{acf1} autocorrelation at first lag, \code{sk} skewness, \code{kurt} kurtosis, \code{cv} coeffcient of variation, \code{returnrate}, and \code{densratio} density ratio of the power spectrum at low frequencies over high frequencies.
 #'    @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default valuise 50\%.
-#'    @param detrending the timeseries can be detrended/filtered prior to analysis. There are three options: \code{gaussian} filtering, \code{linear} detrending and \code{first-diff}erencing. Default is \code{no} detrending.
+#'    @param detrending the timeseries can be detrended/filtered prior to analysis. There are three options: \code{gaussian} filtering, \code{loess} fitting, \code{linear} detrending and \code{first-diff}erencing. Default is \code{no} detrending.
 #'    @param bandwidth is the bandwidth used for the Gaussian kernel when gaussian filtering is selected. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Alternatively it can be given by the bandwidth selector \code{\link{bw.nrd0}} (Default).
+#'    @parma span parameter that controls the degree of smoothing (numeric between 0 and 100, Default 25). see more on loess{stats}
+#'    @param degree the degree of polynomial to be used for when loess fitting is applied, normally 1 or 2 (Default). see more on loess{stats}
 #'    @param boots the number of surrogate data. Default is 100.
 #'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.
 #'    @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries). 
@@ -42,7 +44,7 @@
 
 # Author: Vasilis Dakos, January 4, 2012
 
-surrogates_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","cv","returnrate","densratio"),winsize=50,detrending=c("no","gaussian","linear","first-diff"),bandwidth=NULL,boots=100,logtransform=FALSE,interpolate=FALSE){
+surrogates_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","cv","returnrate","densratio"),winsize=50,detrending=c("no","gaussian","loess","linear","first-diff"),bandwidth=NULL,span=NULL, degree=NULL, boots=100,logtransform=FALSE,interpolate=FALSE){
 	
 	#require(lmtest)
 	#require(nortest)
@@ -88,6 +90,16 @@ surrogates_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","c
 		smYY<-ksmooth(timeindex,Y,kernel=c("normal"), bandwidth=bw, range.x=range(timeindex),n.points=length(timeindex))
 		nsmY<-Y-smYY$y
 		smY<-smYY$y
+		}else if(detrending=="loess"){
+		  if (is.null(span)){
+		    span<-25/100}else{
+		      span<-span/100}
+		  if (is.null(degree)){
+		    degree<-2}else{
+		      degree<-degree}
+		  smYY<-loess(Y~timeindex,span = span, degree = degree, normalize = FALSE, family = "gaussian")
+		  smY<-predict(smYY, data.frame(x=timeindex), se = FALSE)
+		  nsmY<-Y-smY
 	}else if(detrending=="linear"){
 		nsmY<-resid(lm(Y~timeindex))
 		smY<-fitted(lm(Y~timeindex))
