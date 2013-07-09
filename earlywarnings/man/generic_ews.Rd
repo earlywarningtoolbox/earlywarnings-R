@@ -3,10 +3,10 @@
 \title{Description: Generic Early Warning Signals}
 \usage{
   generic_ews(timeseries, winsize = 50,
-    detrending = c("no", "gaussian", "linear", "first-diff"),
-    bandwidth = NULL, logtransform = FALSE,
-    interpolate = FALSE, AR_n = FALSE,
-    powerspectrum = FALSE)
+    detrending = c("no", "gaussian", "loess", "linear", "first-diff"),
+    bandwidth = NULL, span = NULL, degree = NULL,
+    logtransform = FALSE, interpolate = FALSE,
+    AR_n = FALSE, powerspectrum = FALSE)
 }
 \arguments{
   \item{timeseries}{a numeric vector of the observed
@@ -29,9 +29,13 @@
 
   \item{detrending}{the timeseries can be
   detrended/filtered prior to analysis. There are four
-  options: \code{gaussian} filtering, \code{linear}
-  detrending and \code{first-differencing}. Default is
-  \code{no} detrending.}
+  options: \code{gaussian} filtering, \code{loess} fitting,
+  \code{linear} detrending and \code{first-differencing}.
+  Default is \code{no} detrending.}
+
+  \item{degree}{the degree of polynomial to be used for
+  when loess fitting is applied, normally 1 or 2 (Default).
+  see more on loess{stats}}
 
   \item{logtransform}{logical. If TRUE data are
   logtransformed prior to analysis as log(X+1). Default is

@@ -306,6 +306,15 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
   if (is.null(param)) {
     param <- seq(1, length(X), 1)
   }
+
+  
+  nas <- is.na(param) | is.na(X)
+  if (sum(nas) > 0) {
+    warning("The data contains NAs, removing the associated samples from X and param input arguments.")
+    X <- X[!nas]
+    param <- param[!nas]
+  }
+
   minparam <- min(param)    
   maxparam <- max(param)
 

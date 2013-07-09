@@ -5,9 +5,9 @@
   surrogates_ews(timeseries,
     indicator = c("ar1", "sd", "acf1", "sk", "kurt", "cv", "returnrate", "densratio"),
     winsize = 50,
-    detrending = c("no", "gaussian", "linear", "first-diff"),
-    bandwidth = NULL, boots = 100, logtransform = FALSE,
-    interpolate = FALSE)
+    detrending = c("no", "gaussian", "loess", "linear", "first-diff"),
+    bandwidth = NULL, span = NULL, degree = NULL,
+    boots = 100, logtransform = FALSE, interpolate = FALSE)
 }
 \arguments{
   \item{timeseries}{a numeric vector of the observed
@@ -32,9 +32,9 @@
 
   \item{detrending}{the timeseries can be
   detrended/filtered prior to analysis. There are three
-  options: \code{gaussian} filtering, \code{linear}
-  detrending and \code{first-diff}erencing. Default is
-  \code{no} detrending.}
+  options: \code{gaussian} filtering, \code{loess} fitting,
+  \code{linear} detrending and \code{first-diff}erencing.
+  Default is \code{no} detrending.}
 
   \item{bandwidth}{is the bandwidth used for the Gaussian
   kernel when gaussian filtering is selected. It is
@@ -42,6 +42,10 @@
   numeric between 0 and 100). Alternatively it can be given
   by the bandwidth selector \code{\link{bw.nrd0}}
   (Default).}
+
+  \item{degree}{the degree of polynomial to be used for
+  when loess fitting is applied, normally 1 or 2 (Default).
+  see more on loess{stats}}
 
   \item{boots}{the number of surrogate data. Default is
   100.}

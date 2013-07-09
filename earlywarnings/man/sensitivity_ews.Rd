@@ -5,8 +5,9 @@
   sensitivity_ews(timeseries,
     indicator = c("ar1", "sd", "acf1", "sk", "kurt", "cv", "returnrate", "densratio"),
     winsizerange = c(25, 75), incrwinsize = 25,
-    detrending = c("no", "gaussian", "linear", "first-diff"),
-    bandwidthrange = c(5, 100), incrbandwidth = 20,
+    detrending = c("no", "gaussian", "loess", "linear", "first-diff"),
+    bandwidthrange = c(5, 100), spanrange = c(5, 100),
+    degree = NULL, incrbandwidth = 20, incrspanrange = 10,
     logtransform = FALSE, interpolate = FALSE)
 }
 \arguments{
@@ -36,15 +37,19 @@
 
   \item{detrending}{the timeseries can be
   detrended/filtered. There are three options:
-  \code{gaussian} filtering, \code{linear} detrending and
-  \code{first-differencing}. Default is \code{no}
-  detrending.}
+  \code{gaussian} filtering, \code{loess} fitting,
+  \code{linear} detrending and \code{first-differencing}.
+  Default is \code{no} detrending.}
 
   \item{bandwidthrange}{is the range of the bandwidth used
   for the Gaussian kernel when gaussian filtering is
   selected. It is expressed as percentage of the timeseries
   length (must be numeric between 0 and 100). Default is
   5\% - 100\%.}
+
+  \item{degree}{the degree of polynomial to be used for
+  when loess fitting is applied, normally 1 or 2 (Default).
+  see more on loess{stats}}
 
   \item{incrbandwidth}{is the size to increment the
   bandwidth used for the Gaussian kernel when gaussian
