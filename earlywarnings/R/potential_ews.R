@@ -8,6 +8,7 @@
 #    @param xlab.text xlab text
 #    @param ylab.text ylab text
 #    @param cutoff parameter determining the upper limit of potential for visualizations
+#    @param plot.contours Plot contour lines.
 # 
 # importFrom tgp interp.loess
 # importFrom ggplot2 ggplot
@@ -23,7 +24,7 @@
 #
 # @keywords early-warning
 
-PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) {
+PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, plot.contours = TRUE) {
 
   cut.potential <- max(apply(res$pots, 1, min)) + cutoff*abs(max(apply(res$pots, 1, min))) # Ensure all minima are visualized
   pots <- res$pots
@@ -41,7 +42,11 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5) 
   bg.var <- NULL
   phylotype <- NULL
 
-  p <- ggplot2::ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + stat_contour(binwidth = 0.2)
+  p <- ggplot2::ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + scale_fill_gradient(low="black", high="white")
+
+  if (plot.contours) {
+    p <- p + stat_contour(binwidth = 0.2)
+  }
 
   p <- p + xlab(xlab.text) + ylab(ylab.text) + labs(title = title)
 
