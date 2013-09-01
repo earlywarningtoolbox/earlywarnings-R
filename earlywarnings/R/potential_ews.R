@@ -45,7 +45,9 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, 
   p <- ggplot2::ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + scale_fill_gradient(low="black", high="white")
 
   if (plot.contours) {
-    p <- p + stat_contour(binwidth = 0.2)
+    p <- p + stat_contour(binwidth = .2)
+    #p <- p + stat_contour(bins = 2)
+    # p <- p + stat_contour(geom="polygon", aes(fill=..level..))
   }
 
   p <- p + xlab(xlab.text) + ylab(ylab.text) + labs(title = title)
