@@ -284,6 +284,7 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 #'  @param std std
 #'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
 #'  @param plot.cutoff cuttoff for potential minima and maxima in visualization
+#'  @param plot.contours Plot contours on the landscape visualization
 #'
 #' Returns:
 #'   @return A list with the following elements:
@@ -306,7 +307,9 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 #'  res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
-movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold = 0.1, std = 1, grid.size = 50, plot.cutoff = 0.5) {
+movpotential_ews <- function (X, param = NULL, bw = "nrd",
+detection.threshold = 0.1, std = 1, grid.size = 50, plot.cutoff = 0.5,
+plot.contours = TRUE) {
 
   if (is.null(param)) {
     param <- seq(1, length(X), 1)
@@ -355,7 +358,9 @@ movpotential_ews <- function (X, param = NULL, bw = "nrd", detection.threshold =
   }  
 
   res <- list(pars = pars, xis = xis, pots = pots, mins = mins, maxs = maxs, std = std)
-  p <- PlotPotential(res, title = "Moving Average Potential", 'parameter/time', 'state variable', cutoff = plot.cutoff)
+  p <- PlotPotential(res, title = "Moving Average Potential",
+'parameter/time', 'state variable', cutoff = plot.cutoff,
+plot.contours = plot.contours)
 
   list(res = res, plot = p)
 
