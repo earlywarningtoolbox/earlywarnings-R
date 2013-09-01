@@ -12,7 +12,7 @@
 #'    @param incrwinsize increments the rolling window size (must be numeric between 0 and 100). Default is 25.
 #'    @param detrending the timeseries can be detrended/filtered. There are three options: \code{gaussian} filtering, \code{loess} fitting, \code{linear} detrending and \code{first-differencing}. Default is \code{no} detrending.
 #'    @param bandwidthrange is the range of the bandwidth used for the Gaussian kernel when gaussian filtering is selected. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 5\% - 100\%.
-#'    @parma spanrange parameter that controls the degree of smoothing (numeric between 0 and 100). Default is 5\% - 100\%. see more on loess{stats}
+#'    @param spanrange parameter that controls the degree of smoothing (numeric between 0 and 100). Default is 5\% - 100\%. see more on loess{stats}
 #'    @param degree the degree of polynomial to be used for when loess fitting is applied, normally 1 or 2 (Default). see more on loess{stats}
 #'    @param incrbandwidth is the size to increment the bandwidth used for the Gaussian kernel when gaussian filtering is applied. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 20.
 #'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE. 

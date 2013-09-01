@@ -9,6 +9,8 @@
 #    @param ylab.text ylab text
 #    @param cutoff parameter determining the upper limit of potential for visualizations
 #    @param plot.contours Plot contour lines.
+#    @param binwidth binwidth for contour plot
+#    @param bins bins for contour plot. Overrides binwidth if given
 # 
 # importFrom tgp interp.loess
 # importFrom ggplot2 ggplot
@@ -24,7 +26,7 @@
 #
 # @keywords early-warning
 
-PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, plot.contours = TRUE) {
+PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
 
   cut.potential <- max(apply(res$pots, 1, min)) + cutoff*abs(max(apply(res$pots, 1, min))) # Ensure all minima are visualized
   pots <- res$pots
@@ -45,8 +47,12 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, 
   p <- ggplot2::ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + scale_fill_gradient(low="black", high="white")
 
   if (plot.contours) {
-    p <- p + stat_contour(binwidth = .2)
-    #p <- p + stat_contour(bins = 2)
+    if (!is.null(bins)) {
+      warning("bins argument is overriding the binwidth argument!")
+      p <- p + stat_contour(bins = bins)            
+    } else {
+      p <- p + stat_contour(binwidth = binwidth)
+    }
     # p <- p + stat_contour(geom="polygon", aes(fill=..level..))
   }
 
@@ -285,6 +291,8 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 #'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
 #'  @param plot.cutoff cuttoff for potential minima and maxima in visualization
 #'  @param plot.contours Plot contours on the landscape visualization
+#'  @param binwidth binwidth for contour plot
+#'  @param bins bins for contour plot. Overrides binwidth if given
 #'
 #'  @return A list with the following elements:
 #'     pars values of the covariate parameter as matrix;
@@ -305,7 +313,7 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 
 movpotential_ews <- function (X, param = NULL, bw = "nrd",
 detection.threshold = 0.1, std = 1, grid.size = 50, plot.cutoff = 0.5,
-plot.contours = TRUE) {
+plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
 
   if (is.null(param)) {
     param <- seq(1, length(X), 1)
@@ -353,9 +361,7 @@ plot.contours = TRUE) {
   }  
 
   res <- list(pars = pars, xis = xis, pots = pots, mins = mins, maxs = maxs, std = std)
-  p <- PlotPotential(res, title = "Moving Average Potential",
-'parameter/time', 'state variable', cutoff = plot.cutoff,
-plot.contours = plot.contours)
+  p <- PlotPotential(res, title = "Moving Average Potential", 'parameter/time', 'state variable', cutoff = plot.cutoff, plot.contours = plot.contours, binwidth = binwidth, bins = bins)
 
   list(res = res, plot = p)
 

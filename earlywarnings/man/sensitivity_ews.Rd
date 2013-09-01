@@ -47,6 +47,10 @@
   length (must be numeric between 0 and 100). Default is
   5\% - 100\%.}
 
+  \item{spanrange}{parameter that controls the degree of
+  smoothing (numeric between 0 and 100). Default is 5\% -
+  100\%. see more on loess{stats}}
+
   \item{degree}{the degree of polynomial to be used for
   when loess fitting is applied, normally 1 or 2 (Default).
   see more on loess{stats}}

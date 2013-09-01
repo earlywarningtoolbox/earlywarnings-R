@@ -4,7 +4,8 @@
 \usage{
   movpotential_ews(X, param = NULL, bw = "nrd",
     detection.threshold = 0.1, std = 1, grid.size = 50,
-    plot.cutoff = 0.5, plot.contours = TRUE)
+    plot.cutoff = 0.5, plot.contours = TRUE,
+    binwidth = 0.2, bins = NULL)
 }
 \arguments{
   \item{X}{a vector of the X observations of the state
@@ -30,6 +31,11 @@
 
   \item{plot.contours}{Plot contours on the landscape
   visualization}
+
+  \item{binwidth}{binwidth for contour plot}
+
+  \item{bins}{bins for contour plot. Overrides binwidth if
+  given}
 }
 \value{
   A list with the following elements: pars values of the
