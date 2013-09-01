@@ -11,7 +11,7 @@
 #'    @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default valuise 50\%.
 #'    @param detrending the timeseries can be detrended/filtered prior to analysis. There are three options: \code{gaussian} filtering, \code{loess} fitting, \code{linear} detrending and \code{first-diff}erencing. Default is \code{no} detrending.
 #'    @param bandwidth is the bandwidth used for the Gaussian kernel when gaussian filtering is selected. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Alternatively it can be given by the bandwidth selector \code{\link{bw.nrd0}} (Default).
-#'    @parma span parameter that controls the degree of smoothing (numeric between 0 and 100, Default 25). see more on loess{stats}
+#'    @param span parameter that controls the degree of smoothing (numeric between 0 and 100, Default 25). see more on loess{stats}
 #'    @param degree the degree of polynomial to be used for when loess fitting is applied, normally 1 or 2 (Default). see more on loess{stats}
 #'    @param boots the number of surrogate data. Default is 100.
 #'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.

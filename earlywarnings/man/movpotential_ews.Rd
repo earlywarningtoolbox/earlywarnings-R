@@ -1,10 +1,10 @@
 \name{movpotential_ews}
 \alias{movpotential_ews}
-\title{Description: Moving Average Potential}
+\title{Moving Average Potential}
 \usage{
   movpotential_ews(X, param = NULL, bw = "nrd",
     detection.threshold = 0.1, std = 1, grid.size = 50,
-    plot.cutoff = 0.5)
+    plot.cutoff = 0.5, plot.contours = TRUE)
 }
 \arguments{
   \item{X}{a vector of the X observations of the state
@@ -19,46 +19,36 @@
   \item{detection.threshold}{Threshold for local optima to
   be discarded.}
 
-  \item{std}{std}
+  \item{std}{Standard deviation.}
 
   \item{grid.size}{number of evaluation points; number of
   steps between min and max potential; also used as kernel
   window size}
 
   \item{plot.cutoff}{cuttoff for potential minima and
-  maxima in visualization
+  maxima in visualization}
 
-  Returns:}
+  \item{plot.contours}{Plot contours on the landscape
+  visualization}
 }
 \value{
-  A list with the following elements:
-
-  \item{pars}{values of the covariate parameter as matrix}
-
-  \item{xis}{values of the x as matrix}
-
-  \item{pots}{smoothed potentials}
-
-  \item{mins}{minima in the densities (-potentials;
-  neglecting local optima)}
-
-  \item{maxs}{maxima in densities (-potentials; neglecting
-  local optima)}
-
-  \item{plot}{an object that displays the potential
-  estimated in 2D}
+  A list with the following elements: pars values of the
+  covariate parameter as matrix; xis values of the x as
+  matrix; pots smoothed potentials; mins minima in the
+  densities (-potentials; neglecting local optima); maxs
+  maxima in densities (-potentials; neglecting local
+  optima); plot an object that displays the potential
+  estimated in 2D
 }
 \description{
-  \code{movpotential_ews} reconstructs a potential derived
-  from data along a gradient of a given parameter the
-  \code{movpotential_ews} calculates the potential for
-  values that correspond to a particular parameter. see ref
-  below
+  This function reconstructs a potential derived from data
+  along a gradient of a given parameter.
+}
+\details{
+  Arguments:
 }
 \examples{
-X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
- param = seq(0,5,length=3000)
- res <- movpotential_ews(X, param)
+X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
 }
 \author{
   L. Lahti, E. van Nes, V. Dakos.

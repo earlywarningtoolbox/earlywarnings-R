@@ -159,14 +159,14 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 #'  Arguments:
 #'    @param fpot potential
 #'    @param detection.threshold detection threshold will be determined by multiplying this scalar with kernel height.
-#'   @param bw bandwidth
-#'   @param x original data
-#'   @param detection.limit ignore maxima that are below detection.limit * maximum density
+#'    @param bw bandwidth
+#'    @param x original data
+#'    @param detection.limit ignore maxima that are below detection.limit * maximum density
 #'
 #' Returns:
-#'   @return A list with the following elements:
-#'     min potential minima
-#'     max potential maxima
+#'    @return A list with the following elements:
+#'      min potential minima
+#'      max potential maxima
 #'
 #' @export
 #'
@@ -270,30 +270,27 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 }
 
 
-#' Description: Moving Average Potential
+#' Moving Average Potential
 #'
-#' \code{movpotential_ews} reconstructs a potential derived from data along a gradient of a given parameter
-#Detail
-#' the \code{movpotential_ews} calculates the potential for values that correspond to a particular parameter. see ref below
+#' This function reconstructs a potential derived from data along a gradient of a given parameter.
 #'
-# Arguments:
+#' Arguments:
 #'  @param X a vector of the X observations of the state variable of interest
 #'  @param param parameter values corresponding to the observations in X 
 #'  @param bw Bandwidth for smoothing kernels. Automatically determined by default.
 #'  @param detection.threshold Threshold for local optima to be discarded.
-#'  @param std std
+#'  @param std Standard deviation.
 #'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
 #'  @param plot.cutoff cuttoff for potential minima and maxima in visualization
 #'  @param plot.contours Plot contours on the landscape visualization
 #'
-#' Returns:
-#'   @return A list with the following elements:
-#'   @return \item{pars}{values of the covariate parameter as matrix}
-#'   @return \item{xis}{values of the x as matrix}
-#'   @return \item{pots}{smoothed potentials}
-#'   @return \item{mins}{minima in the densities (-potentials; neglecting local optima)}
-#'   @return \item{maxs}{maxima in densities (-potentials; neglecting local optima)}
-#'   @return \item{plot}{an object that displays the potential estimated in 2D}
+#'  @return A list with the following elements:
+#'     pars values of the covariate parameter as matrix;
+#'     xis values of the x as matrix;
+#'     pots smoothed potentials;
+#'     mins minima in the densities (-potentials; neglecting local optima);
+#'     maxs maxima in densities (-potentials; neglecting local optima);
+#'     plot an object that displays the potential estimated in 2D
 #' 
 #' @export
 #'
@@ -301,10 +298,7 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 #' @author L. Lahti, E. van Nes, V. Dakos.
 #' @seealso \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{livpotential_ews}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
-#' @examples 
-#'  X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2))
-#'  param = seq(0,5,length=3000)
-#'  res <- movpotential_ews(X, param)
+#' @examples X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
 movpotential_ews <- function (X, param = NULL, bw = "nrd",
@@ -315,7 +309,6 @@ plot.contours = TRUE) {
     param <- seq(1, length(X), 1)
   }
 
-  
   nas <- is.na(param) | is.na(X)
   if (sum(nas) > 0) {
     warning("The data contains NAs, removing the associated samples from X and param input arguments.")

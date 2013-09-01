@@ -33,6 +33,10 @@
   \code{linear} detrending and \code{first-differencing}.
   Default is \code{no} detrending.}
 
+  \item{span}{parameter that controls the degree of
+  smoothing (numeric between 0 and 100, Default 25). see
+  more on loess{stats}}
+
   \item{degree}{the degree of polynomial to be used for
   when loess fitting is applied, normally 1 or 2 (Default).
   see more on loess{stats}}
