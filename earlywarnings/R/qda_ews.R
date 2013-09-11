@@ -22,7 +22,7 @@
 #'    @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
 #' 
 # Returns:
-#' \code{qda_ews} returns three plots. The first plot contains the original data, the detrending/filtering applied and the residuals (if selected), autocorrelation and variance. For each statistic trends are estimated by the nonparametric Kendall tau correlation.  The second plot, returns a histogram of the distributions of the Kendall trend statistic for autocorrelation and variance estimated on the surrogated data. Vertical lines represent the level of significance, whereas the black dots the actual trend found in the time series. The third plot is the reconstructed potential landscape in 2D.
+#' \code{qda_ews} produces three plots. The first plot contains the original data, the detrending/filtering applied and the residuals (if selected), autocorrelation and variance. For each statistic trends are estimated by the nonparametric Kendall tau correlation.  The second plot, returns a histogram of the distributions of the Kendall trend statistic for autocorrelation and variance estimated on the surrogated data. Vertical lines represent the level of significance, whereas the black dots the actual trend found in the time series. The third plot is the reconstructed potential landscape in 2D. In addition, the function returns a list containing the output from the respective functions generic_RShiny (indicators); surrogates_RShiny (trends); movpotential_ews (potential analysis)
 #'  
 #' @export
 #' 
@@ -40,25 +40,29 @@ qda_ews <- function(timeseries, param = NULL, winsize = 50, detrending=c("no","g
   
   timeseries <- data.matrix(timeseries)
     message("Indicator trend analysis")
-    generic_RShiny(timeseries,winsize,detrending,bandwidth,logtransform,interpolate,AR_n=FALSE,powerspectrum=FALSE)
+    g <- generic_RShiny(timeseries,winsize,detrending,bandwidth,logtransform,interpolate,AR_n=FALSE,powerspectrum=FALSE)
       
     message("Trend significance analysis")
+    X11()
     s <- surrogates_RShiny(timeseries,winsize,detrending,bandwidth,boots,s_level,logtransform,interpolate)
     print(s)
 
     message("Potential analysis")
     p <- movpotential_ews(as.vector(timeseries[,1]), param, detection.threshold = detection.threshold, grid.size = grid.size, plot.cutoff = cutoff)
+    X11()
     print(p)
     
     #   message("Sensitivity of trends")
     #   sens <- sensitivity_RShiny(timeseries,winsizerange=c(25,75),incrwinsize,detrending=detrending, bandwidthrange=c(5,100),incrbandwidth,logtransform=FALSE,interpolate=FALSE)
+
+    list(indicators = g, trends = s, potential.plot = p)
 
 }
   
 # generic_Rshiny for estimating only AR1 and Variance in moving windows with various options for pretreating the data
 # 26 Feb 2013
 
-generic_RShiny<-function(timeseries, winsize = 50, detrending = c("no", "gaussian", "linear", "first-diff"), bandwidth, logtransform, interpolate, AR_n = FALSE, powerspectrum = FALSE){
+generic_RShiny <- function(timeseries, winsize = 50, detrending = c("no", "gaussian", "linear", "first-diff"), bandwidth, logtransform, interpolate, AR_n = FALSE, powerspectrum = FALSE){
 	
     #timeseries<-ts(timeseries)
     timeseries<-data.matrix(timeseries) #strict data-types the input data as tseries object for use in later steps
@@ -166,7 +170,8 @@ generic_RShiny<-function(timeseries, winsize = 50, detrending = c("no", "gaussia
     # Output
     out<-data.frame(timeindex[mw:length(nsmY)],nARR,nSD)
     colnames(out)<-c("timeindex","ar1","sd")
-    #return(out)
+
+    return(out)
     
 }
 

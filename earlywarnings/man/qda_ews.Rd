@@ -58,7 +58,7 @@
   original. Default is FALSE (assumes there are no gaps in
   the timeseries).
 
-  \code{qda_ews} returns three plots. The first plot
+  \code{qda_ews} produces three plots. The first plot
   contains the original data, the detrending/filtering
   applied and the residuals (if selected), autocorrelation
   and variance. For each statistic trends are estimated by
@@ -68,7 +68,11 @@
   estimated on the surrogated data. Vertical lines
   represent the level of significance, whereas the black
   dots the actual trend found in the time series. The third
-  plot is the reconstructed potential landscape in 2D.}
+  plot is the reconstructed potential landscape in 2D. In
+  addition, the function returns a list containing the
+  output from the respective functions generic_RShiny
+  (indicators); surrogates_RShiny (trends);
+  movpotential_ews (potential analysis)}
 }
 \description{
   \code{qda_ews} is used to estimate autocorrelation,
