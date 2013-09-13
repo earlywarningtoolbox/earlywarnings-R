@@ -34,7 +34,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, 
 
   # Static contour
   # Interpolate potential grid
-  intp <- tgp::interp.loess(as.vector(res$pars), as.vector(res$xis), as.vector(pots))
+  intp <- tgp::interp.loess(as.vector(res$pars), as.vector(res$xis), as.vector(pots), gridlen = 2*dim(pots))
   xy <- expand.grid(intp$x, intp$y)
   z <- as.vector(intp$z)
   z[is.na(z)] <- max(na.omit(z))
@@ -346,7 +346,9 @@ plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
 
     # Check which elements in evaluation range (param) are within 2*sd of par
     weights <- exp(-.5*(abs(par - param) / sdwindow)^2)
-    weights <- weights/sum(weights) # LL added normalization in the R implementation 16.5.2012
+
+    # LL: Normalization was added in the R implementation 16.5.2012; removed 13.9.2013 for consistency
+    # weights <- weights/sum(weights) 
 
     # Calculate the potential
     tmp <- livpotential_ews(x = X, std = std, bw = bw, weights = weights, grid.size = grid.size)
