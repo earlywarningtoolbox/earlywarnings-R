@@ -135,8 +135,6 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
   # Normalize the density such that it integrates to unity
   f <- f/sum(diff(de$x[1:2])*f)
 
-  # Smooth the density
-
   # Final grid points and bandwidth
   grid.points <- de$x
   bw <- de$bw
@@ -336,7 +334,7 @@ plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
   xi <- seq(min(X), max(X), length = grid.size)
 
   # Initialize
-  xis <- pars <- pots <- matrix(0, nrow = grid.size, ncol = length(xi))
+  xis  <- pars <- pots <- matrix(0, nrow = grid.size, ncol = length(xi))
   maxs <- mins <- matrix(0, nrow = grid.size, ncol = length(xi))
   
   for (i in 1:grid.size) {
@@ -347,8 +345,8 @@ plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
     # Check which elements in evaluation range (param) are within 2*sd of par
     weights <- exp(-.5*(abs(par - param) / sdwindow)^2)
 
-    # LL: Normalization was added in the R implementation 16.5.2012; removed 13.9.2013 for consistency
-    # weights <- weights/sum(weights) 
+    # LL: Normalization was added in the R implementation 16.5.2012
+    weights <- weights/sum(weights) 
 
     # Calculate the potential
     tmp <- livpotential_ews(x = X, std = std, bw = bw, weights = weights, grid.size = grid.size)
@@ -363,6 +361,7 @@ plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
   }  
 
   res <- list(pars = pars, xis = xis, pots = pots, mins = mins, maxs = maxs, std = std)
+  
   p <- PlotPotential(res, title = "Moving Average Potential", 'parameter/time', 'state variable', cutoff = plot.cutoff, plot.contours = plot.contours, binwidth = binwidth, bins = bins)
 
   list(res = res, plot = p)
