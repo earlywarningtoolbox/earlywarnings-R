@@ -3,9 +3,9 @@
 \title{Moving Average Potential}
 \usage{
   movpotential_ews(X, param = NULL, bw = "nrd",
-    detection.threshold = 0.1, std = 1, grid.size = 50,
-    plot.cutoff = 0.5, plot.contours = TRUE,
-    binwidth = 0.2, bins = NULL)
+    bw.adjust = 1, detection.threshold = 0.1, std = 1,
+    grid.size = 50, plot.cutoff = 0.5,
+    plot.contours = TRUE, binwidth = 0.2, bins = NULL)
 }
 \arguments{
   \item{X}{a vector of the X observations of the state
@@ -16,6 +16,8 @@
 
   \item{bw}{Bandwidth for smoothing kernels. Automatically
   determined by default.}
+
+  \item{bw.adjust}{Bandwidth adjustment constant}
 
   \item{detection.threshold}{Threshold for local optima to
   be discarded.}

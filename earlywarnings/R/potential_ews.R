@@ -284,6 +284,7 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 #'  @param X a vector of the X observations of the state variable of interest
 #'  @param param parameter values corresponding to the observations in X 
 #'  @param bw Bandwidth for smoothing kernels. Automatically determined by default.
+#'  @param bw.adjust Bandwidth adjustment constant
 #'  @param detection.threshold Threshold for local optima to be discarded.
 #'  @param std Standard deviation.
 #'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
@@ -309,7 +310,7 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
 #' @examples X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
-movpotential_ews <- function (X, param = NULL, bw = "nrd",
+movpotential_ews <- function (X, param = NULL, bw = "nrd", bw.adjust = 1,
 detection.threshold = 0.1, std = 1, grid.size = 50, plot.cutoff = 0.5,
 plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
 
@@ -349,7 +350,7 @@ plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
     weights <- weights/sum(weights) 
 
     # Calculate the potential
-    tmp <- livpotential_ews(x = X, std = std, bw = bw, weights = weights, grid.size = grid.size)
+    tmp <- livpotential_ews(x = X, std = std, bw = bw, bw.adjust = bw.adjust, weights = weights, grid.size = grid.size)
 
     # Store variables
     pots[i, ] <- tmp$pot
