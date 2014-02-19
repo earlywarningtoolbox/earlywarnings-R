@@ -108,7 +108,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, 
 #' res <- livpotential_ews(foldbif)
 #' @keywords early-warning
 
-livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.01, bw.adjust = 1, density.smoothing = 0.01, detection.limit = 0.1) {
+livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.01, bw.adjust = 1, density.smoothing = 0, detection.limit = 0.1) {
 
   x <- data.frame(x)
 
@@ -141,14 +141,13 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 
   # Compute potential
   U <- -log(f)*std^2/2
+  # f <- exp(-2*U/std^2) # backtransform to density distribution
+save(U, file = "~/tmp/tmp.RData")
+  # Ignore very local optima
+  # Note mins and maxs for density given here (not for potential,
+  # which has the opposite signs)
 
-  # Mark the final minima and maxima for this evaluation point
-  # (minima and maxima for the density; note this is conversely to potential!)    fpot <- f
-  # fpot <- exp(-2*U/std^2) # backtransform to density distribution
-
-  # Identify and store optima, given detection threshold (ie. ignore very local optima)
-  # Note mins and maxs for density given here (not for potential, which has the opposite signs)
-  ops  <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x, detection.limit = detection.limit)
+  ops  <- find.optima(f, detection.multiplier = detection.threshold, bw = bw, x = x, detection.limit = detection.limit)
   min.points <- grid.points[ops$min]
   max.points <- grid.points[ops$max]
   det.th <- ops$detection.threshold
@@ -160,19 +159,19 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 
 #' Description: find.optima
 #'
-#' Detect optima from the potential, excluding very local optima below detection.threshold
+#' Detect optima, excluding very local optima below detection.threshold
 #'
 #'  Arguments:
-#'    @param fpot potential
-#'    @param detection.threshold detection threshold will be determined by multiplying this scalar with kernel height.
+#'    @param f density
+#'    @param detection.multiplier multiple of kernel height to be used as the detection threshold
 #'    @param bw bandwidth
 #'    @param x original data
-#'    @param detection.limit ignore maxima that are below detection.limit * maximum density
+#'    @param detection.limit ignore maxima that are below detection.limit given by multiple of kernel height
 #'
 #' Returns:
 #'    @return A list with the following elements:
-#'      min potential minima
-#'      max potential maxima
+#'      min minima
+#'      max maxima
 #'
 #' @export
 #'
@@ -182,27 +181,73 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 #'
 #' @keywords utilities
 
-find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit = 0) {
+find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0) {
 
-  # Set detection threshold as fraction of the maximal observed density
-  #det.th <- detection.threshold * max(f)
-  kernel.height <- dnorm(0, sd = bw) / length(x)
-  detection.threshold <- detection.threshold * kernel.height
-  #det.th <- detection.threshold/(bw * length(x))
-  #det.th <- detection.threshold/bw
-  #det.th <- detection.threshold
- 	  
+  # Set detection threshold as function of kernel height
+  kernel.height <- dnorm(0, sd = bw) / nrow(x)
+  detection.threshold <- detection.multiplier * kernel.height
+  detlim <- detection.limit * kernel.height
+  #detlim <- detection.limit*1/diff(range(x))
+
   # Detect minima and maxima of the density (see Livina et al.)
   # these correspond to maxima and minima of the potential, respectively
   # including end points of the vector	   
-  maxima <- which(diff(sign(diff(c(-Inf, fpot, -Inf))))==-2)
-  minima <- which(diff(sign(diff(c(Inf, -fpot, Inf))))==-2)
+  maxima <- which(diff(sign(diff(c(-Inf, f, -Inf))))==-2)
+  minima <- which(diff(sign(diff(c( Inf, -f, Inf))))==-2)
+  #minima <- which(extract(turnpoints(ts(f))) == -1)	
+  #maxima <- which(extract(turnpoints(ts(f))) == 1)	
 
-  # First, set all maxima that are below detection threshold to the minimal density to 
-  # ignore them in the later steps
-  #fpot[maxima][fpot[maxima] < min.density * kernel.height] <- min(fpot)
-  fpot[maxima][fpot[maxima] < detection.limit * max(fpot)] <- min(fpot)
-  #fpot[maxima][fpot[maxima] < min.density * diff(range(x))] <- min(fpot)
+  # remove maxima that are below detection threshold 
+  maxima <- maxima[f[maxima] >= detlim]
+
+  # remove minima that now became obsolete
+  # If there are multiple minima between two consecutive maxima
+  # after removing the maxima that did not pass the threshold,
+  # take the average of the minima;return the list of indices such
+  # that between each pair of consecutive maxima, there is 
+  # exactly one minimum
+
+  if (length(maxima) > 1) {
+    minima <- sapply(2:length(maxima), function (i) {
+
+      mins <- minima[minima >= maxima[[i-1]] & minima <= maxima[[i]]];
+      round(mean(mins[which(f[mins] == min(f[mins]))]))
+
+    })
+
+  } else {
+    minima <- NULL
+  }
+
+  # Combine maxima that do not have minima in between
+  if (length(maxima) > 1) {
+    maxima2 <- c()
+
+    for (i in 1:(length(maxima)-1)) {
+      nominima <- TRUE
+      cnt <- 0
+      while (nominima) {
+        cnt <- cnt + 1
+        nominima <- sum(minima > maxima[[i]] & minima < maxima[[i + cnt]]) == 0
+      }
+
+      maxs <- maxima[i:(i+cnt-1)]
+      maxima2 <- c(maxima2, round(mean(maxs[which(f[maxs] == max(f[maxs]))])))
+
+    }
+
+    if (!maxima[[length(maxima)]] %in% maxima2) {
+      maxima2 <- c(maxima2, maxima[[length(maxima)]])
+    }
+      
+
+    maxima <- maxima2
+
+  }
+
+
+  # Remove minima that are outside the most extreme maxima
+  minima <- minima[minima > min(maxima) & minima < max(maxima)]
 
   # Remove minima and maxima that are too shallow
   delmini <- logical(length(minima))
@@ -229,19 +274,22 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
     } 
         
     # if no positive differences available, set it to same value with i2
-    if (is.null(i1) && !is.null(i2)) {
+    if ((is.null(i1) && !is.null(i2))) {
        i1 <- i2
-    } else if (is.null(i2) && !is.null(i1)) {
+    } else if ((is.null(i2) && !is.null(i1))) {
        # if no negative differences available, set it to same value with i1
        i2 <- i1
     }
+
+    if (!is.null(i1) && is.na(i1)) {i1 <- NULL}
+    if (!is.null(i2) && is.na(i2)) {i2 <- NULL}
 
     # If a closest minimum exists, check differences and remove if difference is under threshold
     if (!is.null(i1)) {
   
       # Smallest difference between this maximum and the closest minima
-      diff <- min( (fpot[maxima[[j]]] - fpot[i1]), 
-	     	   (fpot[maxima[[j]]] - fpot[i2]))
+      diff <- min( c((f[maxima[[j]]] - f[i1]), 
+	     	   (f[maxima[[j]]] - f[i2])))
 
       if (diff < detection.threshold) {
 
@@ -249,7 +297,7 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
         delmaxi[[j]] <- TRUE
 
 	# Delete the larger of the two neighboring minima 
-        if (fpot[[i1]] > fpot[[i2]]) {
+        if (f[[i1]] > f[[i2]]) {
           delmini[minima == i1] <- TRUE
 	} else {
           delmini[minima == i2] <- TRUE
@@ -261,7 +309,6 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
     }
   }
 
-
   # Delete the shallow minima and maxima 
   if (length(minima) > 0 && sum(delmini)>0) {
     minima <- minima[!delmini]
@@ -271,7 +318,9 @@ find.optima <- function (fpot, detection.threshold = 0, bw, x, detection.limit =
     maxima <- maxima[!delmaxi]
   }
 
-  list(min = minima, max = maxima, detection.threshold = detection.threshold)
+  #print(maxima)
+
+  list(min = minima, max = maxima, detection.threshold = detection.threshold, detection.limit = detlim)
   
 }
 
