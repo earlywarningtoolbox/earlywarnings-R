@@ -1,30 +1,28 @@
-# Description: Plot Potential
-#
-# Visualization of the potential function from the movpotential function
-#
-#  Arguments:
-#    @param res output from movpotential function
-#    @param title title text
-#    @param xlab.text xlab text
-#    @param ylab.text ylab text
-#    @param cutoff parameter determining the upper limit of potential for visualizations
-#    @param plot.contours Plot contour lines.
-#    @param binwidth binwidth for contour plot
-#    @param bins bins for contour plot. Overrides binwidth if given
-# 
-# importFrom tgp interp.loess
-# importFrom ggplot2 ggplot
-#
-# Returns:
-#   @return \item{ggplot2}{potential plotted}
-#
-# @export
-#
-# @references Dakos, V., et al (2012)."Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data." \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
-# @author Leo Lahti \email{leo.lahti@@iki.fi}
-# @examples #
-#
-# @keywords early-warning
+#' Description: Plot Potential
+#'
+#' Visualization of the potential function from the movpotential function
+#'
+#' Arguments:
+#'    @param res output from movpotential function
+#'    @param title title text
+#'    @param xlab.text xlab text
+#'    @param ylab.text ylab text
+#'    @param cutoff parameter determining the upper limit of potential for visualizations
+#'    @param plot.contours Plot contour lines.
+#'    @param binwidth binwidth for contour plot
+#'    @param bins bins for contour plot. Overrides binwidth if given
+#' 
+#' @importFrom tgp interp.loess
+#' @importFrom ggplot2 ggplot
+#' @return \item{ggplot2}{potential plotted}
+#'
+#' @export
+#'
+#' @references Dakos, V., et al (2012)."Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data." \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+#' @author Leo Lahti \email{leo.lahti@@iki.fi}
+#' @examples # X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param); PlotPotential(res$res, title = "", xlab.text = "", ylab.text = "", cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2)
+#'
+#' @keywords early-warning
 
 PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2, bins = NULL) {
 
@@ -142,7 +140,6 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
   # Compute potential
   U <- -log(f)*std^2/2
   # f <- exp(-2*U/std^2) # backtransform to density distribution
-save(U, file = "~/tmp/tmp.RData")
   # Ignore very local optima
   # Note mins and maxs for density given here (not for potential,
   # which has the opposite signs)
@@ -211,13 +208,18 @@ find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0
     minima <- sapply(2:length(maxima), function (i) {
 
       mins <- minima[minima >= maxima[[i-1]] & minima <= maxima[[i]]];
-      round(mean(mins[which(f[mins] == min(f[mins]))]))
-
+      if (length(mins) > 0) {
+        round(mean(mins[which(f[mins] == min(f[mins]))]))
+      } else {NULL}
     })
 
   } else {
     minima <- NULL
   }
+
+  minima <- unlist(minima)
+  maxima <- maxima[f[maxima] >= detlim]
+  
 
   # Combine maxima that do not have minima in between
   if (length(maxima) > 1) {
@@ -229,6 +231,7 @@ find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0
       while (nominima) {
         cnt <- cnt + 1
         nominima <- sum(minima > maxima[[i]] & minima < maxima[[i + cnt]]) == 0
+	#if (is.na(nominima)) {nominima <- TRUE}
       }
 
       maxs <- maxima[i:(i+cnt-1)]

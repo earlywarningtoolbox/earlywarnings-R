@@ -4,7 +4,7 @@
 \usage{
   livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
     grid.size = NULL, detection.threshold = 0.01,
-    bw.adjust = 1, density.smoothing = 0.01,
+    bw.adjust = 1, density.smoothing = 0,
     detection.limit = 0.1)
 }
 \arguments{
