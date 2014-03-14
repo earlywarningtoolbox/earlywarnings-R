@@ -2,10 +2,9 @@
 \alias{livpotential_ews}
 \title{Description: Potential Analysis for univariate data}
 \usage{
-  livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
-    grid.size = NULL, detection.threshold = 0.01,
-    bw.adjust = 1, density.smoothing = 0,
-    detection.limit = 0.1)
+livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
+  grid.size = NULL, detection.threshold = 0.01, bw.adjust = 1,
+  density.smoothing = 0, detection.limit = 0.1)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -39,64 +38,61 @@
   detection.limit * maximum density}
 }
 \value{
-  \code{livpotential} returns a list with the following
-  elements:
+\code{livpotential} returns a list with the following
+elements:
 
-  \item{xi}{the grid of points on which the potential is
-  estimated}
+\item{xi}{the grid of points on which the potential is
+estimated}
 
-  \item{pot}{The estimated potential: -log(f)*std^2/2,
-  where f is the density.}
+\item{pot}{The estimated potential: -log(f)*std^2/2, where
+f is the density.}
 
-  \item{density}{Density estimate corresponding to the
-  potential.}
+\item{density}{Density estimate corresponding to the
+potential.}
 
-  \item{min.inds}{indices of the grid points at which the
-  density has minimum values; (-potentials; neglecting
-  local optima)}
+\item{min.inds}{indices of the grid points at which the
+density has minimum values; (-potentials; neglecting local
+optima)}
 
-  \item{max.inds}{indices the grid points at which the
-  density has maximum values; (-potentials; neglecting
-  local optima)}
+\item{max.inds}{indices the grid points at which the
+density has maximum values; (-potentials; neglecting local
+optima)}
 
-  \item{bw}{bandwidth of kernel used}
+\item{bw}{bandwidth of kernel used}
 
-  \item{min.points}{grid point values at which the density
-  has minimum values; (-potentials; neglecting local
-  optima)}
+\item{min.points}{grid point values at which the density
+has minimum values; (-potentials; neglecting local optima)}
 
-  \item{max.points}{grid point values at which the density
-  has maximum values; (-potentials; neglecting local
-  optima)}
+\item{max.points}{grid point values at which the density
+has maximum values; (-potentials; neglecting local optima)}
 }
 \description{
-  \code{livpotential_ews} performs one-dimensional
-  potential estimation derived from a uni-variate
-  timeseries
+\code{livpotential_ews} performs one-dimensional potential
+estimation derived from a uni-variate timeseries
 }
 \examples{
 data(foldbif)
 res <- livpotential_ews(foldbif)
 }
 \author{
-  Based on Matlab code from Egbert van Nes modified by Leo
-  Lahti. Implemented in early warnings package by V. Dakos.
+Based on Matlab code from Egbert van Nes modified by Leo
+Lahti. Implemented in early warnings package by V. Dakos.
 }
 \references{
-  Livina, VN, F Kwasniok, and TM Lenton, 2010. Potential
-  analysis reveals changing number of climate states during
-  the last 60 kyr . \emph{Climate of the Past}, 6, 77-82.
+Livina, VN, F Kwasniok, and TM Lenton, 2010. Potential
+analysis reveals changing number of climate states during
+the last 60 kyr . \emph{Climate of the Past}, 6, 77-82.
 
-  Dakos, V., et al (2012)."Methods for Detecting Early
-  Warnings of Critical Transitions in Time Series
-  Illustrated Using Simulated Ecological Data." \emph{PLoS
-  ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
+Dakos, V., et al (2012)."Methods for Detecting Early
+Warnings of Critical Transitions in Time Series Illustrated
+Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{
-  \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}};
-  \code{\link{bdstest_ews}};
-  \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}};
-  \code{\link{ch_ews}};\code{\link{movpotential_ews}}
+\code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}};
+\code{\link{bdstest_ews}};
+\code{\link{sensitivity_ews}};\code{\link{surrogates_ews}};
+\code{\link{ch_ews}};\code{\link{movpotential_ews}}
 }
 \keyword{early-warning}
 

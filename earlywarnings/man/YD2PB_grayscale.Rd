@@ -4,16 +4,16 @@
 \title{YD2PB_grayscale data set}
 \format{TBA}
 \source{
-  TBA
+TBA
 }
 \description{
-  YD2PB_grayscale data set
+YD2PB_grayscale data set
 }
 \examples{
 #
 }
 \references{
-  See citation("earlywarnings")
+See citation("earlywarnings")
 }
 \keyword{datasets}
 

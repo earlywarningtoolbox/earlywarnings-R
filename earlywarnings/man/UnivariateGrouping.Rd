@@ -2,7 +2,7 @@
 \alias{UnivariateGrouping}
 \title{Description: Get group assigment indices for univariate data points, given cluster break points}
 \usage{
-  UnivariateGrouping(x, breakpoints)
+UnivariateGrouping(x, breakpoints)
 }
 \arguments{
   \item{x}{Univariate data vector}
@@ -12,16 +12,16 @@
   Returns:}
 }
 \value{
-  A vector of cluster indices
+A vector of cluster indices
 }
 \description{
-  Arguments:
+Arguments:
 }
 \examples{
 #
 }
 \author{
-  Leo Lahti \email{leo.lahti@iki.fi}
+Leo Lahti \email{leo.lahti@iki.fi}
 }
 \keyword{early-warning}
 

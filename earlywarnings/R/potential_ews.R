@@ -108,6 +108,8 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, 
 
 livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, detection.threshold = 0.01, bw.adjust = 1, density.smoothing = 0, detection.limit = 0.1) {
 
+  # std <- 1; bw <- "nrd"; weights <- c(); grid.size = floor(.2*ncol(mydat)); detection.threshold = det.th; density.smoothing = 0
+
   x <- data.frame(x)
 
   if (is.null(grid.size)) {
@@ -180,6 +182,8 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 
 find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0) {
 
+  # detection.multiplier = detection.threshold
+
   # Set detection threshold as function of kernel height
   kernel.height <- dnorm(0, sd = bw) / nrow(x)
   detection.threshold <- detection.multiplier * kernel.height
@@ -220,7 +224,6 @@ find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0
   minima <- unlist(minima)
   maxima <- maxima[f[maxima] >= detlim]
   
-
   # Combine maxima that do not have minima in between
   if (length(maxima) > 1) {
     maxima2 <- c()
@@ -228,7 +231,7 @@ find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0
     for (i in 1:(length(maxima)-1)) {
       nominima <- TRUE
       cnt <- 0
-      while (nominima) {
+      while (nominima & (i + cnt) < length(maxima)) {
         cnt <- cnt + 1
         nominima <- sum(minima > maxima[[i]] & minima < maxima[[i + cnt]]) == 0
 	#if (is.na(nominima)) {nominima <- TRUE}
@@ -247,7 +250,6 @@ find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0
     maxima <- maxima2
 
   }
-
 
   # Remove minima that are outside the most extreme maxima
   minima <- minima[minima > min(maxima) & minima < max(maxima)]

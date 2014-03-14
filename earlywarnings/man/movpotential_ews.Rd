@@ -2,10 +2,9 @@
 \alias{movpotential_ews}
 \title{Moving Average Potential}
 \usage{
-  movpotential_ews(X, param = NULL, bw = "nrd",
-    bw.adjust = 1, detection.threshold = 0.1, std = 1,
-    grid.size = 50, plot.cutoff = 0.5,
-    plot.contours = TRUE, binwidth = 0.2, bins = NULL)
+movpotential_ews(X, param = NULL, bw = "nrd", bw.adjust = 1,
+  detection.threshold = 0.1, std = 1, grid.size = 50, plot.cutoff = 0.5,
+  plot.contours = TRUE, binwidth = 0.2, bins = NULL)
 }
 \arguments{
   \item{X}{a vector of the X observations of the state
@@ -40,37 +39,36 @@
   given}
 }
 \value{
-  A list with the following elements: pars values of the
-  covariate parameter as matrix; xis values of the x as
-  matrix; pots smoothed potentials; mins minima in the
-  densities (-potentials; neglecting local optima); maxs
-  maxima in densities (-potentials; neglecting local
-  optima); plot an object that displays the potential
-  estimated in 2D
+A list with the following elements: pars values of the
+covariate parameter as matrix; xis values of the x as
+matrix; pots smoothed potentials; mins minima in the
+densities (-potentials; neglecting local optima); maxs
+maxima in densities (-potentials; neglecting local optima);
+plot an object that displays the potential estimated in 2D
 }
 \description{
-  This function reconstructs a potential derived from data
-  along a gradient of a given parameter.
+This function reconstructs a potential derived from data
+along a gradient of a given parameter.
 }
 \details{
-  Arguments:
+Arguments:
 }
 \examples{
 X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
 }
 \author{
-  L. Lahti, E. van Nes, V. Dakos.
+L. Lahti, E. van Nes, V. Dakos.
 }
 \references{
-  Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M.
-  (2011). Global resilience of tropical forest and savanna
-  to critical transitions. \emph{Science}, 334, 232-235.
+Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M.
+(2011). Global resilience of tropical forest and savanna to
+critical transitions. \emph{Science}, 334, 232-235.
 }
 \seealso{
-  \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}};
-  \code{\link{bdstest_ews}};
-  \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}};
-  \code{\link{ch_ews}}; \code{livpotential_ews}
+\code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}};
+\code{\link{bdstest_ews}};
+\code{\link{sensitivity_ews}};\code{\link{surrogates_ews}};
+\code{\link{ch_ews}}; \code{livpotential_ews}
 }
 \keyword{early-warning}
 

@@ -2,8 +2,7 @@
 \alias{find.optima}
 \title{Description: find.optima}
 \usage{
-  find.optima(f, detection.multiplier = 0, bw, x,
-    detection.limit = 0)
+find.optima(f, detection.multiplier = 0, bw, x, detection.limit = 0)
 }
 \arguments{
   \item{f}{density}
@@ -21,23 +20,23 @@
   Returns:}
 }
 \value{
-  A list with the following elements: min minima max maxima
+A list with the following elements: min minima max maxima
 }
 \description{
-  Detect optima, excluding very local optima below
-  detection.threshold
+Detect optima, excluding very local optima below
+detection.threshold
 }
 \details{
-  Arguments:
+Arguments:
 }
 \examples{
 #
 }
 \author{
-  Leo Lahti \email{leo.lahti@iki.fi}
+Leo Lahti \email{leo.lahti@iki.fi}
 }
 \references{
-  See citation("TBA")
+See citation("TBA")
 }
 \keyword{utilities}
 
