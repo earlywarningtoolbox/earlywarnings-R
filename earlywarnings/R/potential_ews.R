@@ -146,7 +146,7 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
   # Note mins and maxs for density given here (not for potential,
   # which has the opposite signs)
 
-  ops  <- find.optima(f, detection.multiplier = detection.threshold, bw = bw, x = x, detection.limit = detection.limit)
+  ops  <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x, detection.limit = detection.limit)
   min.points <- grid.points[ops$min]
   max.points <- grid.points[ops$max]
   det.th <- ops$detection.threshold
@@ -162,10 +162,10 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 #'
 #'  Arguments:
 #'    @param f density
-#'    @param detection.multiplier multiple of kernel height to be used as the detection threshold
+#'    @param detection.threshold detection threshold for peaks
 #'    @param bw bandwidth
 #'    @param x original data
-#'    @param detection.limit ignore maxima that are below detection.limit given by multiple of kernel height
+#'    @param detection.limit ignore maxima that are below this value
 #'
 #' Returns:
 #'    @return A list with the following elements:
@@ -180,15 +180,15 @@ livpotential_ews <- function (x, std = 1, bw = "nrd", weights = c(), grid.size =
 #'
 #' @keywords utilities
 
-find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0) {
+find.optima <- function (f, detection.threshold = 0, bw, x, detection.limit = 0) {
 
   # detection.multiplier = detection.threshold
-
   # Set detection threshold as function of kernel height
-  kernel.height <- dnorm(0, sd = bw) / nrow(x)
-  detection.threshold <- detection.multiplier * kernel.height
-  detlim <- detection.limit * kernel.height
+  #kernel.height <- dnorm(0, sd = bw) / nrow(x)
+  #detection.threshold <- detection.multiplier * kernel.height
+  #detlim <- detection.limit * kernel.height
   #detlim <- detection.limit*1/diff(range(x))
+  detlim <- detection.limit
 
   # Detect minima and maxima of the density (see Livina et al.)
   # these correspond to maxima and minima of the potential, respectively
@@ -322,8 +322,6 @@ find.optima <- function (f, detection.multiplier = 0, bw, x, detection.limit = 0
   if (length(maxima) > 0 && sum(delmaxi)>0) {
     maxima <- maxima[!delmaxi]
   }
-
-  #print(maxima)
 
   list(min = minima, max = maxima, detection.threshold = detection.threshold, detection.limit = detlim)
   

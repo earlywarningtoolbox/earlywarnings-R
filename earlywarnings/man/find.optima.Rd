@@ -2,20 +2,19 @@
 \alias{find.optima}
 \title{Description: find.optima}
 \usage{
-find.optima(f, detection.multiplier = 0, bw, x, detection.limit = 0)
+find.optima(f, detection.threshold = 0, bw, x, detection.limit = 0)
 }
 \arguments{
   \item{f}{density}
 
-  \item{detection.multiplier}{multiple of kernel height to
-  be used as the detection threshold}
+  \item{detection.threshold}{detection threshold for peaks}
 
   \item{bw}{bandwidth}
 
   \item{x}{original data}
 
-  \item{detection.limit}{ignore maxima that are below
-  detection.limit given by multiple of kernel height
+  \item{detection.limit}{ignore maxima that are below this
+  value
 
   Returns:}
 }
