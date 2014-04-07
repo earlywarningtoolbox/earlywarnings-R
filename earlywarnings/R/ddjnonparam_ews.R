@@ -13,7 +13,7 @@
 
 # Function to compute Bandi, Johannes etc estimators for time series x
 Bandi5 <- function(x0,dx,nx,DT,bw,na,avec)  {
-require(KernSmooth)
+
 # Set up constants and useful preliminaries
 SF <- 1/(bw*sqrt(2*pi))  # scale factor for kernel calculation
 x02 <- x0*x0 # second power of x
@@ -72,7 +72,7 @@ return(outlist)
 #' [1]    \eqn{dx = f(x,\theta)dt + g(x,\theta)dW + dJ}
 #' Here x is the state variable, f() and g() are nonlinear functions, dW is a Wiener process and dJ is a jump process. Jumps are large, one-step, positive or negative shocks that are uncorrelated in time. 
 #'
-# Arguments:
+#' Arguments:
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
 #'    @param bandwidth is the bandwidht of the kernel regressor (must be numeric). Default is 0.6.
 #'    @param na is the number of points for computing the kernel (must be numeric). Default is 500.

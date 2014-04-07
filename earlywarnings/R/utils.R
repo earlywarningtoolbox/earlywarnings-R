@@ -1,8 +1,15 @@
+#' @import Kendall
+#' @import KernSmooth
+#' @import lmtest
+#' @import nortest
+#' @import som
+#' @import spam
+#' @import stats
+NULL
 
 #' Description: Get group assigment indices for univariate data points, given cluster break points
 #'
-#'
-#'  Arguments:
+#' Arguments:
 #'    @param x Univariate data vector
 #'    @param breakpoints Cluster breakpoints
 #'
@@ -15,7 +22,6 @@
 #' @examples #
 #'
 #' @keywords early-warning
-
 
 UnivariateGrouping <- function (x, breakpoints) {
   g <- rep.int(NA, length(x))

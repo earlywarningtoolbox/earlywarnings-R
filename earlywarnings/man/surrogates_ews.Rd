@@ -96,6 +96,8 @@ probabilities of false positives.
 }
 \details{
 see ref below
+
+Arguments:
 }
 \examples{
 data(foldbif)

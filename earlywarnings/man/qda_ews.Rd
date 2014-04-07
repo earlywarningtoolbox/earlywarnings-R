@@ -80,6 +80,8 @@ potential landscape of the timeseries
 }
 \details{
 see ref below
+
+Arguments:
 }
 \examples{
 data(foldbif)

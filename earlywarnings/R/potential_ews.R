@@ -70,7 +70,7 @@ PlotPotential <- function (res, title = "", xlab.text, ylab.text, cutoff = 0.5, 
 #'
 #' \code{livpotential_ews} performs one-dimensional potential estimation derived from a uni-variate timeseries
 #'
-#  Arguments:
+#' Arguments:
 #'    @param x Univariate data (vector) for which the potentials shall be estimated
 #'    @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
 #'    @param bw bandwidth for kernel estimation

@@ -5,7 +5,7 @@
 # Details:
 #' see ref below
 #'
-# Arguments:
+#' Arguments:
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
 #'    @param indicator is the statistic (leading indicator) selected for which the sensitivity analysis is perfomed. Currently, the indicators supported are: \code{ar1} autoregressive coefficient of a first order AR model, \code{sd} standard deviation, \code{acf1} autocorrelation at first lag, \code{sk} skewness, \code{kurt} kurtosis, \code{cv} coeffcient of variation, \code{returnrate}, and \code{densratio} density ratio of the power spectrum at low frequencies over high frequencies.
 #'    @param winsizerange is the range of the rolling window sizes expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 25\% - 75\%.
@@ -15,6 +15,7 @@
 #'    @param spanrange parameter that controls the degree of smoothing (numeric between 0 and 100). Default is 5\% - 100\%. see more on loess{stats}
 #'    @param degree the degree of polynomial to be used for when loess fitting is applied, normally 1 or 2 (Default). see more on loess{stats}
 #'    @param incrbandwidth is the size to increment the bandwidth used for the Gaussian kernel when gaussian filtering is applied. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 20.
+#'    @param incrspanrange Span range
 #'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE. 
 #'    @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
 #' 
@@ -46,19 +47,7 @@
 
 sensitivity_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","cv","returnrate","densratio"),winsizerange=c(25,75),incrwinsize=25,detrending=c("no","gaussian","loess","linear","first-diff"),bandwidthrange=c(5,100),spanrange=c(5,100),degree=NULL,incrbandwidth=20,incrspanrange=10,logtransform=FALSE,interpolate=FALSE){
 	
-	#require(lmtest)
-	#require(nortest)
-	#require(stats)
-	#require(som)
-	#require(Kendall)
-	#require(KernSmooth)
-	#require(moments)
-	#require(fields)
-
-  kurtosis <- moments::kurtosis
-  skewness <- moments::skewness
-	
-#timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
+  #timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
 
 	  timeseries<-data.matrix(timeseries)
     if (dim(timeseries)[2]==1){
@@ -146,7 +135,7 @@ sensitivity_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","
 		# Plot
 		layout(matrix(1:4,2,2))
 		par(font.main=10,mar=(c(4.6,4,0.5,2)+0.2),mgp=c(2,1,0),oma=c(0.5,1,2,1))
-		fields::image.plot(width,tw,Ktauestind,zlim=c(-1,1),xlab="filtering bandwidth",ylab="rolling window size",main="Kendall tau estimate",cex.main=0.8,log="y",nlevel=20,col=rainbow(20))
+		image.plot(width,tw,Ktauestind,zlim=c(-1,1),xlab="filtering bandwidth",ylab="rolling window size",main="Kendall tau estimate",cex.main=0.8,log="y",nlevel=20,col=rainbow(20))
 		ind=which(Ktauestind==max(Ktauestind),arr.ind=TRUE)
 		lines(width[ind[1]],tw[ind[2]],type="p",cex=1.2,pch=17,col=1)
 		hist(Ktauestind,breaks=12,col="lightblue",main=NULL, xlab="Kendall tau estimate", ylab="occurence",border="black",xlim=c(-1,1))

@@ -2,17 +2,17 @@
 # Author: Stephen R Carpenter, 22 Oct 2011
 # Modified by: Vasilis Dakos, January 1, 2012
 
+#' @importFrom tseries bds.test
+
 BDSboot <- function(X,varname,nboot,epsvec,emb) { # begin function
 
-require(tseries)
-	
 StdEpsAll <- X  # name of variable for BDS
 neps <- length(epsvec)
 # Compute and print BDS test
 print('***********************************************',quote=FALSE)
 print(c('BDS test for ',varname),quote=FALSE)
 print(c('Embedding dimension = ',emb),quote=FALSE)
-BDS.data <- tseries::bds.test(StdEpsAll,m=emb,epsvec)
+BDS.data <- bds.test(StdEpsAll,m=emb,epsvec)
 print('BDS statistics for Nominal Data at each Epsilon',quote=FALSE)
 print(round(BDS.data$statistic,3))
 print('P value based on standard normal',quote=FALSE)
@@ -22,7 +22,7 @@ nobs <- length(StdEpsAll)
 bootmat <- matrix(0,nrow=emb-1,ncol=neps)  # matrix to count extreme BDS values
 for(i in 1:nboot) { # start bootstrap loop
  epsboot <- sample(StdEpsAll,nobs,replace=TRUE)
- BDS.boot <- tseries::bds.test(epsboot,m=emb,epsvec)
+ BDS.boot <- bds.test(epsboot,m=emb,epsvec)
  for(im in 1:(emb-1)) {  # loop over embedding dimensions
    bootvec <- BDS.boot$statistic[im,]
    N.above <- ifelse(bootvec>BDS.data$statistic[im,],1,0)
@@ -53,7 +53,7 @@ print('**********************************************************',quote=FALSE)
 # Details:
 #' See also \code{bds.test{tseries}} for more details. The function requires the installation of packages \code{tseries} and \code{quadprog} that are not available under Linux and need to be manually installed under Windows.
 #'
-# Arguments:
+#' Arguments:
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
 #'    @param ARMAoptim is the order of the \code{ARMA(p,q)} model to be fitted on the original timeseries. If TRUE the best ARMA model based on AIC is applied. If FALSE the \code{ARMAorder} is used.
 #'    @param ARMAorder is the order of the \code{AR(p)} and \code{MA(q)} process to be fitted on the original timeseries. Default is \code{p=1} \code{q=0}.
@@ -86,15 +86,14 @@ print('**********************************************************',quote=FALSE)
 #' \code{\link{livpotential_ews}}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @importFrom tseries garch
+#' @import quadprog
 #' @examples #
 #' data(foldbif)
 #' bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5, boots=200,logtransform=FALSE,interpolate=FALSE)
 #' @keywords early-warning
 #' 
 bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,1),embdim=3,epsilon=c(0.5,0.75,1),boots=1000,logtransform=FALSE,interpolate=FALSE){
-	
-	#require(quadprog)
-	
+		
 	timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
 	if (ncol(timeseries)==1){
 		Y=timeseries
@@ -160,7 +159,7 @@ bdstest_ews<-function(timeseries,ARMAoptim=TRUE,ARMAorder=c(1,0),GARCHorder=c(0,
 	BDSboot(Eps2,c('ARMA model residuals'),nboot,epsvec,emb)
 
 	# Fit GARCH(0,1) model to detrended data
-	Gfit <- tseries::garch(Y,order=c(GARCHorder[1],GARCHorder[2]))
+	Gfit <- garch(Y,order=c(GARCHorder[1],GARCHorder[2]))
 	print('GARCH(0,1) model fit to detrended data',quote=FALSE)
 	print(Gfit,digits=4)
 

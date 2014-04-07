@@ -5,7 +5,7 @@
 # Details:
 #' see ref below
 #'
-# Arguments:
+#' Arguments:
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
 #'    @param param values corresponding to observations in timeseries
 #'    @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 50\%.

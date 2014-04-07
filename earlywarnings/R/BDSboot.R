@@ -2,6 +2,8 @@
 # Author: Stephen R Carpenter, 22 Oct 2011
 # Modified by: Vasilis Dakos, January 1, 2012
 
+#' @importFrom tseries bds.test
+
 BDSboot <- function(X,varname,nboot,epsvec,emb) { # begin function
 	
 StdEpsAll <- X  # name of variable for BDS
@@ -12,7 +14,7 @@ message('***********************************************',quote=FALSE)
 message(c('BDS test for ',varname),quote=FALSE)
 message(c('Embedding dimension = ',emb),quote=FALSE)
 
-BDS.data <- tseries::bds.test(StdEpsAll,m=emb,epsvec)
+BDS.data <- bds.test(StdEpsAll,m=emb,epsvec)
 
 message('BDS statistics for Nominal Data at each Epsilon',quote=FALSE)
 message(round(BDS.data$statistic,3))
@@ -24,7 +26,7 @@ nobs <- length(StdEpsAll)
 bootmat <- matrix(0,nrow=emb-1,ncol=neps)  # matrix to count extreme BDS values
 for(i in 1:nboot) { # start bootstrap loop
  epsboot <- sample(StdEpsAll,nobs,replace=TRUE)
- BDS.boot <- tseries::bds.test(epsboot,m=emb,epsvec)
+ BDS.boot <- bds.test(epsboot,m=emb,epsvec)
  for(im in 1:(emb-1)) {  # loop over embedding dimensions
    bootvec <- BDS.boot$statistic[im,]
    N.above <- ifelse(bootvec>BDS.data$statistic[im,],1,0)

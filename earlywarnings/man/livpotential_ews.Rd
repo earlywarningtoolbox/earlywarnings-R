@@ -70,6 +70,9 @@ has maximum values; (-potentials; neglecting local optima)}
 \code{livpotential_ews} performs one-dimensional potential
 estimation derived from a uni-variate timeseries
 }
+\details{
+Arguments:
+}
 \examples{
 data(foldbif)
 res <- livpotential_ews(foldbif)

@@ -5,7 +5,7 @@
 # Details:
 #' see ref below
 #'
-# Arguments:
+#' Arguments:
 #'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
 #'    @param indicator is the statistic (leading indicator) selected for which the surrogate timeseries are produced. Currently, the indicators supported are: \code{ar1} autoregressive coefficient of a first order AR model, \code{sd} standard deviation, \code{acf1} autocorrelation at first lag, \code{sk} skewness, \code{kurt} kurtosis, \code{cv} coeffcient of variation, \code{returnrate}, and \code{densratio} density ratio of the power spectrum at low frequencies over high frequencies.
 #'    @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default valuise 50\%.
@@ -45,15 +45,7 @@
 # Author: Vasilis Dakos, January 4, 2012
 
 surrogates_ews<-function(timeseries,indicator=c("ar1","sd","acf1","sk","kurt","cv","returnrate","densratio"),winsize=50,detrending=c("no","gaussian","loess","linear","first-diff"),bandwidth=NULL,span=NULL, degree=NULL, boots=100,logtransform=FALSE,interpolate=FALSE){
-	
-	#require(lmtest)
-	#require(nortest)
-	#require(stats)
-	#require(som)
-	#require(Kendall)
-	#require(KernSmooth)
-	#require(moments)
-	
+		
 	#timeseries<-ts(timeseries) #strict data-types the input data as tseries object for use in later steps
 
 	skewness <- moments::skewness

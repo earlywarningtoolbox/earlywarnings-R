@@ -77,6 +77,8 @@ g(x,\theta)dW + dJ} Here x is the state variable, f() and
 g() are nonlinear functions, dW is a Wiener process and dJ
 is a jump process. Jumps are large, one-step, positive or
 negative shocks that are uncorrelated in time.
+
+Arguments:
 }
 \examples{
 data(foldbif)

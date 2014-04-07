@@ -54,14 +54,6 @@
   	
 generic_ews<-function(timeseries,winsize=50,detrending=c("no","gaussian","loess","linear","first-diff"),bandwidth=NULL,span=NULL, degree=NULL, logtransform=FALSE,interpolate=FALSE,AR_n=FALSE,powerspectrum=FALSE){	
 	
-	require(lmtest)
-	require(nortest)
-	require(stats)
-	require(som)
-	require(Kendall)
-	require(KernSmooth)
-	require(moments)
-
 	#timeseries<-ts(timeseries)
 	timeseries<-data.matrix(timeseries) #strict data-types the input data as tseries object for use in later steps
 	if (dim(timeseries)[2]==1){

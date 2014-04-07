@@ -79,6 +79,8 @@ function requires the installation of packages
 \code{tseries} and \code{quadprog} that are not available
 under Linux and need to be manually installed under
 Windows.
+
+Arguments:
 }
 \examples{
 #

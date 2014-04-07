@@ -60,6 +60,8 @@ sensitivity_ews(timeseries, indicator = c("ar1", "sd", "acf1", "sk", "kurt",
   the timeseries length (must be numeric between 0 and
   100). Default is 20.}
 
+  \item{incrspanrange}{Span range}
+
   \item{logtransform}{logical. If TRUE data are
   logtransformed prior to analysis as log(X+1). Default is
   FALSE.}
@@ -93,6 +95,8 @@ nonparametric Kendall tau correlation coefficient.
 }
 \details{
 see ref below
+
+Arguments:
 }
 \examples{
 data(foldbif)
