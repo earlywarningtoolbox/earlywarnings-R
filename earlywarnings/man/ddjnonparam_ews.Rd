@@ -89,13 +89,13 @@ logtransform=TRUE,interpolate=FALSE)
 S. R. Carpenter, modified by V. Dakos
 }
 \references{
-Carpenter, S. R. and W. A. Brock (2011). "Early warnings of
-unknown nonlinear shifts: a nonparametric approach."
+Carpenter, S. R. and W. A. Brock (2011). 'Early warnings of
+unknown nonlinear shifts: a nonparametric approach.'
 \emph{Ecology} 92(12): 2196-2201
 
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{

@@ -85,16 +85,16 @@ Arguments:
 }
 \examples{
 data(foldbif)
-out <- qda_ews(foldbif, param = NULL, winsize = 50, detrending="gaussian", bandwidth=NULL, boots = 50, s_level = 0.05, cutoff=0.05, detection.threshold = 0.002, grid.size = 50, logtransform=FALSE, interpolate=FALSE)
+out <- qda_ews(foldbif, param = NULL, winsize = 50, detrending='gaussian', bandwidth=NULL, boots = 50, s_level = 0.05, cutoff=0.05, detection.threshold = 0.002, grid.size = 50, logtransform=FALSE, interpolate=FALSE)
 }
 \author{
 Vasilis Dakos, Leo Lahti, March 1, 2013
 \email{vasilis.dakos@gmail.com}
 }
 \references{
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{

@@ -13,7 +13,7 @@ circulation data set
 #
 }
 \references{
-See citation("earlywarnings")
+See citation('earlywarnings')
 }
 \keyword{datasets}
 

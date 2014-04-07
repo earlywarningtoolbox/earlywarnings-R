@@ -77,13 +77,13 @@ out=ch_ews(foldbif, winsize=50, alpha=0.05, optim=TRUE, lags)
 T. Cline, modified by V. Dakos
 }
 \references{
-Seekell, D. A., et al (2011). "Conditional
+Seekell, D. A., et al (2011). 'Conditional
 heteroscedasticity as a leading indicator of ecological
-regime shifts." \emph{American Naturalist} 178(4): 442-451
+regime shifts.' \emph{American Naturalist} 178(4): 442-451
 
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{

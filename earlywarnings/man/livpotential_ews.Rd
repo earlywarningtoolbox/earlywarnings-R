@@ -86,9 +86,9 @@ Livina, VN, F Kwasniok, and TM Lenton, 2010. Potential
 analysis reveals changing number of climate states during
 the last 60 kyr . \emph{Climate of the Past}, 6, 77-82.
 
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{

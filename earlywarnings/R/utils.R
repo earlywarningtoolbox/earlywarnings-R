@@ -23,11 +23,11 @@ NULL
 #'
 #' @keywords early-warning
 
-UnivariateGrouping <- function (x, breakpoints) {
-  g <- rep.int(NA, length(x))
-  mps <- c(breakpoints, Inf)
-  for (i in 1:length(mps)) {
-    g[x <= mps[[i]] & is.na(g)] <- i  
-  }
-  g
-}
+UnivariateGrouping <- function(x, breakpoints) {
+    g <- rep.int(NA, length(x))
+    mps <- c(breakpoints, Inf)
+    for (i in 1:length(mps)) {
+        g[x <= mps[[i]] & is.na(g)] <- i
+    }
+    g
+} 

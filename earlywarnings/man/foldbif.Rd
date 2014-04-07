@@ -13,7 +13,7 @@ foldbif data set
 #
 }
 \references{
-See citation("earlywarnings")
+See citation('earlywarnings')
 }
 \keyword{datasetspl}
 

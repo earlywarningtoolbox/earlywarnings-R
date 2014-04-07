@@ -3,7 +3,7 @@
 #' @name YD2PB_grayscale
 #' @docType data
 #' @format TBA
-#' @references See citation("earlywarnings")
+#' @references See citation('earlywarnings')
 #' @source TBA
 #' @keywords datasets
 #' @examples #
@@ -15,7 +15,7 @@ NULL
 #' @name circulation
 #' @docType data
 #' @format TBA
-#' @references See citation("earlywarnings")
+#' @references See citation('earlywarnings')
 #' @source TBA
 #' @keywords datasets
 #' @examples #
@@ -27,8 +27,8 @@ NULL
 #' @name foldbif
 #' @docType data
 #' @format TBA
-#' @references See citation("earlywarnings")
+#' @references See citation('earlywarnings')
 #' @source TBA
 #' @keywords datasetspl
 #' @examples #
-NULL
+NULL 

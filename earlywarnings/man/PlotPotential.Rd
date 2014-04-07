@@ -35,15 +35,15 @@ movpotential function
 Arguments:
 }
 \examples{
-# X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param); PlotPotential(res$res, title = "", xlab.text = "", ylab.text = "", cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2)
+# X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param); PlotPotential(res$res, title = '', xlab.text = '', ylab.text = '', cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2)
 }
 \author{
 Leo Lahti \email{leo.lahti@iki.fi}
 }
 \references{
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \keyword{early-warning}

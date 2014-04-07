@@ -95,9 +95,9 @@ J. B. Cromwell, W. C. Labys and M. Terraza (1994):
 Univariate Tests for Time Series Models, Sage, Thousand
 Oaks, CA, pages 32-36.
 
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{

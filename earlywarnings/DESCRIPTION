@@ -2,7 +2,7 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals Toolbox for Detecting Critical Transitions in
     Timeseries
-Version: 1.0.58
+Version: 1.0.59
 Date: 2013-04-07
 Author: Vasilis Dakos <vasilis.dakos@gmail.com>, with contributions from S.R.
     Carpenter, T. Cline, L. Lahti

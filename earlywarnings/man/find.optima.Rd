@@ -35,7 +35,7 @@ Arguments:
 Leo Lahti \email{leo.lahti@iki.fi}
 }
 \references{
-See citation("TBA")
+See citation('TBA')
 }
 \keyword{utilities}
 

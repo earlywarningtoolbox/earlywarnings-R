@@ -101,20 +101,20 @@ Arguments:
 }
 \examples{
 data(foldbif)
-output=surrogates_ews(foldbif,indicator="sd",winsize=50,detrending="gaussian",
+output=surrogates_ews(foldbif,indicator='sd',winsize=50,detrending='gaussian',
 bandwidth=10,boots=200,logtransform=FALSE,interpolate=FALSE)
 }
 \author{
 Vasilis Dakos \email{vasilis.dakos@gmail.com}
 }
 \references{
-Dakos, V., et al (2008). "Slowing down as an early warning
-signal for abrupt climate change." \emph{Proceedings of the
+Dakos, V., et al (2008). 'Slowing down as an early warning
+signal for abrupt climate change.' \emph{Proceedings of the
 National Academy of Sciences} 105(38): 14308-14312
 
-Dakos, V., et al (2012)."Methods for Detecting Early
+Dakos, V., et al (2012).'Methods for Detecting Early
 Warnings of Critical Transitions in Time Series Illustrated
-Using Simulated Ecological Data." \emph{PLoS ONE} 7(7):
+Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7):
 e41010. doi:10.1371/journal.pone.0041010
 }
 \seealso{
