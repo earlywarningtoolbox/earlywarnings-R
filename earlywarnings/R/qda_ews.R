@@ -51,7 +51,7 @@ qda_ews <- function(timeseries, param = NULL, winsize = 50, detrending = c("no",
         interpolate, AR_n = FALSE, powerspectrum = FALSE)
     
     message("Trend significance analysis")
-    X11()
+    dev.new()
     s <- surrogates_RShiny(timeseries, winsize, detrending, bandwidth, boots, s_level, 
         logtransform, interpolate)
     print(s)
@@ -59,7 +59,7 @@ qda_ews <- function(timeseries, param = NULL, winsize = 50, detrending = c("no",
     message("Potential analysis")
     p <- movpotential_ews(as.vector(timeseries[, 1]), param, detection.threshold = detection.threshold, 
         grid.size = grid.size, plot.cutoff = cutoff)
-    X11()
+    dev.new()
     print(p)
     
     # message('Sensitivity of trends') sens <-
