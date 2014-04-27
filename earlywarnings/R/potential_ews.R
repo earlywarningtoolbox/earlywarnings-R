@@ -20,7 +20,14 @@
 #'
 #' @references Dakos, V., et al (2012).'Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
 #' @author Leo Lahti \email{leo.lahti@@iki.fi}
-#' @examples # X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param); PlotPotential(res$res, title = '', xlab.text = '', ylab.text = '', cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2)
+#' @examples   X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), 
+#'   	             rnorm(1000, mean = 2))
+#'	       param = seq(0,5,length=3000); 
+#'	       res <- movpotential_ews(X, param); 
+#'	       PlotPotential(res$res, title = '', 
+#'	       	             xlab.text = '', ylab.text = '', 
+#'			     cutoff = 0.5, 
+#'			     plot.contours = TRUE, binwidth = 0.2)
 #'
 #' @keywords early-warning
 
@@ -372,7 +379,10 @@ find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 0) 
 #' @author L. Lahti, E. van Nes, V. Dakos.
 #' @seealso \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{livpotential_ews}
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
-#' @examples X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
+#' @examples X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), 
+#' 	           rnorm(1000, mean = 2)); 
+#'	     param = seq(0,5,length=3000); 
+#'	     res <- movpotential_ews(X, param)
 #' @keywords early-warning
 
 movpotential_ews <- function(X, param = NULL, bw = "nrd", bw.adjust = 1, detection.threshold = 0.1, 

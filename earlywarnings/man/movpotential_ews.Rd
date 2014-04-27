@@ -54,7 +54,10 @@ along a gradient of a given parameter.
 Arguments:
 }
 \examples{
-X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2)); param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
+X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2),
+	           rnorm(1000, mean = 2));
+	     param = seq(0,5,length=3000);
+	     res <- movpotential_ews(X, param)
 }
 \author{
 L. Lahti, E. van Nes, V. Dakos.
