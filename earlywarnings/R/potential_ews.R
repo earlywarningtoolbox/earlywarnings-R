@@ -83,13 +83,12 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 #' Arguments:
 #'    @param x Univariate data (vector) for which the potentials shall be estimated
 #'    @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
-#'    @param bw bandwidth for kernel estimation
+#'    @param bw kernel bandwidth estimation method 
 #'    @param weights optional weights in ksdensity (used by movpotentials).
 #'    @param grid.size Grid size for potential estimation.
 #'    @param detection.threshold maximum detection threshold as fraction of density kernel height dnorm(0, sd = bandwidth)/N
 #'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
 #'    @param density.smoothing Add a small constant density across the whole observation range to regularize density estimation (and to avoid zero probabilities within the observation range). This parameter adds uniform density across the observation range, scaled by density.smoothing.
-#'    @param detection.limit ignore maxima that are below detection.limit * maximum density
 #' 
 # Returns:
 #'   @return \code{livpotential} returns a list with the following elements:
@@ -113,36 +112,26 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 # ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @examples 
 #' data(foldbif)
-#' res <- livpotential_ews(foldbif)
+#' res <- livpotential_ews(foldbif[,1])
 #' @keywords early-warning
 
 livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, 
-    detection.threshold = 0.01, bw.adjust = 1, density.smoothing = 0, detection.limit = 0.1) {
+    detection.threshold = 1, bw.adjust = 1, density.smoothing = 0) {
     
-    # std <- 1; bw <- 'nrd'; weights <- c(); grid.size = floor(.2*ncol(mydat));
-    # detection.threshold = det.th; density.smoothing = 0
-    
-    x <- data.frame(x)
+    # std <- 1; bw <- 'nrd'; weights <- c(); grid.size = floor(.2*length(x)); detection.threshold = 1; bw.adjust = 1; density.smoothing = 0; grid.size = NULL
     
     if (is.null(grid.size)) {
-        grid.size <- floor(0.2 * nrow(x))
-    }
-    
-    if (is.null(bw)) {
-        # following Silverman, B. W.: Density estimation for statistics and data
-        # analysis,Chapman and Hall, 1986.
-        bw <- 1.06 * sapply(x, sd)/nrow(x)^(1/5)
+        grid.size <- floor(0.2 * length(x))
     }
     
     # Density estimation
-    de <- density(ts(x), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, 
+    de <- density(ts(data.frame(x)), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, 
         window = kernel, n = grid.size, from = min(x), to = max(x), cut = 3, na.rm = FALSE)
-    
-    # Estimated density f <- de$y
-    
-    # Smooth the density by adding a small probability across the whole observation
-    # range (to avoid zero probabilities for points in the observation range)
-    f <- de$y + density.smoothing * 1/diff(range(de$x))  # *max(de$y)
+
+    # Smooth the estimated density (f <- de$y) by adding a small
+    # probability across the whole observation range (to avoid zero
+    # probabilities for points in the observation range)
+    f <- de$y + density.smoothing * 1/diff(range(de$x)) # *max(de$y)
     
     # Normalize the density such that it integrates to unity
     f <- f/sum(diff(de$x[1:2]) * f)
@@ -157,8 +146,7 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
     # optima Note mins and maxs for density given here (not for potential, which has
     # the opposite signs)
     
-    ops <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x, 
-        detection.limit = detection.limit)
+    ops <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x)
     min.points <- grid.points[ops$min]
     max.points <- grid.points[ops$max]
     det.th <- ops$detection.threshold
@@ -178,13 +166,12 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'    @param detection.threshold detection threshold for peaks
 #'    @param bw bandwidth
 #'    @param x original data
-#'    @param detection.limit ignore maxima that are below this value
 #'
 #' Returns:
 #'    @return A list with the following elements:
 #'      min minima
 #'      max maxima
-#'
+#'	detection.density Minimum detection density
 #' @export
 #'
 #' @references See citation('TBA') 
@@ -193,24 +180,20 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'
 #' @keywords utilities
 
-find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 0) {
-    
-    # detection.multiplier = detection.threshold Set detection threshold as function
-    # of kernel height kernel.height <- dnorm(0, sd = bw) / nrow(x)
-    # detection.threshold <- detection.multiplier * kernel.height detlim <-
-    # detection.limit * kernel.height detlim <- detection.limit*1/diff(range(x))
-    detlim <- detection.limit
+find.optima <- function(f, detection.threshold = 0, bw, x) {
+   
+    # multiple of kernel height 
+    kernel.height <- dnorm(0, sd = bw) / length(x) 
+    deth <- detection.threshold * kernel.height 
     
     # Detect minima and maxima of the density (see Livina et al.)  these correspond
     # to maxima and minima of the potential, respectively including end points of the
     # vector
     maxima <- which(diff(sign(diff(c(-Inf, f, -Inf)))) == -2)
     minima <- which(diff(sign(diff(c(Inf, -f, Inf)))) == -2)
-    # minima <- which(extract(turnpoints(ts(f))) == -1) maxima <-
-    # which(extract(turnpoints(ts(f))) == 1)
-    
+
     # remove maxima that are below detection threshold
-    maxima <- maxima[f[maxima] >= detlim]
+    maxima <- maxima[f[maxima] >= deth]
     
     # remove minima that now became obsolete If there are multiple minima between two
     # consecutive maxima after removing the maxima that did not pass the threshold,
@@ -233,7 +216,8 @@ find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 0) 
     }
     
     minima <- unlist(minima)
-    maxima <- maxima[f[maxima] >= detlim]
+    maxima <- unlist(maxima)
+    #maxima <- maxima[f[maxima] >= detlim]
     
     # Combine maxima that do not have minima in between
     if (length(maxima) > 1) {
@@ -269,7 +253,6 @@ find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 0) 
     # Remove minima and maxima that are too shallow
     delmini <- logical(length(minima))
     delmaxi <- logical(length(maxima))
-    
     for (j in 1:length(maxima)) {
         
         # Calculate distance of this maximum to all minima
@@ -316,7 +299,7 @@ find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 0) 
             # Smallest difference between this maximum and the closest minima
             diff <- min(c((f[maxima[[j]]] - f[i1]), (f[maxima[[j]]] - f[i2])))
             
-            if (diff < detection.threshold) {
+            if (diff < deth) {
                 
                 # If difference is below threshold, delete this maximum
                 delmaxi[[j]] <- TRUE
@@ -343,7 +326,7 @@ find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 0) 
         maxima <- maxima[!delmaxi]
     }
     
-    list(min = minima, max = maxima, detection.threshold = detection.threshold, detection.limit = detlim)
+    list(min = minima, max = maxima, detection.density = deth)
     
 }
 

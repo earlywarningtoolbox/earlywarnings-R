@@ -3,8 +3,8 @@
 \title{Description: Potential Analysis for univariate data}
 \usage{
 livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
-  grid.size = NULL, detection.threshold = 0.01, bw.adjust = 1,
-  density.smoothing = 0, detection.limit = 0.1)
+  grid.size = NULL, detection.threshold = 1, bw.adjust = 1,
+  density.smoothing = 0)
 }
 \arguments{
   \item{x}{Univariate data (vector) for which the
@@ -13,7 +13,7 @@ livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
   \item{std}{Standard deviation of the noise (defaults to
   1; this will set scaled potentials)}
 
-  \item{bw}{bandwidth for kernel estimation}
+  \item{bw}{kernel bandwidth estimation method}
 
   \item{weights}{optional weights in ksdensity (used by
   movpotentials).}
@@ -33,9 +33,6 @@ livpotential_ews(x, std = 1, bw = "nrd", weights = c(),
   observation range). This parameter adds uniform density
   across the observation range, scaled by
   density.smoothing.}
-
-  \item{detection.limit}{ignore maxima that are below
-  detection.limit * maximum density}
 }
 \value{
 \code{livpotential} returns a list with the following
@@ -75,7 +72,7 @@ Arguments:
 }
 \examples{
 data(foldbif)
-res <- livpotential_ews(foldbif)
+res <- livpotential_ews(foldbif[,1])
 }
 \author{
 Based on Matlab code from Egbert van Nes modified by Leo

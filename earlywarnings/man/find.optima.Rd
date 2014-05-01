@@ -2,7 +2,7 @@
 \alias{find.optima}
 \title{Description: find.optima}
 \usage{
-find.optima(f, detection.threshold = 0, bw, x, detection.limit = 0)
+find.optima(f, detection.threshold = 0, bw, x)
 }
 \arguments{
   \item{f}{density}
@@ -11,15 +11,13 @@ find.optima(f, detection.threshold = 0, bw, x, detection.limit = 0)
 
   \item{bw}{bandwidth}
 
-  \item{x}{original data}
-
-  \item{detection.limit}{ignore maxima that are below this
-  value
+  \item{x}{original data
 
   Returns:}
 }
 \value{
 A list with the following elements: min minima max maxima
+detection.density Minimum detection density
 }
 \description{
 Detect optima, excluding very local optima below

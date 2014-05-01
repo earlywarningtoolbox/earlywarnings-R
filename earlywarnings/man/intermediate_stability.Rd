@@ -1,26 +1,47 @@
 \name{intermediate_stability}
 \alias{intermediate_stability}
-\title{Description: Quantify intermediate stability}
+\title{intermediate_stability}
 \usage{
-intermediate_stability(dat, meta, reference.point = NULL)
+intermediate_stability(dat, meta, reference.point = NULL, method = "lm")
 }
 \arguments{
   \item{dat}{Input data matrix (variables x samples)}
 
   \item{meta}{Metadata (samples x factors). This should
   contain for each sample the following self-explanatory
-  fields: subjectID, time, data.}
+  fields: subjectID and time.}
 
   \item{reference.point}{Calculate stability of the data
   w.r.t. this point.  By default the intermediate range is
   used (min + (max - min)/2)}
+
+  \item{method}{"lm" (linear model) or "correlation"; the
+  linear model takes time into account as a covariate}
 }
 \value{
-A vector listing the intermediate stability for each
-variable
+A list with following elements: stability: vector listing
+the intermediate stability for each variable data:
+processed data sets used for calculations
 }
 \description{
-Description: Quantify intermediate stability
+Quantify stability with respect to a given reference point
+for all variables.
+}
+\details{
+This method decomposes the data set into differences
+between consecutive time points. For each variable and time
+point we calculate for the data values: (i) the distance
+from reference point; (ii) distance from the data value at
+the consecutive time point. The "correlation" method
+calculates correlation between these two variables.
+Negative correlations indicate that values closer to
+reference point tend to have larger shifts in the
+consecutive time point. The "lm" method takes the time lag
+between the consecutive time points into account as this
+may affect the comparison and is not taken into account by
+the straightforward correlation. Here the coefficients of
+the following linear model are used to assess stability:
+abs(change) ~ time + abs(start.reference.distance)
 }
 \examples{
 # Create simulated example data

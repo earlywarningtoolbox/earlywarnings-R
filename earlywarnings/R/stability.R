@@ -1,12 +1,32 @@
-#' Description: Quantify intermediate stability
+#' intermediate_stability
+#'
+#' Quantify stability with respect to a given reference point for all variables.
 #'
 #' @param dat Input data matrix (variables x samples)
 #' @param meta Metadata (samples x factors). This should contain for each sample 
-#'           the following self-explanatory fields: subjectID, time, data. 
+#'           the following self-explanatory fields: subjectID and time. 
 #' @param reference.point Calculate stability of the data w.r.t. this point. 
 #'                    By default the intermediate range is used (min + (max - min)/2)
-#' 
-#' @return A vector listing the intermediate stability for each variable
+#' @param method "lm" (linear model) or "correlation"; the linear model takes time into account 
+#' 	         as a covariate 
+#'
+#' @return A list with following elements: 
+#' 	     stability: vector listing the intermediate stability for each variable
+#'	     data: processed data sets used for calculations	    
+#'
+#'
+#' @details This method decomposes the data set into differences between
+#' consecutive time points. For each variable and time point we calculate
+#' for the data values: (i) the distance from reference point; (ii)
+#' distance from the data value at the consecutive time point. The
+#' "correlation" method calculates correlation between these two
+#' variables. Negative correlations indicate that values closer to
+#' reference point tend to have larger shifts in the consecutive time
+#' point. The "lm" method takes the time lag between the consecutive time
+#' points into account as this may affect the comparison and is not taken
+#' into account by the straightforward correlation. Here the coefficients
+#' of the following linear model are used to assess stability:
+#' abs(change) ~ time + abs(start.reference.distance)
 #'
 #' @export
 #'
@@ -26,22 +46,27 @@
 #'
 #' @keywords early-warning
 
-intermediate_stability <- function (dat, meta, reference.point = NULL) {
+intermediate_stability <- function (dat, meta, reference.point = NULL, method = "lm") {
 
   df <- meta
   stabilities <- c()	      
+  data <- list()
   for (i in 1:nrow(dat)) {	      
     df$data <- dat[i,]
-    stabilities[[i]] <- estimate_stability(df, reference.point)
+    stab <- estimate_stability(df, reference.point, method = method)
+    stabilities[[i]] <- stab$stability
+    data[[i]] <- stab$data
   }
 
   if (!is.null(rownames(dat))){
     names(stabilities) <- rownames(dat)
+    names(data) <- rownames(dat)
   }
 
-  stabilities
+  list(stability = stabilities, data = data)
 
 }
+
 
 
 #' estimate_stability
@@ -52,14 +77,26 @@ intermediate_stability <- function (dat, meta, reference.point = NULL) {
 #'           the following self-explanatory fields: subjectID, time, data. 
 #' @param reference.point Optional. Calculate stability of the data w.r.t. this point. 
 #'                        By default the intermediate range is used (min + (max - min)/2)
+#' @param method "lm" (linear model) or "correlation"; the linear model takes time into account 
+#' 	         as a covariate 
 #' 
-#' @return Estimated intermediate stability for the given data.
+#' @return A list with following elements: 
+#' 	     stability: estimated stability
+#'	     data: processed data set used in calculations	    
 #'
-#' @details The stability is quantified by calculating correlation between 
-#'          (i) deviation from the reference point at the first time point
-#' 	    (ii) deviation between the first and second time points.
-#'          The first and last time point for each subject is used.  
-#' 	    Samples with missing data, and subjects with less than two time point are excluded.	   
+#' @details This method decomposes the data set into differences between
+#' consecutive time points. For each variable and time point we calculate
+#' for the data values: (i) the distance from reference point; (ii)
+#' distance from the data value at the consecutive time point. The
+#' "correlation" method calculates correlation between these two
+#' variables. Negative correlations indicate that values closer to
+#' reference point tend to have larger shifts in the consecutive time
+#' point. The "lm" method takes the time lag between the consecutive time
+#' points into account as this may affect the comparison and is not taken
+#' into account by the straightforward correlation. Here the coefficients
+#' of the following linear model are used to assess stability:
+#' abs(change) ~ time + abs(start.reference.distance). 
+#' Samples with missing data, and subjects with less than two time point are excluded.	   
 #'
 #' @author Leo Lahti \email{leo.lahti@@iki.fi}
 #' @examples 
@@ -67,11 +104,12 @@ intermediate_stability <- function (dat, meta, reference.point = NULL) {
 #'   #	  subjectID = rep(paste("subject", 1:50, sep = "-"), each = 2), 
 #'   #	  time = rep(1:2, 50), 
 #'   #	  data = rnorm(100)))
-#'   # s <- estimate_stability(df, reference.point = NULL)
+#'   # s <- estimate_stability(df, reference.point = NULL, method = "lm")
 #'
 #' @keywords internal
 
-estimate_stability <- function (df, reference.point = NULL) {
+
+estimate_stability <- function (df, reference.point = NULL, method = "lm") {
 
   # Remove NAs
   df <- df[!is.na(df$data),]
@@ -87,21 +125,43 @@ estimate_stability <- function (df, reference.point = NULL) {
   # Split data by subject
   spl <- split(df, df$subjectID)    
 
-  # If there are multiple time points, keep the first and last one
-  spl <- lapply(spl, function (tab) {tab[c(which.min(tab$time), which.max(tab$time)),]})
+  dfis <- NULL
+  for (spli in spl) {
 
-  # For each subject, calculate distance from the stability point
+    # Ensure the measurements are ordered in time
+    spli <- spli[order(spli$time),]
+
+    # Calculate differences between consecutive time points; 
+    # and the initial values; and their distance from reference
+    data.difs <- diff(spli$data)
+    time.difs <- diff(spli$time)
+    start.points <- spli$data[-nrow(spli)]
+    start.reference.distance <- start.points - reference.point
+
+    # Organize into data frame
+    dfi <- data.frame(change = data.difs, time = time.difs, start = start.points, start.reference.distance = start.reference.distance)
+
+    # Add to the collection
+    dfis <- rbind(dfis, dfi)
+
+  }
+
+  # For each subject, check distance from the stability point
   # at the baseline time point
-  baseline.distance <- abs(sapply(spl, function (x) {x[which.min(x$time), "data"] - reference.point}))
+  baseline.distance <- abs(dfis$start.reference.distance)
 
   # For each subject, calculate deviation between the first and second time point
-  followup.distance <- abs(sapply(spl, function (x) {x[which.max(x$time), "data"] - x[which.min(x$time), "data"]}))
+  followup.distance <- abs(dfis$change)
 
-  stability <- cor(baseline.distance, followup.distance)  
+  # Simplified stability calculation (do not consider time effect)
+  stability <- NULL
+  if (method == "correlation") {
+    stability <- cor(baseline.distance, followup.distance)  
+  } else if (method == "lm") {
+    # Advanced calculation, take time into account with linear model (also possible to check p-values later if needed)
+    stability <- coef(summary(lm(abs(change) ~ time + abs(start.reference.distance), data = dfis)))["abs(start.reference.distance)", "Estimate"]
+  }
 
-  stability
+  list(stability = stability, data = dfis)
 
 }
-
-
-
