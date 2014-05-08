@@ -50,20 +50,26 @@ intermediate_stability <- function (dat, meta, reference.point = NULL, method = 
 
   df <- meta
   stabilities <- c()	      
+  stabilities.right <- c()	      
+  stabilities.left <- c()	      
   data <- list()
   for (i in 1:nrow(dat)) {	      
     df$data <- dat[i,]
-    stab <- estimate_stability(df, reference.point, method = method)
+    stab <- estimate_stability(df = df, reference.point = reference.point, method = method)
     stabilities[[i]] <- stab$stability
+    stabilities.right[[i]] <- stab$stability.right
+    stabilities.left[[i]] <- stab$stability.left
     data[[i]] <- stab$data
   }
 
   if (!is.null(rownames(dat))){
     names(stabilities) <- rownames(dat)
+    names(stabilities.right) <- rownames(dat)
+    names(stabilities.left) <- rownames(dat)
     names(data) <- rownames(dat)
   }
 
-  list(stability = stabilities, data = data)
+  list(stability = stabilities, stability.right = stabilities.right, stability.left = stabilities.left, data = data)
 
 }
 
@@ -115,7 +121,7 @@ estimate_stability <- function (df, reference.point = NULL, method = "lm") {
   # Remove NAs
   df <- df[!is.na(df$data),]
 
-  # Detect intermediate value in the overall data
+  # Detect intermediate value in the overall data if reference point not given
   if (is.null(reference.point)) {
     reference.point <- mean(range(df$data))
   }
@@ -147,22 +153,34 @@ estimate_stability <- function (df, reference.point = NULL, method = "lm") {
 
   }
 
-  # For each subject, check distance from the stability point
-  # at the baseline time point
-  baseline.distance <- abs(dfis$start.reference.distance)
-
-  # For each subject, calculate deviation between the first and second time point
-  followup.distance <- abs(dfis$change)
-
   # Simplified stability calculation (do not consider time effect)
   stability <- NULL
   if (method == "correlation") {
+    # For each subject, check distance from the stability point
+    # at the baseline time point
+    baseline.distance <- abs(dfis$start.reference.distance)
+    # For each subject, calculate deviation between the first and second time point
+    followup.distance <- abs(dfis$change)
     stability <- cor(baseline.distance, followup.distance)  
   } else if (method == "lm") {
     # Advanced calculation, take time into account with linear model (also possible to check p-values later if needed)
     stability <- coef(summary(lm(abs(change) ~ time + abs(start.reference.distance), data = dfis)))["abs(start.reference.distance)", "Estimate"]
   }
 
-  list(stability = stability, data = dfis)
+  stability.left <- stability.right <- NA
+
+  dfis.left <- subset(dfis, start.reference.distance < 0)
+  if (nrow(dfis.left)>10) {
+    # Negative values for low stability
+    stability.left <- -coef(summary(lm(change ~ time + abs(start.reference.distance), data = dfis.left)))["abs(start.reference.distance)", "Estimate"]
+  }
+
+  dfis.right <- subset(dfis, start.reference.distance > 0)
+  if (nrow(dfis.right)>10) {
+    # Negative values for low stability
+    stability.right <- -coef(summary(lm(change ~ time + abs(start.reference.distance), data = dfis.right)))["abs(start.reference.distance)", "Estimate"]
+  }
+
+  list(stability = stability, stability.right = stability.right, stability.left = stability.left, data = dfis)
 
 }
