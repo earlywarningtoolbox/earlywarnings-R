@@ -99,6 +99,7 @@ intermediate_stability <- function (dat, meta, reference.point = NULL, method = 
 #' Samples with missing data, and subjects with less than two time point are excluded.	   
 #'
 #' @author Leo Lahti \email{leo.lahti@@iki.fi}
+#' @export
 #' @examples 
 #'   #df <- data.frame(list(
 #'   #	  subjectID = rep(paste("subject", 1:50, sep = "-"), each = 2), 
