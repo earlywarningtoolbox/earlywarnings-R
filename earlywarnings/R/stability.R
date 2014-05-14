@@ -115,7 +115,6 @@ intermediate_stability <- function (dat, meta, reference.point = NULL, method = 
 #'
 #' @keywords internal
 
-
 estimate_stability <- function (df, reference.point = NULL, method = "lm") {
 
   # Remove NAs
@@ -153,8 +152,12 @@ estimate_stability <- function (df, reference.point = NULL, method = "lm") {
 
   }
 
+  dfis.left <- subset(dfis, start.reference.distance < 0)
+  dfis.right <- subset(dfis, start.reference.distance > 0)
+
   # Simplified stability calculation (do not consider time effect)
   stability <- NULL
+  stability.left <- stability.right <- NA
   if (method == "correlation") {
     # For each subject, check distance from the stability point
     # at the baseline time point
@@ -162,23 +165,35 @@ estimate_stability <- function (df, reference.point = NULL, method = "lm") {
     # For each subject, calculate deviation between the first and second time point
     followup.distance <- abs(dfis$change)
     stability <- cor(baseline.distance, followup.distance)  
+
+    if (nrow(dfis.left)>10){ 
+      # Negative values for low stability
+      baseline.distance <- abs(dfis.left$start.reference.distance)
+      followup.distance <- dfis.left$change
+      stability.left <- cor(baseline.distance, followup.distance)  
+
+    }
+
+    if (nrow(dfis.right)>10) {
+      baseline.distance <- abs(dfis.right$start.reference.distance)
+      followup.distance <- dfis.right$change
+      stability.right <- -cor(baseline.distance, followup.distance)  
+    }
+
+
   } else if (method == "lm") {
     # Advanced calculation, take time into account with linear model (also possible to check p-values later if needed)
     stability <- coef(summary(lm(abs(change) ~ time + abs(start.reference.distance), data = dfis)))["abs(start.reference.distance)", "Estimate"]
-  }
+  
+    if (nrow(dfis.left)>10){ 
+      # Negative values for low stability
+      stability.left <- coef(summary(lm(change ~ time + abs(start.reference.distance), data = dfis.left)))["abs(start.reference.distance)", "Estimate"]
+    }
+    if (nrow(dfis.right)>10){ 
+      # Negative values for low stability
+      stability.right <- -coef(summary(lm(change ~ time + abs(start.reference.distance), data = dfis.right)))["abs(start.reference.distance)", "Estimate"]
 
-  stability.left <- stability.right <- NA
-
-  dfis.left <- subset(dfis, start.reference.distance < 0)
-  if (nrow(dfis.left)>10) {
-    # Negative values for low stability
-    stability.left <- -coef(summary(lm(change ~ time + abs(start.reference.distance), data = dfis.left)))["abs(start.reference.distance)", "Estimate"]
-  }
-
-  dfis.right <- subset(dfis, start.reference.distance > 0)
-  if (nrow(dfis.right)>10) {
-    # Negative values for low stability
-    stability.right <- -coef(summary(lm(change ~ time + abs(start.reference.distance), data = dfis.right)))["abs(start.reference.distance)", "Estimate"]
+    }
   }
 
   list(stability = stability, stability.right = stability.right, stability.left = stability.left, data = dfis)
