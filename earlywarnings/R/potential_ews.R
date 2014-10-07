@@ -72,6 +72,67 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 
 
 
+#' potential_analysis_bootstrap
+#'
+#' Description:
+#'
+#' Bootstrap analysis of multimodality based on potential analysis of
+#' Livina et al. (2010) as described in Lahti et al. (2014)
+#' 
+#' @param x Data vector
+#' @param det.th Mode detection threshold
+#' @param bw.adjust Bandwidth adjustment
+#' @param detection.limit Mode detection minimun frequency
+#' @param bs.iterations Bootstrap iterations
+#'
+#' @return List with following elements:
+#' 	   modes:  Number of modes for the input data vector (the most frequent number of modes from bootstrap analysis)
+#' 	   minima: Average of potential minima across the bootstrap samples (for the most frequent number of modes)
+#' 	   maxima: Average of potential maxima across the bootstrap samples (for the most frequent number of modes)
+#'
+#' @references 
+#' Livina et al. (2010). Potential analysis 
+#' reveals changing number of climate states during the last 60
+#' kyr. \emph{Climate of the Past}, 6, 77-82.
+#'
+#' Lahti et al. (2014). Tipping elements of the human intestinal
+#' ecosystem. \emph{Nature Communications} 5:4344.
+#'
+potential_analysis_bootstrap <- function (x, det.th, bw.adjust = 1, detection.limit = 0, bs.iterations = 100) {
+
+  nmodes <- c()
+  minpoints <- list()
+  maxpoints <- list()
+
+  for (r in 1:bs.iterations) {
+  
+    # Bootstrap
+    rs <- sample(length(x), replace = TRUE) 
+
+    xbs <- na.omit(unname(x[rs]))
+
+    a <- livpotential_ews(xbs, grid.size = floor(.2*length(x)), 
+      	 		     detection.threshold = det.th, 
+			     bw.adjust = bw.adjust, 
+			     detection.limit = detection.limit)
+
+    nmodes[[r]] <- length(a$max.points)
+    minpoints[[r]] <- a$min.points
+    maxpoints[[r]] <- a$max.points
+
+  }
+
+  # Most frequently observed number of modes
+  top.modes <- as.numeric(names(which.max(table(nmodes))))
+  min.points <- colMeans(do.call("rbind", minpoints[nmodes == top.modes]))
+  max.points <- colMeans(do.call("rbind", maxpoints[nmodes == top.modes]))
+
+  # Return the most frequent number of modes and
+  # the corresponding tipping points
+  # from the bootstrap analysis
+  list(modes = top.modes, minima = min.points, maxima = max.points)
+  
+}
 
 
 
