@@ -12,7 +12,10 @@ find.optima(f, detection.threshold = 0, bw, x, detection.limit = 1)
 
 \item{bw}{bandwidth}
 
-\item{x}{original data
+\item{x}{original data}
+
+\item{detection.limit}{Minimun accepted density for a maximum;
+                          as a multiple of kernel height
 
 Returns:}
 }

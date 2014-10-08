@@ -105,14 +105,14 @@ potential_analysis_bootstrap <- function (x, detection.threshold, bw.adjust = 1,
   minpoints <- list()
   maxpoints <- list()
   bws <- c()
-  s <- list()
+  #s <- list()
   for (r in 1:bs.iterations) {
   
     # Bootstrap
     rs <- sample(length(x), replace = TRUE) 
 
     xbs <- na.omit(unname(x[rs]))
-    s[[r]] <- xbs
+    #s[[r]] <- xbs
 
     a <- livpotential_ews(xbs, grid.size = floor(.2*length(x)), 
       	 		     detection.threshold = detection.threshold, 
@@ -129,7 +129,6 @@ potential_analysis_bootstrap <- function (x, detection.threshold, bw.adjust = 1,
   top.modes <- as.numeric(names(which.max(table(nmodes))))
   min.points <- colMeans(do.call("rbind", minpoints[nmodes == top.modes]))
   max.points <- colMeans(do.call("rbind", maxpoints[nmodes == top.modes]))
-  
   unimodality.support <- mean(nmodes <= 1)
 
   # Return the most frequent number of modes and
