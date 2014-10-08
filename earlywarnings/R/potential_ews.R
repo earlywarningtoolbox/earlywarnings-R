@@ -80,15 +80,16 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 #' Livina et al. (2010) as described in Lahti et al. (2014)
 #' 
 #' @param x Data vector
-#' @param det.th Mode detection threshold
+#' @param detection.threshold Mode detection threshold
 #' @param bw.adjust Bandwidth adjustment
-#' @param detection.limit Mode detection minimun frequency
 #' @param bs.iterations Bootstrap iterations
+#' @param detection.limit minimum accepted density for a maximum; as a multiple of kernel height
 #'
 #' @return List with following elements:
 #' 	   modes:  Number of modes for the input data vector (the most frequent number of modes from bootstrap analysis)
 #' 	   minima: Average of potential minima across the bootstrap samples (for the most frequent number of modes)
 #' 	   maxima: Average of potential maxima across the bootstrap samples (for the most frequent number of modes)
+#'	   unimodality.support Fraction of bootstrap samples exhibiting unimodality	   
 #'
 #' @references 
 #' Livina et al. (2010). Potential analysis 
@@ -98,39 +99,43 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 #' Lahti et al. (2014). Tipping elements of the human intestinal
 #' ecosystem. \emph{Nature Communications} 5:4344.
 #'
-potential_analysis_bootstrap <- function (x, det.th, bw.adjust = 1, detection.limit = 0, bs.iterations = 100) {
+potential_analysis_bootstrap <- function (x, detection.threshold, bw.adjust = 1, bs.iterations = 100, detection.limit = 1) {
 
   nmodes <- c()
   minpoints <- list()
   maxpoints <- list()
-
+  bws <- c()
+  s <- list()
   for (r in 1:bs.iterations) {
   
     # Bootstrap
     rs <- sample(length(x), replace = TRUE) 
 
     xbs <- na.omit(unname(x[rs]))
+    s[[r]] <- xbs
 
     a <- livpotential_ews(xbs, grid.size = floor(.2*length(x)), 
-      	 		     detection.threshold = det.th, 
+      	 		     detection.threshold = detection.threshold, 
 			     bw.adjust = bw.adjust, 
 			     detection.limit = detection.limit)
 
     nmodes[[r]] <- length(a$max.points)
     minpoints[[r]] <- a$min.points
     maxpoints[[r]] <- a$max.points
-
+    bws[[r]] <- a$bw
   }
 
   # Most frequently observed number of modes
   top.modes <- as.numeric(names(which.max(table(nmodes))))
   min.points <- colMeans(do.call("rbind", minpoints[nmodes == top.modes]))
   max.points <- colMeans(do.call("rbind", maxpoints[nmodes == top.modes]))
+  
+  unimodality.support <- mean(nmodes <= 1)
 
   # Return the most frequent number of modes and
   # the corresponding tipping points
   # from the bootstrap analysis
-  list(modes = top.modes, minima = min.points, maxima = max.points)
+  list(modes = top.modes, minima = min.points, maxima = max.points, unimodality.support = unimodality.support, bws = bws)
   
 }
 
@@ -150,6 +155,7 @@ potential_analysis_bootstrap <- function (x, det.th, bw.adjust = 1, detection.li
 #'    @param detection.threshold maximum detection threshold as fraction of density kernel height dnorm(0, sd = bandwidth)/N
 #'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
 #'    @param density.smoothing Add a small constant density across the whole observation range to regularize density estimation (and to avoid zero probabilities within the observation range). This parameter adds uniform density across the observation range, scaled by density.smoothing.
+#'    @param detection.limit minimum accepted density for a maximum; as a multiple of kernel height
 #' 
 # Returns:
 #'   @return \code{livpotential} returns a list with the following elements:
@@ -177,7 +183,7 @@ potential_analysis_bootstrap <- function (x, det.th, bw.adjust = 1, detection.li
 #' @keywords early-warning
 
 livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, 
-    detection.threshold = 1, bw.adjust = 1, density.smoothing = 0) {
+    detection.threshold = 1, bw.adjust = 1, density.smoothing = 0, detection.limit = 1) {
     
     # std <- 1; bw <- 'nrd'; weights <- c(); grid.size = floor(.2*length(x)); detection.threshold = 1; bw.adjust = 1; density.smoothing = 0; grid.size = NULL
     
@@ -186,8 +192,11 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
     }
     
     # Density estimation
-    de <- density(ts(data.frame(x)), bw = bw, adjust = bw.adjust, kernel = "gaussian", weights = weights, 
-        window = kernel, n = grid.size, from = min(x), to = max(x), cut = 3, na.rm = FALSE)
+    de <- density(ts(data.frame(x)), bw = bw, adjust = bw.adjust, 
+       	  	  kernel = "gaussian", weights = weights, 
+        	  window = kernel, n = grid.size, 
+		  from = min(x), to = max(x), 
+		  cut = 3, na.rm = FALSE)
 
     # Smooth the estimated density (f <- de$y) by adding a small
     # probability across the whole observation range (to avoid zero
@@ -207,7 +216,7 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
     # optima Note mins and maxs for density given here (not for potential, which has
     # the opposite signs)
     
-    ops <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x)
+    ops <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x, detection.limit = detection.limit)
     min.points <- grid.points[ops$min]
     max.points <- grid.points[ops$max]
     det.th <- ops$detection.threshold
@@ -227,6 +236,8 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'    @param detection.threshold detection threshold for peaks
 #'    @param bw bandwidth
 #'    @param x original data
+#'    @param detection.limit Minimun accepted density for a maximum; 
+#'                           as a multiple of kernel height
 #'
 #' Returns:
 #'    @return A list with the following elements:
@@ -241,76 +252,25 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'
 #' @keywords utilities
 
-find.optima <- function(f, detection.threshold = 0, bw, x) {
+find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 1) {
    
     # multiple of kernel height 
     kernel.height <- dnorm(0, sd = bw) / length(x) 
     deth <- detection.threshold * kernel.height 
+    detl <- detection.limit * kernel.height 
     
-    # Detect minima and maxima of the density (see Livina et al.)  these correspond
+    # Detect minima and maxima of the density (see Livina et al.) these correspond
     # to maxima and minima of the potential, respectively including end points of the
     # vector
-    maxima <- which(diff(sign(diff(c(-Inf, f, -Inf)))) == -2)
-    minima <- which(diff(sign(diff(c(Inf, -f, Inf)))) == -2)
+    maxima <- find.maxima(f)
+    minima <- find.minima(f)
 
-    # remove maxima that are below detection threshold
-    maxima <- maxima[f[maxima] >= deth]
-    
-    # remove minima that now became obsolete If there are multiple minima between two
-    # consecutive maxima after removing the maxima that did not pass the threshold,
-    # take the average of the minima;return the list of indices such that between
-    # each pair of consecutive maxima, there is exactly one minimum
-    
-    if (length(maxima) > 1) {
-        minima <- sapply(2:length(maxima), function(i) {
-            
-            mins <- minima[minima >= maxima[[i - 1]] & minima <= maxima[[i]]]
-            if (length(mins) > 0) {
-                round(mean(mins[which(f[mins] == min(f[mins]))]))
-            } else {
-                NULL
-            }
-        })
-        
-    } else {
-        minima <- NULL
-    }
-    
+    # remove maxima that are below detection limit
+    maxima <- maxima[f[maxima] >= detl]
+    minima <- remove_obsolete_minima(f, maxima, minima)
     minima <- unlist(minima)
     maxima <- unlist(maxima)
-    #maxima <- maxima[f[maxima] >= detlim]
-    
-    # Combine maxima that do not have minima in between
-    if (length(maxima) > 1) {
-        maxima2 <- c()
-        
-        for (i in 1:(length(maxima) - 1)) {
-            nominima <- TRUE
-            cnt <- 0
-            while (nominima & (i + cnt) < length(maxima)) {
-                cnt <- cnt + 1
-                nominima <- sum(minima > maxima[[i]] & minima < maxima[[i + cnt]]) == 
-                  0
-                # if (is.na(nominima)) {nominima <- TRUE}
-            }
-            
-            maxs <- maxima[i:(i + cnt - 1)]
-            maxima2 <- c(maxima2, round(mean(maxs[which(f[maxs] == max(f[maxs]))])))
-            
-        }
-        
-        if (!maxima[[length(maxima)]] %in% maxima2) {
-            maxima2 <- c(maxima2, maxima[[length(maxima)]])
-        }
-        
-        
-        maxima <- maxima2
-        
-    }
-    
-    # Remove minima that are outside the most extreme maxima
-    minima <- minima[minima > min(maxima) & minima < max(maxima)]
-    
+
     # Remove minima and maxima that are too shallow
     delmini <- logical(length(minima))
     delmaxi <- logical(length(maxima))
@@ -382,6 +342,27 @@ find.optima <- function(f, detection.threshold = 0, bw, x) {
     if (length(minima) > 0 && sum(delmini) > 0) {
         minima <- minima[!delmini]
     }
+
+    # Combine maxima that do not have minima in between
+    if (length(maxima) > 1) {
+      maxima2 <- c()
+      for (i in 1:(length(maxima) - 1)) {
+        nominima <- TRUE
+	cnt <- 0
+	while (nominima & (i + cnt) < length(maxima)) {
+	cnt <- cnt + 1
+	nominima <- sum(minima > maxima[[i]] & minima < maxima[[i + cnt]]) == 0
+	# if (is.na(nominima)) {nominima <- TRUE}
+      }
+      maxs <- maxima[i:(i + cnt - 1)]
+      maxima2 <- c(maxima2, round(mean(maxs[which(f[maxs] == max(f[maxs]))])))
+    }
+    if (!maxima[[length(maxima)]] %in% maxima2) {
+    maxima2 <- c(maxima2, maxima[[length(maxima)]])
+    }
+    maxima <- maxima2
+    }
+   
     
     if (length(maxima) > 0 && sum(delmaxi) > 0) {
         maxima <- maxima[!delmaxi]
@@ -389,6 +370,33 @@ find.optima <- function(f, detection.threshold = 0, bw, x) {
     
     list(min = minima, max = maxima, detection.density = deth)
     
+}
+
+remove_obsolete_minima <- function (f, maxima, minima) {
+
+    # remove minima that now became obsolete If there are multiple minima between two
+    # consecutive maxima after removing the maxima that did not pass the threshold,
+    # take the average of the minima;return the list of indices such that between
+    # each pair of consecutive maxima, there is exactly one minimum
+    if (length(maxima) > 1) {
+        minima <- sapply(2:length(maxima), function(i) {
+            
+            mins <- minima[minima >= maxima[[i - 1]] & minima <= maxima[[i]]]
+            if (length(mins) > 0) {
+                round(mean(mins[which(f[mins] == min(f[mins]))]))
+            } else {
+                NULL
+            }
+        })
+        
+    } else {
+        minima <- NULL
+    }
+
+    # Remove minima that are outside the most extreme maxima
+    minima <- minima[minima > min(maxima) & minima < max(maxima)]
+
+    minima
 }
 
 
