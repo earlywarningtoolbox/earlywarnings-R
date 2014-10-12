@@ -1,3 +1,43 @@
+
+#' variability_individual
+#' 
+#' Average CoV within individuals for each feature in the data matrix
+#'
+#' @param dat Data matrix (samples x features)
+#' @param meta Metadata (samples x variables) with the following
+#' 	       fields: subject
+#' @return Vector. Average variability within individuals for each feature.
+#' @export
+#' @examples
+#'   data(peerj32)
+#'   cv <- variability_individual(peerj32$microbes, peerj32$meta)
+#'   print(head(cv))
+variability_individual <- function (dat, meta) {
+
+  coms <- intersect(rownames(dat), rownames(meta))
+  if (length(coms) < 2) {
+    stop("Check that the dat and meta arguments have more than 1 samples in common")
+  } else {	    
+    meta <- meta[coms,]	    
+    dat <- dat[coms, ]	    
+    subj <- as.character(meta$subject)
+    spl <- split(coms, subj) # Sample list for each subject
+
+    # For each feature (e.g. microbe) calculate
+    # CoV within each subject across time
+    # then average over subjects
+    timevar <- sapply(colnames(dat), function (tax) {
+      mean(na.omit(sapply(spl, function (s) {
+        x <- dat[s, tax]; sd(x)/mean(x)
+      })))
+    })
+  }
+
+  timevar
+
+}
+
+
 #' intermediate_stability
 #'
 #' Quantify stability with respect to a given reference point for all variables.

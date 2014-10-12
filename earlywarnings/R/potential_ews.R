@@ -1,3 +1,63 @@
+
+
+#' multimodality_score
+#'
+#' Calculate multimodality score based on bootstrapped potential analysis
+#'
+#' @param dat Input data matrix (variables x samples)
+#' @param detection.threshold Mode detection threshold
+#' @param bw.adjust Bandwidth adjustment
+#' @param bs.iterations Bootstrap iterations
+#' @param detection.limit minimum accepted density for a maximum; as a multiple of kernel height
+#' 
+#' @return A list with following elements: 
+#' 	     score: Fraction of bootstrap samples where multiple modes are observed
+#'	     nmodes: The most frequently observed number of modes in bootrstrap sampling 
+#'
+#'
+#' @details This function repeats potential analysis (Livina et al. 2010) multiple 
+#' 	    times with bootstrap sampling for each row of the input data 
+#'	    (as in Lahti et al. 2014) and returns the specified results
+#'
+#' @export
+#'
+#' @author Leo Lahti \email{leo.lahti@@iki.fi}
+#' @examples 
+#'   # Create simulated example data
+#'   data(peerj32)
+#'   multimodality_score(t(peerj32$microbes))
+#'
+#' @references 
+#' Livina et al. (2010). Potential analysis 
+#' reveals changing number of climate states during the last 60
+#' kyr. \emph{Climate of the Past}, 6, 77-82.
+#'
+#' Lahti et al. (2014). Tipping elements of the human intestinal
+#' ecosystem. \emph{Nature Communications} 5:4344.
+#'
+#' @keywords early-warning
+
+multimodality_score <- function (dat, detection.threshold = 1, bw.adjust = 1, bs.iterations = 100, detection.limit = 1) {
+
+  # Univariate potential analysis for all taxa with full data
+  potential.results <- list()
+  nmodes <- c()
+
+  for (tax in rownames(dat)) {
+    x <- as.numeric(dat[tax, ])
+    m <- potential_analysis_bootstrap(x, detection.threshold = detection.threshold, bw.adjust = bw.adjust, bs.iterations = bs.iterations, detection.limit = detection.limit)
+    nmodes[[tax]] <- m$modes 
+    potential.results[[tax]] <- m
+
+  }
+
+  multimodality.score <- sapply(potential.results, function (x) {1 - x$unimodality.support})
+
+  list(score = multimodality.score, modes = nmodes)
+
+}
+
+
 #' Description: Plot Potential
 #'
 #' Visualization of the potential function from the movpotential function

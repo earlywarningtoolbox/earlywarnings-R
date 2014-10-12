@@ -1,5 +1,5 @@
 /usr/bin/R CMD BATCH document.R
 /usr/bin/R CMD build ../../
-/usr/bin/R CMD check --as-cran earlywarnings_1.1.11.tar.gz
-/usr/bin/R CMD INSTALL earlywarnings_1.1.11.tar.gz
+/usr/bin/R CMD check --as-cran earlywarnings_1.1.13.tar.gz
+/usr/bin/R CMD INSTALL earlywarnings_1.1.13.tar.gz
 
