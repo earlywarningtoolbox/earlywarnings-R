@@ -91,6 +91,7 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 #' 	   maxima: Average of potential maxima across the bootstrap samples (for the most frequent number of modes)
 #'	   unimodality.support Fraction of bootstrap samples exhibiting unimodality	   
 #'
+#' @export
 #' @references 
 #' Livina et al. (2010). Potential analysis 
 #' reveals changing number of climate states during the last 60
