@@ -24,8 +24,9 @@
 #' @author Leo Lahti \email{leo.lahti@@iki.fi}
 #' @examples 
 #'   # Create simulated example data
-#'   data(peerj32)
-#'   multimodality_score(t(peerj32$microbes))
+#'   #library(microbiome)
+#'   #data(peerj32)
+#'   #multimodality_score(t(peerj32$microbes))
 #'
 #' @references 
 #' Livina et al. (2010). Potential analysis 

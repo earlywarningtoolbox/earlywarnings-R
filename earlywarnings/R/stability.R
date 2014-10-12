@@ -9,9 +9,10 @@
 #' @return Vector. Average variability within individuals for each feature.
 #' @export
 #' @examples
-#'   data(peerj32)
-#'   cv <- variability_individual(peerj32$microbes, peerj32$meta)
-#'   print(head(cv))
+#'   #library(microbiome)
+#'   #data(peerj32)
+#'   #cv <- variability_individual(peerj32$microbes, peerj32$meta)
+#'   #print(head(cv))
 variability_individual <- function (dat, meta) {
 
   coms <- intersect(rownames(dat), rownames(meta))
