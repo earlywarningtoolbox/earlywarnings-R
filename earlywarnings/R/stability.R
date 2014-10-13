@@ -4,7 +4,11 @@
 #'
 #' @param dat Data matrix (samples x features)
 #' @param meta Metadata (samples x variables) with the following
-#' 	       fields: subject
+#' 	       fields: subject, time
+#' @param method Method to calculate the variability within
+#'   	  	 individuals: sd (ignores time) or timevar (normalizes by time)
+#'
+#' 
 #' @return Vector. Average variability within individuals for each feature.
 #' @export
 #' @examples
@@ -12,7 +16,7 @@
 #'   #data(peerj32)
 #'   #cv <- variability_individual(peerj32$microbes, peerj32$meta)
 #'   #print(head(cv))
-variability_individual <- function (dat, meta) {
+variability_individual <- function (dat, meta, method = "timevar") {
 
   coms <- intersect(rownames(dat), rownames(meta))
   if (length(coms) < 2) {
@@ -30,18 +34,58 @@ variability_individual <- function (dat, meta) {
     }    
 
     # For each feature (e.g. microbe) calculate
-    # CoV within each subject across time
-    # then average over subjects
-    timevar <- sapply(colnames(dat), function (tax) {
-      mean(na.omit(sapply(spl, function (s) {
-        x <- dat[s, tax]; sd(x)/mean(x)
-      })))
-    })
+    # CoV within each subject then average over subjects; time is ignored
+    # (intervals are the same for all subjects anyway)
+      timevar <- c()
+      for (tax in colnames(dat)) {
+        stab <- subject_tables(dat[, tax], meta[, c("subject", "time")])
+
+	if (method == "std") {
+          m <- sapply(stab, function (tab) {x <- tab$signal; sd(x)/mean(x)})
+    	} else if (method == "timevar") {
+          m <- sapply(stab, function (tab) {x <- tab$shift[-1]; T <- tab$time[-1]; sqrt(sum((x/T)^2))})
+	}
+        timevar[[tax]] <- mean(na.omit(m))
+      }
   }
 
   timevar
 
 }
+
+
+
+subject_tables <- function (x, meta) {
+
+  # Focus on the signal from specific taxon
+  meta$signal <- x
+
+  # Pick data for each subject separately
+  spl <- split(meta, meta$subject)
+
+  tabs <- list()
+  cnt <- 0 
+  for (subj in names(spl)) {
+
+    times <- as.numeric(spl[[subj]]$time)
+    signal <- as.numeric(spl[[subj]]$signal)
+    mintime <- which.min(times)
+    
+    # Shift in time from first time point
+    spl[[subj]]$time <- (times - times[[mintime]])
+    
+    # Shift in signal from first time point    		      
+    spl[[subj]]$shift <- (signal - signal[[mintime]])
+
+    # Store
+    tabs[[subj]] <- spl[[subj]]
+  }
+
+  tabs
+
+}
+
+
 
 
 #' intermediate_stability
