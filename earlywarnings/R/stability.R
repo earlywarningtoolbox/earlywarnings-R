@@ -1,4 +1,3 @@
-
 #' variability_individual
 #' 
 #' Average CoV within individuals for each feature in the data matrix
@@ -23,6 +22,12 @@ variability_individual <- function (dat, meta) {
     dat <- dat[coms, ]	    
     subj <- as.character(meta$subject)
     spl <- split(coms, subj) # Sample list for each subject
+    spl <- spl[sapply(spl,length) > 1] # only keep subjects with >1 samples
+
+    if (length(spl) == 0) {
+      warning("Every subject has only a single sample. Not possible to assess variability within individuals."); 
+      return(NA)
+    }    
 
     # For each feature (e.g. microbe) calculate
     # CoV within each subject across time
