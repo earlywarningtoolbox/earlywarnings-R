@@ -1,3 +1,4 @@
+
 #' variability_individual
 #' 
 #' Average CoV within individuals for each feature in the data matrix
