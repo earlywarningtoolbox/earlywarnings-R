@@ -55,14 +55,13 @@ variability_individual <- function (dat, meta, method = "timevar") {
 }
 
 
-
 subject_tables <- function (x, meta) {
 
   # Focus on the signal from specific taxon
   meta$signal <- x
 
   # Pick data for each subject separately
-  spl <- split(meta, meta$subject)
+  spl <- split(meta, droplevels(meta$subject))
 
   tabs <- list()
   cnt <- 0 
