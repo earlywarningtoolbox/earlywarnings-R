@@ -61,7 +61,7 @@ subject_tables <- function (x, meta) {
   meta$signal <- x
 
   # Pick data for each subject separately
-  spl <- split(meta, droplevels(meta$subject))
+  spl <- split(meta, as.character(meta$subject))
 
   tabs <- list()
   cnt <- 0 
