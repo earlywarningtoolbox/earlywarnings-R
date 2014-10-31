@@ -30,4 +30,4 @@ Imports:
     stats
 LazyLoad: yes
 URL: http://www.early-warning-signals.org, http://vasilisdakos.wordpress.com
-License: FreeBSD
+License: BSD_2_clause + file LICENSE
