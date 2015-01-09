@@ -219,7 +219,7 @@ estimate_stability <- function (df, reference.point = NULL, method = "lm") {
   df <- df[df$subjectID %in% names(which(table(df$subjectID) > 1)),]
 
   # Split data by subject
-  spl <- split(df, df$subjectID)    
+  spl <- split(df, as.character(df$subjectID))
 
   dfis <- NULL
   for (spli in spl) {

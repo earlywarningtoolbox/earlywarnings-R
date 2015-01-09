@@ -4,7 +4,7 @@
 \title{multimodality_score}
 \usage{
 multimodality_score(dat, detection.threshold = 1, bw.adjust = 1,
-  bs.iterations = 100, detection.limit = 1)
+  bs.iterations = 100, detection.limit = 1, verbose = TRUE)
 }
 \arguments{
 \item{dat}{Input data matrix (variables x samples)}
@@ -16,11 +16,16 @@ multimodality_score(dat, detection.threshold = 1, bw.adjust = 1,
 \item{bs.iterations}{Bootstrap iterations}
 
 \item{detection.limit}{minimum accepted density for a maximum; as a multiple of kernel height}
+
+\item{verbose}{Verbose}
 }
 \value{
 A list with following elements:
-	     score: Fraction of bootstrap samples where multiple modes are observed
-	     nmodes: The most frequently observed number of modes in bootrstrap sampling
+	  \itemize{
+		\item{score}{Fraction of bootstrap samples where multiple modes are observed}
+	     	\item{nmodes}{The most frequently observed number of modes in bootrstrap sampling results}
+		\item{results}{Full results of potential_analysis_bootstrap for each row of the input matrix.}
+	   }
 }
 \description{
 Calculate multimodality score based on bootstrapped potential analysis

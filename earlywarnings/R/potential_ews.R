@@ -9,11 +9,14 @@
 #' @param bw.adjust Bandwidth adjustment
 #' @param bs.iterations Bootstrap iterations
 #' @param detection.limit minimum accepted density for a maximum; as a multiple of kernel height
+#' @param verbose Verbose
 #' 
 #' @return A list with following elements: 
-#' 	     score: Fraction of bootstrap samples where multiple modes are observed
-#'	     nmodes: The most frequently observed number of modes in bootrstrap sampling 
-#'
+#' 	  \itemize{
+#'		\item{score}{Fraction of bootstrap samples where multiple modes are observed}
+#'	     	\item{nmodes}{The most frequently observed number of modes in bootrstrap sampling results}
+#'		\item{results}{Full results of potential_analysis_bootstrap for each row of the input matrix.}
+#'	   }
 #'
 #' @details This function repeats potential analysis (Livina et al. 2010) multiple 
 #' 	    times with bootstrap sampling for each row of the input data 
@@ -38,23 +41,27 @@
 #'
 #' @keywords early-warning
 
-multimodality_score <- function (dat, detection.threshold = 1, bw.adjust = 1, bs.iterations = 100, detection.limit = 1) {
+multimodality_score <- function (dat, detection.threshold = 1, bw.adjust = 1, bs.iterations = 100, detection.limit = 1, verbose = TRUE) {
 
   # Univariate potential analysis for all taxa with full data
   potential.results <- list()
   nmodes <- c()
 
+  if (is.null(rownames(dat))) {
+    rownames(dat) <- as.character(1:nrow(dat))
+  }
+
   for (tax in rownames(dat)) {
+    if (verbose) {message(tax)}
     x <- as.numeric(dat[tax, ])
     m <- potential_analysis_bootstrap(x, detection.threshold = detection.threshold, bw.adjust = bw.adjust, bs.iterations = bs.iterations, detection.limit = detection.limit)
     nmodes[[tax]] <- m$modes 
     potential.results[[tax]] <- m
-
   }
 
   multimodality.score <- sapply(potential.results, function (x) {1 - x$unimodality.support})
 
-  list(score = multimodality.score, modes = nmodes)
+  list(score = multimodality.score, modes = nmodes, results = potential.results)
 
 }
 
@@ -75,6 +82,12 @@ multimodality_score <- function (dat, detection.threshold = 1, bw.adjust = 1, bs
 #' 
 #' @importFrom tgp interp.loess
 #' @importFrom ggplot2 ggplot
+#' @importFrom ggplot2 aes
+#' @importFrom ggplot2 geom_tile
+#' @importFrom ggplot2 stat_contour
+#' @importFrom ggplot2 xlab
+#' @importFrom ggplot2 ylab
+#' @importFrom ggplot2 labs
 #' @return \item{ggplot2}{potential plotted}
 #'
 #' @export

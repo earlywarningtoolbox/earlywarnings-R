@@ -1,7 +1,7 @@
 ---
 title: "earlywarnings vignette"
 author: "Vasilis Dakos and Leo Lahti"
-date: "2014-10-31"
+date: "2015-01-09"
 output:
   html_document:
     toc: true
@@ -67,8 +67,29 @@ p <- PlotPotential(res$res, title = '',
 print(p)
 ```
 
-![plot of chunk movpotential](figure/movpotential.png) 
+![plot of chunk movpotential](figure/movpotential-1.png) 
 
+## Multimodality detection
+
+Estimate multimodality score and number of modes based on bootrstrapped potential analysis.
+
+
+```r
+# Potential analysis with bootstrap
+library(earlywarnings)
+X <- as.matrix(rbind(c(rnorm(100, mean = 0), rnorm(100, mean = 5)), 
+           c(rnorm(200, mean = 0))))
+m <- multimodality_score(X, detection.threshold = 1, bs.iterations = 20, detection.limit = 3)
+
+# Plot the original data for feature i 
+# together with the estimated density maxima and minima
+i <- 1
+plot(density(X[i,])); 
+abline(v = m$results[[i]]$maxima)
+abline(v = m$results[[i]]$minima, lty = 2)
+```
+
+![plot of chunk bimodality](figure/bimodality-1.png) 
 
 
 ### Licensing and Citations
@@ -89,7 +110,7 @@ sessionInfo()
 ```
 
 ```
-## R version 3.1.1 (2014-07-10)
+## R version 3.1.2 (2014-10-31)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## 
 ## locale:
@@ -104,19 +125,19 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] earlywarnings_1.1.16 tseries_0.10-32      tgp_2.4-9           
-## [4] moments_0.13         ggplot2_1.0.0        knitr_1.6           
+## [1] earlywarnings_1.1.18 tseries_0.10-32      tgp_2.4-9           
+## [4] moments_0.13         ggplot2_1.0.0        knitr_1.8           
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] boot_1.3-13        colorspace_1.2-4   digest_0.6.4      
 ##  [4] evaluate_0.5.5     fields_7.1         formatR_1.0       
-##  [7] grid_3.1.1         gtable_0.1.2       Kendall_2.2       
+##  [7] grid_3.1.2         gtable_0.1.2       Kendall_2.2       
 ## [10] KernSmooth_2.23-13 labeling_0.3       lattice_0.20-29   
-## [13] lmtest_0.9-33      maps_2.3-7         MASS_7.3-34       
+## [13] lmtest_0.9-33      maps_2.3-9         MASS_7.3-35       
 ## [16] munsell_0.4.2      nortest_1.0-2      plyr_1.8.1        
-## [19] proto_0.3-10       quadprog_1.5-5     Rcpp_0.11.2       
+## [19] proto_0.3-10       quadprog_1.5-5     Rcpp_0.11.3       
 ## [22] reshape2_1.4       scales_0.2.4       som_0.3-5         
-## [25] spam_1.0-1         stringr_0.6.2      tools_3.1.1       
+## [25] spam_1.0-1         stringr_0.6.2      tools_3.1.2       
 ## [28] zoo_1.7-11
 ```
 
