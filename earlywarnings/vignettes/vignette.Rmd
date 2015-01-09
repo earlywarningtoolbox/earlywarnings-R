@@ -70,6 +70,8 @@ Estimate multimodality score and number of modes based on bootrstrapped potentia
 ```{r bimodality, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 # Potential analysis with bootstrap
 library(earlywarnings)
+
+# Example Data
 X <- as.matrix(rbind(c(rnorm(100, mean = 0), rnorm(100, mean = 5)), 
            c(rnorm(200, mean = 0))))
 m <- multimodality_score(X, detection.threshold = 1, bs.iterations = 20, detection.limit = 3)
