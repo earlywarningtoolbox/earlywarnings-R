@@ -1,7 +1,7 @@
 ---
 title: "earlywarnings vignette"
 author: "Vasilis Dakos and Leo Lahti"
-date: "2015-01-09"
+date: "2015-01-13"
 output:
   html_document:
     toc: true
@@ -25,6 +25,8 @@ earlywarnings R package
 
 ### Installing and loading the release version
 
+Note: if dependencies are missing you may wish to run the [../installation.script](installation.script) first
+
 
 ```r
 install.packages("earlywarnings")
@@ -38,11 +40,36 @@ library(devtools)
 install_github("earlywarningtoolbox/earlywarnings-R/earlywarnings")
 ```
 
+### Clone the repository & install locally:
+
+Run on command line:
+<pre><code>git clone git@github.com:earlywarningtoolbox/earlywarnings-R.git
+./build.sh
+</pre></code>
+
 ### Loading the package
 
 
 ```r
 library(earlywarnings)  
+```
+
+```
+## Loading required package: ggplot2
+## Loading required package: moments
+## Loading required package: tgp
+## Loading required package: tseries
+## 
+##     'tseries' version: 0.10-32
+## 
+##     'tseries' is a package for time series analysis and
+##     computational finance.
+## 
+##     See 'library(help="tseries")' for details.
+## 
+## 
+## earlywarnings Copyright (C) 2011-2015 Vasilis Dakos and Leo Lahti
+## For more information, see http://www.early-warning-signals.org
 ```
 
 
@@ -77,6 +104,8 @@ Estimate multimodality score and number of modes based on bootrstrapped potentia
 ```r
 # Potential analysis with bootstrap
 library(earlywarnings)
+
+# Example Data
 X <- as.matrix(rbind(c(rnorm(100, mean = 0), rnorm(100, mean = 5)), 
            c(rnorm(200, mean = 0))))
 m <- multimodality_score(X, detection.threshold = 1, bs.iterations = 20, detection.limit = 3)
@@ -99,6 +128,38 @@ This work can be freely used, modified and distributed under the
 
 Kindly cite the work as 'Vasilis Dakos and Leo Lahti (2014). earlywarnings R package. URL: https://github.com/earlywarningtoolbox/earlywarnings-R/tree/master/earlywarnings'.
 
+
+```r
+citation("earlywarnings")
+```
+
+```
+## It is recommended to use 'given' instead of 'first'.
+## It is recommended to use 'family' instead of 'last'.
+## It is recommended to use 'given' instead of 'first'.
+## It is recommended to use 'family' instead of 'last'.
+```
+
+```
+## 
+## To cite earlywarnings in publications use:
+## 
+##   Vasilis Dakos et al. Methods for detecting early warnings of
+##   critical transitions in time series illustrated using simulated
+##   ecological dataPLoS One 7(7):e41010, 2012. See
+##   http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0041010
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Article{,
+##     title = {R Early Warning Signals Toolbox},
+##     author = {Vasilis Dakos and Leo Lahti},
+##     journal = {The R Project for Statistical Computing},
+##     year = {2013},
+##     note = {http://cran.r-project.org/web/packages/earlywarnings/index.html},
+##     url = {Publication URL here},
+##   }
+```
 
 ### Session info
 
@@ -125,7 +186,7 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] earlywarnings_1.1.18 tseries_0.10-32      tgp_2.4-9           
+## [1] earlywarnings_1.1.19 tseries_0.10-32      tgp_2.4-9           
 ## [4] moments_0.13         ggplot2_1.0.0        knitr_1.8           
 ## 
 ## loaded via a namespace (and not attached):
@@ -133,7 +194,7 @@ sessionInfo()
 ##  [4] evaluate_0.5.5     fields_7.1         formatR_1.0       
 ##  [7] grid_3.1.2         gtable_0.1.2       Kendall_2.2       
 ## [10] KernSmooth_2.23-13 labeling_0.3       lattice_0.20-29   
-## [13] lmtest_0.9-33      maps_2.3-9         MASS_7.3-35       
+## [13] lmtest_0.9-33      maps_2.3-9         MASS_7.3-34       
 ## [16] munsell_0.4.2      nortest_1.0-2      plyr_1.8.1        
 ## [19] proto_0.3-10       quadprog_1.5-5     Rcpp_0.11.3       
 ## [22] reshape2_1.4       scales_0.2.4       som_0.3-5         

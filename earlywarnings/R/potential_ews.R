@@ -1,5 +1,6 @@
 
 
+
 #' multimodality_score
 #'
 #' Calculate multimodality score based on bootstrapped potential analysis
@@ -107,6 +108,8 @@ multimodality_score <- function (dat, detection.threshold = 1, bw.adjust = 1, bs
 
 PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, plot.contours = TRUE, 
     binwidth = 0.2, bins = NULL) {
+
+    scale_fill_gradient <- NULL # Avoid build warnings
     
     cut.potential <- max(apply(res$pots, 1, min)) + cutoff * abs(max(apply(res$pots, 
         1, min)))  # Ensure all minima are visualized
@@ -125,17 +128,17 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
     bg.var <- NULL
     phylotype <- NULL
     
-    p <- ggplot2::ggplot(df, aes(bg.var, phylotype, z = potential)) + geom_tile(aes(fill = potential)) + 
-        scale_fill_gradient(low = "black", high = "white")
-    
+    p <- ggplot(df)
+    p <- p + geom_tile(aes(x = bg.var, y = phylotype, z = potential, fill = potential)) 
+    p <- p + scale_fill_gradient(low = "black", high = "white")
+
     if (plot.contours) {
         if (!is.null(bins)) {
             warning("bins argument is overriding the binwidth argument!")
-            p <- p + stat_contour(bins = bins)
+            p <- p + stat_contour(bins = bins, aes(x = bg.var, y = phylotype, z = potential, fill = potential))
         } else {
-            p <- p + stat_contour(binwidth = binwidth)
+            p <- p + stat_contour(binwidth = binwidth, aes(x = bg.var, y = phylotype, z = potential, fill = potential))
         }
-        # p <- p + stat_contour(geom='polygon', aes(fill=..level..))
     }
     
     p <- p + xlab(xlab.text) + ylab(ylab.text) + labs(title = title)

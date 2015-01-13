@@ -25,6 +25,8 @@ earlywarnings R package
 
 ### Installing and loading the release version
 
+Note: if dependencies are missing you may wish to run the [../installation.script](installation.script) first
+
 ```{r install, eval=FALSE}
 install.packages("earlywarnings")
 ```
@@ -35,6 +37,13 @@ install.packages("earlywarnings")
 library(devtools)
 install_github("earlywarningtoolbox/earlywarnings-R/earlywarnings")
 ```
+
+### Clone the repository & install locally:
+
+Run on command line:
+<pre><code>git clone git@github.com:earlywarningtoolbox/earlywarnings-R.git
+./build.sh
+</pre></code>
 
 ### Loading the package
 
@@ -92,6 +101,9 @@ This work can be freely used, modified and distributed under the
 
 Kindly cite the work as 'Vasilis Dakos and Leo Lahti (2014). earlywarnings R package. URL: https://github.com/earlywarningtoolbox/earlywarnings-R/tree/master/earlywarnings'.
 
+```{r citation}
+citation("earlywarnings")
+```
 
 ### Session info
 
