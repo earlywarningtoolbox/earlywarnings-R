@@ -74,7 +74,7 @@ print(p)
 
 ## Multimodality detection
 
-Estimate multimodality score and number of modes based on bootrstrapped potential analysis.
+Estimate multimodality score and number of modes based on bootstrapped potential analysis.
 
 ```{r bimodality, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 # Potential analysis with bootstrap
