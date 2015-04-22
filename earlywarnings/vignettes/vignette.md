@@ -1,7 +1,7 @@
 ---
 title: "earlywarnings vignette"
 author: "Vasilis Dakos and Leo Lahti"
-date: "2015-01-13"
+date: "2015-04-22"
 output:
   html_document:
     toc: true
@@ -54,24 +54,6 @@ Run on command line:
 library(earlywarnings)  
 ```
 
-```
-## Loading required package: ggplot2
-## Loading required package: moments
-## Loading required package: tgp
-## Loading required package: tseries
-## 
-##     'tseries' version: 0.10-32
-## 
-##     'tseries' is a package for time series analysis and
-##     computational finance.
-## 
-##     See 'library(help="tseries")' for details.
-## 
-## 
-## earlywarnings Copyright (C) 2011-2015 Vasilis Dakos and Leo Lahti
-## For more information, see http://www.early-warning-signals.org
-```
-
 
 ## Potential analysis
 
@@ -98,7 +80,7 @@ print(p)
 
 ## Multimodality detection
 
-Estimate multimodality score and number of modes based on bootrstrapped potential analysis.
+Estimate multimodality score and number of modes based on bootstrapped potential analysis.
 
 
 ```r
@@ -109,16 +91,36 @@ library(earlywarnings)
 X <- as.matrix(rbind(c(rnorm(100, mean = 0), rnorm(100, mean = 5)), 
            c(rnorm(200, mean = 0))))
 m <- multimodality_score(X, detection.threshold = 1, bs.iterations = 20, detection.limit = 3)
+```
 
+```
+## Error in eval(expr, envir, enclos): could not find function "multimodality_score"
+```
+
+```r
 # Plot the original data for feature i 
 # together with the estimated density maxima and minima
 i <- 1
 plot(density(X[i,])); 
-abline(v = m$results[[i]]$maxima)
-abline(v = m$results[[i]]$minima, lty = 2)
 ```
 
 ![plot of chunk bimodality](figure/bimodality-1.png) 
+
+```r
+abline(v = m$results[[i]]$maxima)
+```
+
+```
+## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): object 'm' not found
+```
+
+```r
+abline(v = m$results[[i]]$minima, lty = 2)
+```
+
+```
+## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): object 'm' not found
+```
 
 
 ### Licensing and Citations
@@ -171,8 +173,9 @@ sessionInfo()
 ```
 
 ```
-## R version 3.1.2 (2014-10-31)
-## Platform: x86_64-pc-linux-gnu (64-bit)
+## R version 3.2.0 (2015-04-16)
+## Platform: x86_64-unknown-linux-gnu (64-bit)
+## Running under: Ubuntu 14.10
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -186,20 +189,21 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] earlywarnings_1.1.19 tseries_0.10-32      tgp_2.4-9           
-## [4] moments_0.13         ggplot2_1.0.0        knitr_1.8           
+## [1] earlywarnings_1.0.59 tseries_0.10-34      tgp_2.4-11          
+## [4] moments_0.14         ggplot2_1.0.1        knitr_1.9           
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] boot_1.3-13        colorspace_1.2-4   digest_0.6.4      
-##  [4] evaluate_0.5.5     fields_7.1         formatR_1.0       
-##  [7] grid_3.1.2         gtable_0.1.2       Kendall_2.2       
-## [10] KernSmooth_2.23-13 labeling_0.3       lattice_0.20-29   
-## [13] lmtest_0.9-33      maps_2.3-9         MASS_7.3-34       
-## [16] munsell_0.4.2      nortest_1.0-2      plyr_1.8.1        
-## [19] proto_0.3-10       quadprog_1.5-5     Rcpp_0.11.3       
-## [22] reshape2_1.4       scales_0.2.4       som_0.3-5         
-## [25] spam_1.0-1         stringr_0.6.2      tools_3.1.2       
-## [28] zoo_1.7-11
+##  [1] Rcpp_0.11.5        cluster_2.0.1      maps_2.3-9        
+##  [4] MASS_7.3-40        nortest_1.0-3      Kendall_2.2       
+##  [7] munsell_0.4.2      som_0.3-5          colorspace_1.2-6  
+## [10] lattice_0.20-31    quadprog_1.5-5     stringr_0.6.2     
+## [13] plyr_1.8.2         fields_8.2-1       tools_3.2.0       
+## [16] grid_3.2.0         spam_1.0-1         gtable_0.1.2      
+## [19] KernSmooth_2.23-14 lmtest_0.9-33      digest_0.6.8      
+## [22] reshape2_1.4.1     formatR_1.2        rpart_4.1-9       
+## [25] evaluate_0.7       maptree_1.4-7      labeling_0.3      
+## [28] scales_0.2.4       boot_1.3-16        proto_0.3-10      
+## [31] zoo_1.7-12
 ```
 
 
