@@ -90,7 +90,9 @@ BDSboot <- function(X, varname, nboot, epsvec, emb) {
 #' @import quadprog
 #' @examples #
 #' data(foldbif)
-#' bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5, boots=200,logtransform=FALSE,interpolate=FALSE)
+#' bdstest_ews(foldbif, ARMAoptim=FALSE, ARMAorder=c(1,0), 
+#'   	       embdim=3, epsilon=0.5, boots=200, 
+#'	       logtransform=FALSE, interpolate=FALSE)
 #' @keywords early-warning
 #' 
 bdstest_ews <- function(timeseries, ARMAoptim = TRUE, ARMAorder = c(1, 0), GARCHorder = c(0, 

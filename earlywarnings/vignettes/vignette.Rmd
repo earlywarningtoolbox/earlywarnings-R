@@ -1,0 +1,118 @@
+---
+title: "earlywarnings vignette"
+author: "Vasilis Dakos and Leo Lahti"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    theme: united
+    highlight: pygments
+---
+
+<!--
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{microbiome tutorial}
+  %\usepackage[utf8]{inputenc}
+-->
+
+
+
+earlywarnings R package
+===========
+
+## Installation
+
+### Installing and loading the release version
+
+Note: if dependencies are missing you may wish to run the [../installation.script](installation.script) first
+
+```{r install, eval=FALSE}
+install.packages("earlywarnings")
+```
+
+### Installing and loading the experimental development version
+
+```{r install2, eval=FALSE}
+library(devtools)
+install_github("earlywarningtoolbox/earlywarnings-R/earlywarnings")
+```
+
+### Clone the repository & install locally:
+
+Run on command line:
+<pre><code>git clone git@github.com:earlywarningtoolbox/earlywarnings-R.git
+./build.sh
+</pre></code>
+
+### Loading the package
+
+```{r loading, eval=TRUE}
+library(earlywarnings)  
+```
+
+
+## Potential analysis
+
+Potential analysis, used for instance in [Hirota et al. Science, 334, 232-235.](http://www.sciencemag.org/content/334/6053/232.long)
+
+```{r movpotential, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+# Create simulated example data
+X <- c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), 
+ 	           rnorm(1000, mean = 2))
+param <- seq(0,5,length=3000) 
+
+# Run potential analysis
+res <- movpotential_ews(X, param)
+
+# Visualize
+p <- PlotPotential(res$res, title = '', 
+	       	   xlab.text = '', ylab.text = '', 
+		   cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2)
+print(p)
+```
+
+## Multimodality detection
+
+Estimate multimodality score and number of modes based on bootstrapped potential analysis.
+
+```{r bimodality, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+# Potential analysis with bootstrap
+library(earlywarnings)
+
+# Example Data
+X <- as.matrix(rbind(c(rnorm(100, mean = 0), rnorm(100, mean = 5)), 
+           c(rnorm(200, mean = 0))))
+m <- multimodality_score(X, detection.threshold = 1, bs.iterations = 20, detection.limit = 3)
+
+# Plot the original data for feature i 
+# together with the estimated density maxima and minima
+i <- 1
+plot(density(X[i,])); 
+abline(v = m$results[[i]]$maxima)
+abline(v = m$results[[i]]$minima, lty = 2)
+```
+
+
+### Licensing and Citations
+
+This work can be freely used, modified and distributed under the 
+[Two-clause (Free)BSD license](http://en.wikipedia.org/wiki/BSD\_licenses).
+
+Kindly cite the work as 'Vasilis Dakos and Leo Lahti (2014). earlywarnings R package. URL: https://github.com/earlywarningtoolbox/earlywarnings-R/tree/master/earlywarnings'.
+
+```{r citation}
+citation("earlywarnings")
+```
+
+### Session info
+
+This vignette was created with
+
+```{r sessioninfo}
+sessionInfo()
+```
+
+
+
+

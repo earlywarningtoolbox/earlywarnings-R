@@ -2,8 +2,8 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals Toolbox for Detecting Critical Transitions in
     Timeseries
-Version: 1.0.59
-Date: 2013-04-07
+Version: 1.1.20
+Date: 2015-05-12
 Author: Vasilis Dakos <vasilis.dakos@gmail.com>, with contributions from S.R.
     Carpenter, T. Cline, L. Lahti
 Maintainer: Vasilis Dakos <vasilis.dakos@gmail.com>
@@ -30,4 +30,4 @@ Imports:
     stats
 LazyLoad: yes
 URL: http://www.early-warning-signals.org, http://vasilisdakos.wordpress.com
-License: FreeBSD
+License: BSD_2_clause + file LICENSE
