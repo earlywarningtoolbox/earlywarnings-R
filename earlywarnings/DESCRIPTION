@@ -2,16 +2,18 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals Toolbox for Detecting Critical Transitions in
     Timeseries
-Version: 1.1.20
-Date: 2015-05-12
-Author: Vasilis Dakos <vasilis.dakos@gmail.com>, with contributions from S.R.
-    Carpenter, T. Cline, L. Lahti
+Version: 1.1.21
+Date: 2015-06-16
+Authors@R: c(
+    person(“Dakos”, “Vasilis”, email = "vasilis.dakos@gmail.com", role = c("aut", "cre")),
+    person("Lahti", "Leo", email = "leo.lahti@iki.fi" , role = "aut"))
 Maintainer: Vasilis Dakos <vasilis.dakos@gmail.com>
 Description: The Early-Warning-Signals Toolbox provides methods for estimating
     statistical changes in timeseries that can be used for identifying nearby
     critical transitions. Based on Dakos et al (2012) Methods for Detecting
     Early Warnings of Critical Transitions in Time Series Illustrated Using
-    Simulated Ecological Data. PLoS ONE 7(7):e41010
+    Simulated Ecological Data. PLoS ONE 7(7):e41010 with contributions from S.R.
+    Carpenter, T. Cline.
 Depends:
     R (>= 3.0.2),
     ggplot2,
@@ -29,5 +31,5 @@ Imports:
     spam,
     stats
 LazyLoad: yes
-URL: http://www.early-warning-signals.org, http://vasilisdakos.wordpress.com
+URL: http://www.early-warning-signals.org, http://www.vasilisdakos.info
 License: BSD_2_clause + file LICENSE

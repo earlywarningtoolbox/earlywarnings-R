@@ -57,7 +57,7 @@ generic_ews <- function(timeseries, winsize = 50, detrending = c("no", "gaussian
     logtransform = FALSE, interpolate = FALSE, AR_n = FALSE, powerspectrum = FALSE) {
     
     # timeseries<-ts(timeseries)
-    timeseries <- data.matrix(timeseries)  #strict data-types the input data as tseries object for use in later steps
+    timeseries <- as.matrix(timeseries)  #strict data-types the input data as tseries object for use in later steps
     if (dim(timeseries)[2] == 1) {
         Y = timeseries
         timeindex = 1:dim(timeseries)[1]
@@ -123,8 +123,8 @@ generic_ews <- function(timeseries, winsize = 50, detrending = c("no", "gaussian
     # Rearrange data for indicator calculation
     mw <- round(length(Y) * winsize/100)
     omw <- length(nsmY) - mw + 1  ##number of moving windows
-    low <- 6
-    high <- omw
+    low <- 2
+    high <- mw
     nMR <- matrix(data = NA, nrow = mw, ncol = omw)
     x1 <- 1:mw
     for (i in 1:omw) {
@@ -139,7 +139,7 @@ generic_ews <- function(timeseries, winsize = 50, detrending = c("no", "gaussian
     nKURT <- numeric()
     nACF <- numeric()
     nDENSITYRATIO <- numeric()
-    nSPECT <- matrix(0, nrow = omw, ncol = ncol(nMR))
+    nSPECT <- matrix(0, nrow = mw, ncol = ncol(nMR))
     nCV <- numeric()
     smARall <- numeric()
     smARmaxeig <- numeric()
@@ -148,7 +148,7 @@ generic_ews <- function(timeseries, winsize = 50, detrending = c("no", "gaussian
     
     nSD <- apply(nMR, 2, sd, na.rm = TRUE)
     for (i in 1:ncol(nMR)) {
-        nYR <- ar.ols(nMR[, i], aic = FALSE, order.max = 1, dmean = FALSE, intercept = FALSE)
+        nYR <- ar.ols(nMR[, i], aic = FALSE, order.max = 1, demean = TRUE, intercept = FALSE)
         nARR[i] <- nYR$ar
         # nSD[i]<-sapply(nMR[,i], sd, na.rm = TRUE)#sd(nMR[,i], na.rm = TRUE)
         nSK[i] <- abs(moments::skewness(nMR[, i], na.rm = TRUE))
@@ -156,7 +156,7 @@ generic_ews <- function(timeseries, winsize = 50, detrending = c("no", "gaussian
         nCV[i] <- nSD[i]/mean(nMR[, i])
         ACF <- acf(nMR[, i], lag.max = 1, type = c("correlation"), plot = FALSE)
         nACF[i] <- ACF$acf[2]
-        spectfft <- spec.ar(nMR[, i], n.freq = omw, plot = FALSE, order = 1)
+        spectfft <- spec.ar(nMR[, i], n.freq = mw, plot = FALSE, order = 1)
         nSPECT[, i] <- spectfft$spec
         nDENSITYRATIO[i] <- spectfft$spec[low]/spectfft$spec[high]
         
@@ -306,7 +306,7 @@ generic_ews <- function(timeseries, winsize = 50, detrending = c("no", "gaussian
     
     # Output
     out <- data.frame(timeindex[mw:length(nsmY)], nARR, nSD, nSK, nKURT, nCV, nRETURNRATE, 
-        nDENSITYRATIO, nACF)
+        nDENSITYRATIO, nACF,row.names = NULL)
     colnames(out) <- c("timeindex", "ar1", "sd", "sk", "kurt", "cv", "returnrate", 
         "densratio", "acf1")
     return(out)

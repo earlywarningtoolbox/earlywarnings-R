@@ -115,7 +115,7 @@ sensitivity_ews <- function(timeseries, indicator = c("ar1", "sd", "acf1", "sk",
                 indicator = match.arg(indicator)
                 if (indicator == "ar1") {
                   indic <- apply(nMR1, 2, function(x) {
-                    nAR1 <- ar.ols(x, aic = FALSE, order.max = 1, dmean = FALSE, 
+                    nAR1 <- ar.ols(x, aic = FALSE, order.max = 1, demean = TRUE, 
                       intercept = FALSE)
                     nAR1$ar
                   })
@@ -213,7 +213,7 @@ sensitivity_ews <- function(timeseries, indicator = c("ar1", "sd", "acf1", "sk",
                 indicator = match.arg(indicator)
                 if (indicator == "ar1") {
                   indic <- apply(nMR1, 2, function(x) {
-                    nAR1 <- ar.ols(x, aic = FALSE, order.max = 1, dmean = FALSE, 
+                    nAR1 <- ar.ols(x, aic = FALSE, order.max = 1, demean = TRUE, 
                       intercept = FALSE)
                     nAR1$ar
                   })
@@ -303,7 +303,7 @@ sensitivity_ews <- function(timeseries, indicator = c("ar1", "sd", "acf1", "sk",
         indicator = match.arg(indicator)
         if (indicator == "ar1") {
             indic <- apply(nMR1, 2, function(x) {
-                nAR1 <- ar.ols(x, aic = FALSE, order.max = 1, dmean = FALSE, intercept = FALSE)
+                nAR1 <- ar.ols(x, aic = FALSE, order.max = 1, demean = TRUE, intercept = FALSE)
                 nAR1$ar
             })
         } else if (indicator == "sd") {
