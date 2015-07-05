@@ -121,7 +121,7 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] earlywarnings_1.1.21 tseries_0.10-34      tgp_2.4-11          
+## [1] earlywarnings_1.1.22 tseries_0.10-34      tgp_2.4-11          
 ## [4] moments_0.14         ggplot2_1.0.1        knitr_1.10.5        
 ## [7] scimapClient_0.2.1  
 ## 
