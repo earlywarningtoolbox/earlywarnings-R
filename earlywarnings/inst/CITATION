@@ -12,7 +12,7 @@ citEntry(entry="article",
 	 issue = "",
 	 pages = "",
          note         = "http://cran.r-project.org/web/packages/earlywarnings/index.html",
-         url          = "Publication URL here",
+         url          = ""
          )
 
 
@@ -40,6 +40,6 @@ citEntry(entry="article",
          textVersion =
          paste(“Vasilis Dakos et al. ",
                "Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data.",
-               “PlosOne(7):e41010, 2012.”,
+               “Plos One 7:e41010, 2012.”,
                sep="")
          )
