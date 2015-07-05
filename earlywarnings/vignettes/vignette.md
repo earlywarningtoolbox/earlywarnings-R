@@ -78,50 +78,6 @@ print(p)
 
 ![plot of chunk movpotential](figure/movpotential-1.png) 
 
-## Multimodality detection
-
-Estimate multimodality score and number of modes based on bootstrapped potential analysis.
-
-
-```r
-# Potential analysis with bootstrap
-library(earlywarnings)
-
-# Example Data
-X <- as.matrix(rbind(c(rnorm(100, mean = 0), rnorm(100, mean = 5)), 
-           c(rnorm(200, mean = 0))))
-m <- multimodality_score(X, detection.threshold = 1, bs.iterations = 20, detection.limit = 3)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "multimodality_score"
-```
-
-```r
-# Plot the original data for feature i 
-# together with the estimated density maxima and minima
-i <- 1
-plot(density(X[i,])); 
-```
-
-![plot of chunk bimodality](figure/bimodality-1.png) 
-
-```r
-abline(v = m$results[[i]]$maxima)
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): object 'm' not found
-```
-
-```r
-abline(v = m$results[[i]]$minima, lty = 2)
-```
-
-```
-## Error in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): object 'm' not found
-```
-
 
 ### Licensing and Citations
 
