@@ -1,7 +1,7 @@
 ---
 title: "earlywarnings vignette"
 author: "Vasilis Dakos and Leo Lahti"
-date: "2015-04-22"
+date: "2015-07-06"
 output:
   html_document:
     toc: true
@@ -136,31 +136,7 @@ citation("earlywarnings")
 ```
 
 ```
-## It is recommended to use 'given' instead of 'first'.
-## It is recommended to use 'family' instead of 'last'.
-## It is recommended to use 'given' instead of 'first'.
-## It is recommended to use 'family' instead of 'last'.
-```
-
-```
-## 
-## To cite earlywarnings in publications use:
-## 
-##   Vasilis Dakos et al. Methods for detecting early warnings of
-##   critical transitions in time series illustrated using simulated
-##   ecological dataPLoS One 7(7):e41010, 2012. See
-##   http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0041010
-## 
-## A BibTeX entry for LaTeX users is
-## 
-##   @Article{,
-##     title = {R Early Warning Signals Toolbox},
-##     author = {Vasilis Dakos and Leo Lahti},
-##     journal = {The R Project for Statistical Computing},
-##     year = {2013},
-##     note = {http://cran.r-project.org/web/packages/earlywarnings/index.html},
-##     url = {Publication URL here},
-##   }
+## Error in tools:::.parse_CITATION_file(file, meta$Encoding): non-ASCII input in a CITATION file without a declared encoding
 ```
 
 ### Session info
@@ -173,9 +149,9 @@ sessionInfo()
 ```
 
 ```
-## R version 3.2.0 (2015-04-16)
+## R version 3.2.1 (2015-06-18)
 ## Platform: x86_64-unknown-linux-gnu (64-bit)
-## Running under: Ubuntu 14.10
+## Running under: Ubuntu 15.04
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -189,21 +165,23 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] earlywarnings_1.0.59 tseries_0.10-34      tgp_2.4-11          
-## [4] moments_0.14         ggplot2_1.0.1        knitr_1.9           
+## [1] earlywarnings_1.1.21 tseries_0.10-34      tgp_2.4-11          
+## [4] moments_0.14         ggplot2_1.0.1        knitr_1.10.5        
+## [7] scimapClient_0.2.1  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.11.5        cluster_2.0.1      maps_2.3-9        
-##  [4] MASS_7.3-40        nortest_1.0-3      Kendall_2.2       
-##  [7] munsell_0.4.2      som_0.3-5          colorspace_1.2-6  
-## [10] lattice_0.20-31    quadprog_1.5-5     stringr_0.6.2     
-## [13] plyr_1.8.2         fields_8.2-1       tools_3.2.0       
-## [16] grid_3.2.0         spam_1.0-1         gtable_0.1.2      
-## [19] KernSmooth_2.23-14 lmtest_0.9-33      digest_0.6.8      
-## [22] reshape2_1.4.1     formatR_1.2        rpart_4.1-9       
-## [25] evaluate_0.7       maptree_1.4-7      labeling_0.3      
-## [28] scales_0.2.4       boot_1.3-16        proto_0.3-10      
-## [31] zoo_1.7-12
+##  [1] Rcpp_0.11.6        cluster_2.0.2      magrittr_1.5      
+##  [4] maps_2.3-9         MASS_7.3-41        nortest_1.0-3     
+##  [7] Kendall_2.2        munsell_0.4.2      som_0.3-5         
+## [10] colorspace_1.2-6   lattice_0.20-31    quadprog_1.5-5    
+## [13] stringr_1.0.0      plyr_1.8.3         fields_8.2-1      
+## [16] tools_3.2.1        grid_3.2.1         spam_1.0-1        
+## [19] gtable_0.1.2       KernSmooth_2.23-14 lmtest_0.9-34     
+## [22] digest_0.6.8       RJSONIO_1.3-0      reshape2_1.4.1    
+## [25] formatR_1.2        rpart_4.1-9        evaluate_0.7      
+## [28] maptree_1.4-7      labeling_0.3       stringi_0.5-5     
+## [31] scales_0.2.5       boot_1.3-16        proto_0.3-10      
+## [34] zoo_1.7-12
 ```
 
 
