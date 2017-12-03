@@ -2,11 +2,11 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals Toolbox for Detecting Critical Transitions in
     Timeseries
-Version: 1.1.21
-Date: 2015-06-16
+Version: 1.1.22
+Date: 2015-07-05
 Authors@R: c(
-	person(“Dakos”, “Vasilis”, email = "vasilis.dakos@gmail.com", role = c("aut", "cre")),
-	person("Lahti", "Leo", email = "leo.lahti@iki.fi" , role = "aut”))
+	person("Dakos", "Vasilis", email = "vasilis.dakos@gmail.com", role = c("aut", "cre")),
+	person("Lahti", "Leo", email = "leo.lahti@iki.fi" , role = "aut"))
 Maintainer: Vasilis Dakos <vasilis.dakos@gmail.com>
 Description: The Early-Warning-Signals Toolbox provides methods for estimating
     statistical changes in timeseries that can be used for identifying nearby

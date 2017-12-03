@@ -43,14 +43,9 @@ Arguments:
 \examples{
 #
 data(foldbif)
-<<<<<<< HEAD
-bdstest_ews(foldbif,ARMAoptim=FALSE,ARMAorder=c(1,0),embdim=3,epsilon=0.5,
-boots=200,logtransform=FALSE,interpolate=FALSE)
-=======
 bdstest_ews(foldbif, ARMAoptim=FALSE, ARMAorder=c(1,0),
   	       embdim=3, epsilon=0.5, boots=200,
 	       logtransform=FALSE, interpolate=FALSE)
->>>>>>> FETCH_HEAD
 }
 \author{
 S. R. Carpenter, modified by V. Dakos

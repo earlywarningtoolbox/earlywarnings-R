@@ -127,18 +127,23 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, 
     detection.threshold = 1, bw.adjust = 1, density.smoothing = 0, detection.limit = 1) {
     
-    # std <- 1; bw <- 'nrd'; weights <- c(); grid.size = floor(.2*length(x)); detection.threshold = 1; bw.adjust = 1; density.smoothing = 0; grid.size = NULL
+    # x = xbs; std <- 1; bw <- 'nrd'; weights <- c(); grid.size = floor(.2*length(x)); bw.density.smoothing = 0; 
     
     if (is.null(grid.size)) {
         grid.size <- floor(0.2 * length(x))
     }
     
     # Density estimation
-    de <- density(ts(data.frame(x)), bw = bw, adjust = bw.adjust, 
+    tmp = try(de <- density(x, bw = bw, adjust = bw.adjust, 
        	  	  kernel = "gaussian", weights = weights, 
         	  window = kernel, n = grid.size, 
 		  from = min(x), to = max(x), 
-		  cut = 3, na.rm = FALSE)
+		  cut = 3, na.rm = FALSE))
+    if (class(tmp) == "try-error") {
+      # Just use default parameters if failing otherwise
+      warning("Density estimation with custom parameters failed. Using the defaults.")
+      de <- density(x)
+    }
 
     # Smooth the estimated density (f <- de$y) by adding a small
     # probability across the whole observation range (to avoid zero
@@ -158,7 +163,7 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
     # optima Note mins and maxs for density given here (not for potential, which has
     # the opposite signs)
     
-    ops <- find.optima(f, detection.threshold = detection.threshold, bw = bw, x = x, detection.limit = detection.limit)
+    ops <- find.optima(f, detection.threshold = detection.threshold, bw = bw, detection.limit = detection.limit)
     min.points <- grid.points[ops$min]
     max.points <- grid.points[ops$max]
     det.th <- ops$detection.threshold
@@ -177,7 +182,6 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'    @param f density
 #'    @param detection.threshold detection threshold for peaks
 #'    @param bw bandwidth
-#'    @param x original data
 #'    @param detection.limit Minimun accepted density for a maximum; 
 #'                           as a multiple of kernel height
 #'
@@ -194,10 +198,10 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 #'
 #' @keywords utilities
 
-find.optima <- function(f, detection.threshold = 0, bw, x, detection.limit = 1) {
+find.optima <- function(f, detection.threshold = 0, bw, detection.limit = 1) {
    
     # multiple of kernel height 
-    kernel.height <- dnorm(0, sd = bw) / length(x) 
+    kernel.height <- dnorm(0, sd = bw) / length(f) 
     deth <- detection.threshold * kernel.height 
     detl <- detection.limit * kernel.height 
     

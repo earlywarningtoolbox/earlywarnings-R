@@ -34,11 +34,6 @@ Visualization of the potential function from the movpotential function
 Arguments:
 }
 \examples{
-<<<<<<< HEAD
-# X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2));
-param = seq(0,5,length=3000); res <- movpotential_ews(X, param);
-PlotPotential(res$res, title = '', xlab.text = '', ylab.text = '', cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2)
-=======
 X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2),
   	             rnorm(1000, mean = 2))
 	       param = seq(0,5,length=3000);
@@ -47,7 +42,6 @@ X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2),
 	       	             xlab.text = '', ylab.text = '',
 			     cutoff = 0.5,
 			     plot.contours = TRUE, binwidth = 0.2)
->>>>>>> FETCH_HEAD
 }
 \author{
 Leo Lahti \email{leo.lahti@iki.fi}

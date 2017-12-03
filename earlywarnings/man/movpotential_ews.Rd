@@ -47,15 +47,10 @@ This function reconstructs a potential derived from data along a gradient of a g
 Arguments:
 }
 \examples{
-<<<<<<< HEAD
-X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2));
-param = seq(0,5,length=3000); res <- movpotential_ews(X, param)
-=======
 X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2),
 	           rnorm(1000, mean = 2));
 	     param = seq(0,5,length=3000);
 	     res <- movpotential_ews(X, param)
->>>>>>> FETCH_HEAD
 }
 \author{
 L. Lahti, E. van Nes, V. Dakos.
