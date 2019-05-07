@@ -51,7 +51,9 @@ sensitivity_ews <- function(timeseries, indicator = c("ar1", "sd", "acf1", "sk",
         100), spanrange = c(5, 100), degree = NULL, incrbandwidth = 20, incrspanrange = 10, 
     logtransform = FALSE, interpolate = FALSE) {
     
-    # timeseries<-ts(timeseries) #strict data-types the input data as tseries object
+    # Ensure timeseries is of class timeseries
+    if(!is.ts(timeseries)) timeseries <- ts(timeseries)#strict data-types the input data as tseries object
+
     # for use in later steps
     
     timeseries <- data.matrix(timeseries)
