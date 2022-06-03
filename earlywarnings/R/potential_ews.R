@@ -1,18 +1,15 @@
-
-
-#' Description: Plot Potential
+#' Plot Potential
 #'
-#' Visualization of the potential function from the movpotential function
+#' Visualization of the potential function from the movpotential function.
 #'
-#' Arguments:
-#'    @param res output from movpotential function
-#'    @param title title text
-#'    @param xlab.text xlab text
-#'    @param ylab.text ylab text
-#'    @param cutoff parameter determining the upper limit of potential for visualizations
-#'    @param plot.contours Plot contour lines.
-#'    @param binwidth binwidth for contour plot
-#'    @param bins bins for contour plot. Overrides binwidth if given
+#' @param res output from movpotential function
+#' @param title title text
+#' @param xlab.text xlab text
+#' @param ylab.text ylab text
+#' @param cutoff parameter determining the upper limit of potential for visualizations
+#' @param plot.contours Plot contour lines.
+#' @param binwidth binwidth for contour plot
+#' @param bins bins for contour plot. Overrides binwidth if given
 #' 
 #' @importFrom tgp interp.loess
 #' @importFrom ggplot2 ggplot
@@ -22,7 +19,8 @@
 #' @importFrom ggplot2 xlab
 #' @importFrom ggplot2 ylab
 #' @importFrom ggplot2 labs
-#' @return \item{ggplot2}{potential plotted}
+#' @importFrom methods is
+#' @return ggplot2 potential plot
 #'
 #' @export
 #'
@@ -36,9 +34,6 @@
 #'	       	             xlab.text = '', ylab.text = '', 
 #'			     cutoff = 0.5, 
 #'			     plot.contours = TRUE, binwidth = 0.2)
-#'
-#' @keywords early-warning
-
 PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, plot.contours = TRUE, 
     binwidth = 0.2, bins = NULL) {
 
@@ -84,31 +79,29 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 
 
 
-#' Description: Potential Analysis for univariate data
+#' Potential Analysis for univariate data
 #'
-#' \code{livpotential_ews} performs one-dimensional potential estimation derived from a uni-variate timeseries
+#' \code{livpotential_ews} performs one-dimensional potential estimation derived from a uni-variate timeseries.
 #'
-#' Arguments:
-#'    @param x Univariate data (vector) for which the potentials shall be estimated
-#'    @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
-#'    @param bw kernel bandwidth estimation method 
-#'    @param weights optional weights in ksdensity (used by movpotentials).
-#'    @param grid.size Grid size for potential estimation.
-#'    @param detection.threshold maximum detection threshold as fraction of density kernel height dnorm(0, sd = bandwidth)/N
-#'    @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
-#'    @param density.smoothing Add a small constant density across the whole observation range to regularize density estimation (and to avoid zero probabilities within the observation range). This parameter adds uniform density across the observation range, scaled by density.smoothing.
-#'    @param detection.limit minimum accepted density for a maximum; as a multiple of kernel height
+#' @param x Univariate data (vector) for which the potentials shall be estimated
+#' @param std Standard deviation of the noise (defaults to 1; this will set scaled potentials)
+#' @param bw kernel bandwidth estimation method 
+#' @param weights optional weights in ksdensity (used by movpotentials).
+#' @param grid.size Grid size for potential estimation.
+#' @param detection.threshold maximum detection threshold as fraction of density kernel height dnorm(0, sd = bandwidth)/N
+#' @param bw.adjust The real bandwidth will be bw.adjust*bw; defaults to 1
+#' @param density.smoothing Add a small constant density across the whole observation range to regularize density estimation (and to avoid zero probabilities within the observation range). This parameter adds uniform density across the observation range, scaled by density.smoothing.
+#' @param detection.limit minimum accepted density for a maximum; as a multiple of kernel height
 #' 
-# Returns:
-#'   @return \code{livpotential} returns a list with the following elements:
-#'   @return \item{xi}{the grid of points on which the potential is estimated}
-#'   @return \item{pot}{The estimated potential: -log(f)*std^2/2, where f is the density.}
-#'   @return \item{density}{Density estimate corresponding to the potential.}
-#'   @return \item{min.inds}{indices of the grid points at which the density has minimum values; (-potentials; neglecting local optima)}
-#'   @return \item{max.inds}{indices the grid points at which the density has maximum values; (-potentials; neglecting local optima)}
-#'   @return \item{bw}{bandwidth of kernel used}
-#'   @return \item{min.points}{grid point values at which the density has minimum values; (-potentials; neglecting local optima)}
-#'   @return \item{max.points}{grid point values at which the density has maximum values; (-potentials; neglecting local optima)}
+#'return \code{livpotential} returns a list with the following elements:
+#'   xi the grid of points on which the potential is estimated
+#'   pot The estimated potential: -log(f)*std^2/2, where f is the density.
+#'   density Density estimate corresponding to the potential.
+#'   min.inds indices of the grid points at which the density has minimum values; (-potentials; neglecting local optima)
+#'   max.inds indices the grid points at which the density has maximum values; (-potentials; neglecting local optima)
+#'   bw bandwidth of kernel used
+#'   min.points grid point values at which the density has minimum values; (-potentials; neglecting local optima)
+#'   max.points grid point values at which the density has maximum values; (-potentials; neglecting local optima)
 #'
 #' @export
 #'
@@ -116,9 +109,6 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 #' 
 #' Dakos, V., et al (2012).'Methods for Detecting Early Warnings of Critical Transitions in Time Series Illustrated Using Simulated Ecological Data.' \emph{PLoS ONE} 7(7): e41010. doi:10.1371/journal.pone.0041010
 #' @author Based on Matlab code from Egbert van Nes modified by Leo Lahti. Implemented in early warnings package by V. Dakos.
-#' @seealso 
-#' \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}}; \code{\link{ch_ews}};\code{\link{movpotential_ews}}
-# ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @examples 
 #' data(foldbif)
 #' res <- livpotential_ews(foldbif[,1])
@@ -126,8 +116,6 @@ PlotPotential <- function(res, title = "", xlab.text, ylab.text, cutoff = 0.5, p
 
 livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = NULL, 
     detection.threshold = 1, bw.adjust = 1, density.smoothing = 0, detection.limit = 1) {
-    
-    # x = xbs; std <- 1; bw <- 'nrd'; weights <- c(); grid.size = floor(.2*length(x)); bw.density.smoothing = 0; 
     
     if (is.null(grid.size)) {
         grid.size <- floor(0.2 * length(x))
@@ -139,7 +127,7 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
         	  window = kernel, n = grid.size, 
 		  from = min(x), to = max(x), 
 		  cut = 3, na.rm = FALSE))
-    if (class(tmp) == "try-error") {
+    if (is(tmp, "try-error")) {
       # Just use default parameters if failing otherwise
       warning("Density estimation with custom parameters failed. Using the defaults.")
       de <- density(x)
@@ -174,30 +162,24 @@ livpotential_ews <- function(x, std = 1, bw = "nrd", weights = c(), grid.size = 
 }
 
 
-#' Description: find.optima
+#' find.optima
 #'
-#' Detect optima, excluding very local optima below detection.threshold
+#' Detect optima, excluding very local optima below detection.threshold.
 #'
-#'  Arguments:
-#'    @param f density
-#'    @param detection.threshold detection threshold for peaks
-#'    @param bw bandwidth
-#'    @param detection.limit Minimun accepted density for a maximum; 
+#' @param f density
+#' @param detection.threshold detection threshold for peaks
+#' @param bw bandwidth
+#' @param detection.limit Minimun accepted density for a maximum; 
 #'                           as a multiple of kernel height
 #'
-#' Returns:
-#'    @return A list with the following elements:
+#' @return A list with the following elements:
 #'      min minima
 #'      max maxima
 #'	detection.density Minimum detection density
 #' @export
 #'
-#' @references See citation('TBA') 
 #' @author Leo Lahti \email{leo.lahti@@iki.fi}
-#' @examples #
-#'
 #' @keywords utilities
-
 find.optima <- function(f, detection.threshold = 0, bw, detection.limit = 1) {
    
     # multiple of kernel height 
@@ -208,8 +190,8 @@ find.optima <- function(f, detection.threshold = 0, bw, detection.limit = 1) {
     # Detect minima and maxima of the density (see Livina et al.) these correspond
     # to maxima and minima of the potential, respectively including end points of the
     # vector
-    maxima <- find.maxima(f)
-    minima <- find.minima(f)
+    maxima <- unlist(find.maxima(f))
+    minima <- unlist(find.minima(f))
 
     # remove maxima that are below detection limit
     maxima <- maxima[f[maxima] >= detl]
@@ -350,20 +332,19 @@ remove_obsolete_minima <- function (f, maxima, minima) {
 #'
 #' This function reconstructs a potential derived from data along a gradient of a given parameter.
 #'
-#' Arguments:
-#'  @param X a vector of the X observations of the state variable of interest
-#'  @param param parameter values corresponding to the observations in X 
-#'  @param bw Bandwidth for smoothing kernels. Automatically determined by default.
-#'  @param bw.adjust Bandwidth adjustment constant
-#'  @param detection.threshold Threshold for local optima to be discarded.
-#'  @param std Standard deviation.
-#'  @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
-#'  @param plot.cutoff cuttoff for potential minima and maxima in visualization
-#'  @param plot.contours Plot contours on the landscape visualization
-#'  @param binwidth binwidth for contour plot
-#'  @param bins bins for contour plot. Overrides binwidth if given
+#' @param X a vector of the X observations of the state variable of interest
+#' @param param parameter values corresponding to the observations in X 
+#' @param bw Bandwidth for smoothing kernels. Automatically determined by default.
+#' @param bw.adjust Bandwidth adjustment constant
+#' @param detection.threshold Threshold for local optima to be discarded.
+#' @param std Standard deviation.
+#' @param grid.size number of evaluation points; number of steps between min and max potential; also used as kernel window size
+#' @param plot.cutoff cuttoff for potential minima and maxima in visualization
+#' @param plot.contours Plot contours on the landscape visualization
+#' @param binwidth binwidth for contour plot
+#' @param bins bins for contour plot. Overrides binwidth if given
 #'
-#'  @return A list with the following elements:
+#' @return A list with the following elements:
 #'     pars values of the covariate parameter as matrix;
 #'     xis values of the x as matrix;
 #'     pots smoothed potentials;
@@ -375,14 +356,10 @@ remove_obsolete_minima <- function (f, maxima, minima) {
 #'
 #' @references Hirota, M., Holmgren, M., van Nes, E.H. & Scheffer, M. (2011). Global resilience of tropical forest and savanna to critical transitions. \emph{Science}, 334, 232-235.
 #' @author L. Lahti, E. van Nes, V. Dakos.
-#' @seealso \code{\link{generic_ews}}; \code{\link{ddjnonparam_ews}}; \code{\link{bdstest_ews}}; \code{\link{sensitivity_ews}};\code{\link{surrogates_ews}}; \code{\link{ch_ews}}; \code{livpotential_ews}
-# ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
-#' @examples X = c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), 
-#' 	           rnorm(1000, mean = 2)); 
-#'	     param = seq(0,5,length=3000); 
-#'	     res <- movpotential_ews(X, param)
-#' @keywords early-warning
-
+#' @examples
+#' X <- c(rnorm(1000, mean = 0), rnorm(1000, mean = -2), rnorm(1000, mean = 2));
+#' param <- seq(0,5,length=3000); 
+#' res <- movpotential_ews(X, param)
 movpotential_ews <- function(X, param = NULL, bw = "nrd", bw.adjust = 1, detection.threshold = 0.1, 
     std = 1, grid.size = 50, plot.cutoff = 0.5, plot.contours = TRUE, binwidth = 0.2, 
     bins = NULL) {

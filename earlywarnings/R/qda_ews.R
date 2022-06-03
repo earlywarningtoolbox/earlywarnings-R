@@ -1,32 +1,27 @@
-#' Description: Quick Detection Analysis for Generic Early Warning Signals
+#' Quick Detection Analysis for Generic Early Warning Signals
 #'
-#' \code{qda_ews} is used to estimate autocorrelation, variance within rolling windows along a timeseries, test the significance of their trends, and reconstruct the potential landscape of the timeseries
+#' Estimate autocorrelation, variance within rolling windows along a timeseries, test the significance of their trends, and reconstruct the potential landscape of the timeseries.
 #'
-# Details:
-#' see ref below
-#'
-#' Arguments:
-#'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
-#'    @param param values corresponding to observations in timeseries
-#'    @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 50\%.
-#'    @param detrending the timeseries can be detrended/filtered prior to analysis. There are four options: \code{gaussian} filtering, \code{linear} detrending and \code{first-differencing}. Default is \code{no} detrending.
-#'    @param bandwidth is the bandwidth used for the Gaussian kernel when gaussian filtering is applied. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Alternatively it can be given by the bandwidth selector \code{\link{bw.nrd0}} (Default).
+#' @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
+#' @param param values corresponding to observations in timeseries
+#' @param winsize is the size of the rolling window expressed as percentage of the timeseries length (must be numeric between 0 and 100). Default is 50\%.
+#' @param detrending the timeseries can be detrended/filtered prior to analysis. There are four options: \code{gaussian} filtering, \code{linear} detrending and \code{first-differencing}. Default is \code{no} detrending.
+#' @param bandwidth is the bandwidth used for the Gaussian kernel when gaussian filtering is applied. It is expressed as percentage of the timeseries length (must be numeric between 0 and 100). Alternatively it can be given by the bandwidth selector \code{\link{bw.nrd0}} (Default).
 # @param incrwinsize increments the rolling window size (must be numeric between
 # 0 and 100). Default is 25.
-#'    @param boots the number of surrogate data to generate from fitting an ARMA(p,q) model. Default is 100.
-#'    @param s_level significance level. Default is 0.05.
+#' @param boots the number of surrogate data to generate from fitting an ARMA(p,q) model. Default is 100.
+#' @param s_level significance level. Default is 0.05.
 # @param incrbandwidth is the size to increment the bandwidth used for the
 # Gaussian kernel when gaussian filtering is applied. It is expressed as
 # percentage of the timeseries length (must be numeric between 0 and 100).
 # Default is 20.
-#'    @param cutoff the cutoff value to visualize the potential landscape
-#'    @param detection.threshold detection threshold for potential minima
-#'    @param grid.size grid size (for potential analysis)
-#'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.
-#'    @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
+#' @param cutoff the cutoff value to visualize the potential landscape
+#' @param detection.threshold detection threshold for potential minima
+#' @param grid.size grid size (for potential analysis)
+#' @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.
+#' @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
 #' 
-# Returns:
-#' \code{qda_ews} produces three plots. The first plot contains the original data, the detrending/filtering applied and the residuals (if selected), autocorrelation and variance. For each statistic trends are estimated by the nonparametric Kendall tau correlation.  The second plot, returns a histogram of the distributions of the Kendall trend statistic for autocorrelation and variance estimated on the surrogated data. Vertical lines represent the level of significance, whereas the black dots the actual trend found in the time series. The third plot is the reconstructed potential landscape in 2D. In addition, the function returns a list containing the output from the respective functions generic_RShiny (indicators); surrogates_RShiny (trends); movpotential_ews (potential analysis)
+#' @return qda_ews produces three plots. The first plot contains the original data, the detrending/filtering applied and the residuals (if selected), autocorrelation and variance. For each statistic trends are estimated by the nonparametric Kendall tau correlation.  The second plot, returns a histogram of the distributions of the Kendall trend statistic for autocorrelation and variance estimated on the surrogated data. Vertical lines represent the level of significance, whereas the black dots the actual trend found in the time series. The third plot is the reconstructed potential landscape in 2D. In addition, the function returns a list containing the output from the respective functions generic_RShiny (indicators); surrogates_RShiny (trends); movpotential_ews (potential analysis)
 #'  
 #' @export
 #' 

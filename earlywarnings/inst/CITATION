@@ -3,43 +3,38 @@ citHeader("To cite earlywarnings in publications use:")
 citEntry(entry="article",
          title = "R Early Warning Signals Toolbox",
          author = personList(
-	 	person(first ="Vasilis", last="Dakos", email = "vasilis.dakos@gmail.com"),
-	 	person(first ="Leo", last="Lahti", email = "leo.lahti@iki.fi")
+	 	person(given ="Vasilis", last="Dakos", email = "vasilis.dakos@gmail.com"),
+	 	person(given ="Leo", last="Lahti", email = "leo.lahti@iki.fi")
 	 	  ),
 	 journal = "The R Project for Statistical Computing",
-	 year = "2013",
+	 year = "2013-2022",
 	 volume = "",
 	 issue = "",
 	 pages = "",
-         note = "http://cran.r-project.org/web/packages/earlywarnings/index.html",
-         url = ""
+         note = "https://cran.r-project.org/web/packages/earlywarnings/index.html",
+         url = "",
+	 textVersion=""
          )
-
 
 citEntry(entry="article",
          title = "Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data",
          author = personList(
-	 	person(given ="Vasilis", family="Dakos", email = “vasilis.dakos@gmail.com”),
-		person(given ="Stephen R.", family="Carpenter”),
-		person(given ="William A.", family="Brock”),
-		person(given ="Aaron M.", family="Ellison”),
-		person(given ="Vishwesha", family="Guttal”),
-		person(given ="Anthony R.", family="Ives”),
-		person(given ="Sonia", family="K\'{e}fi”),
-		person(given ="Valerie", family="Livina”),
-		person(given ="David A.", family="Seekell”),
-		person(given ="Egbert H.", family="van Nes”),
+	 	person(given ="Vasilis", family="Dakos", email = "vasilis.dakos@gmail.com"),
+		person(given ="Stephen R.", family="Carpenter"),
+		person(given ="William A.", family="Brock"),
+		person(given ="Aaron M.", family="Ellison"),
+		person(given ="Vishwesha", family="Guttal"),
+		person(given ="Anthony R.", family="Ives"),
+		person(given ="Sonia", family="K\'{e}fi"),
+		person(given ="Valerie", family="Livina"),
+		person(given ="David A.", family="Seekell"),
+		person(given ="Egbert H.", family="van Nes"),
 		person(given ="Marten", family="Scheffer")
 	 	  ),
 	 journal = "PLoS ONE",
-	 volume = “7”,
+	 volume = "7",
 	 pages = "e41010",
-	 year = "2012”,
-         url  = "http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0041010",
-
-         textVersion =
-         paste(“Vasilis Dakos et al. ",
-               "Methods for detecting early warnings of critical transitions in time series illustrated using simulated ecological data.",
-               “PLoS One 7:e41010, 2012.”,
-               sep="")
+	 year = "2012",
+         url  = "https://journals.plos.org:443/plosone/article?id=10.1371/journal.pone.0041010",
+	 textVersion=""
          )

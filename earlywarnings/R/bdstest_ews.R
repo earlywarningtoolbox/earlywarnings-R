@@ -47,28 +47,24 @@ BDSboot <- function(X, varname, nboot, epsvec, emb) {
 }  # end function
 
 
-#' Description: BDS test Early Warning Signals
+#' BDS test Early Warning Signals
 #'
-#' \code{bdstest_ews} is used to estimate the BDS statistic to detect nonlinearity in the residuals of a timeseries after first-difference detrending, fitting an ARMA(p,q) model, and fitting a GARCH(0,1) model. The function is making use of \code{bds.test} from the tseries package.
+#' \code{\link{bdstest_ews}} is used to estimate the BDS statistic to detect nonlinearity in the residuals of a timeseries after first-difference detrending, fitting an ARMA(p,q) model, and fitting a GARCH(0,1) model. The function is making use of \code{bds.test} from the tseries package.
 #'
-# Details:
-#' See also \code{bds.test{tseries}} for more details. The function requires the installation of packages \code{tseries} and \code{quadprog} that are not available under Linux and need to be manually installed under Windows.
-#'
-#' Arguments:
-#'    @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
-#'    @param ARMAoptim is the order of the \code{ARMA(p,q)} model to be fitted on the original timeseries. If TRUE the best ARMA model based on AIC is applied. If FALSE the \code{ARMAorder} is used.
-#'    @param ARMAorder is the order of the \code{AR(p)} and \code{MA(q)} process to be fitted on the original timeseries. Default is \code{p=1} \code{q=0}.
-#'    @param GARCHorder fits a GARCH model on the original timeseries where \code{GARCHorder[1]} is the GARCH part and \code{GARCHorder[2]} is the ARCH part.
-#'    @param embdim is the embedding dimension (2, 3,... \code{embdim}) up to which the BDS test will be estimated (must be numeric). Default value is 3.
-#'    @param epsilon is a numeric vector that is used to scale the standard deviation of the timeseries. The BDS test is computed for each element of epsilon. Default is 0.5, 0.75 and 1.
-#'    @param boots is the number of bootstraps performed to estimate significance p values for the BDS test. Default is 1000.
-#'    @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.
-#'    @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
+#' The function requires the installation of packages tseries and quadprog that are not available under Linux and need to be manually installed under Windows.
+#' @param timeseries a numeric vector of the observed univariate timeseries values or a numeric matrix where the first column represents the time index and the second the observed timeseries values. Use vectors/matrices with headings.
+#' @param ARMAoptim is the order of the \code{ARMA(p,q)} model to be fitted on the original timeseries. If TRUE the best ARMA model based on AIC is applied. If FALSE the \code{ARMAorder} is used.
+#' @param ARMAorder is the order of the \code{AR(p)} and \code{MA(q)} process to be fitted on the original timeseries. Default is \code{p=1} \code{q=0}.
+#' @param GARCHorder fits a GARCH model on the original timeseries where \code{GARCHorder[1]} is the GARCH part and \code{GARCHorder[2]} is the ARCH part.
+#' @param embdim is the embedding dimension (2, 3,... \code{embdim}) up to which the BDS test will be estimated (must be numeric). Default value is 3.
+#' @param epsilon is a numeric vector that is used to scale the standard deviation of the timeseries. The BDS test is computed for each element of epsilon. Default is 0.5, 0.75 and 1.
+#' @param boots is the number of bootstraps performed to estimate significance p values for the BDS test. Default is 1000.
+#' @param logtransform logical. If TRUE data are logtransformed prior to analysis as log(X+1). Default is FALSE.
+#' @param interpolate logical. If TRUE linear interpolation is applied to produce a timeseries of equal length as the original. Default is FALSE (assumes there are no gaps in the timeseries).
 #' 
-# Values:
-#' @return \code{bdstest_ews} returns output on the R console that summarizes the BDS test statistic for all embedding dimensions and  \code{epsilon} values used, and for first-differenced data, ARMA(p.q) residuals, and GARCH(0,1) residuals). Also the significance p values are returned estimated both by comparing to a standard normal distribution and by bootstrapping.
+#' @return \code{\link{bdstest_ews}} returns output on the R console that summarizes the BDS test statistic for all embedding dimensions and  \code{epsilon} values used, and for first-differenced data, ARMA(p.q) residuals, and GARCH(0,1) residuals). Also the significance p values are returned estimated both by comparing to a standard normal distribution and by bootstrapping.
 #' 
-#' In addition, \code{bdstest_ews} returns a plot with the original timeseries, the residuals after first-differencing, and fitting the ARMA(p,q) and GARCH(0,1) models. Also the autocorrelation \code{\link{acf}} and partial autocorrelation \code{\link{pacf}} functions are estimated serving as guides for the choice of lags of the linear models fitted to the data.
+#' In addition, \code{\link{bdstest_ews}} returns a plot with the original timeseries, the residuals after first-differencing, and fitting the ARMA(p,q) and GARCH(0,1) models. Also the autocorrelation \code{\link{acf}} and partial autocorrelation \code{\link{pacf}} functions are estimated serving as guides for the choice of lags of the linear models fitted to the data.
 #'  
 #' @export
 #' 
@@ -84,16 +80,18 @@ BDSboot <- function(X, varname, nboot, epsvec, emb) {
 #' \code{\link{surrogates_ews}}; 
 #' \code{\link{ch_ews}}; 
 #' \code{\link{movpotential_ews}}; 
-#' \code{\link{livpotential_ews}}
-# ; \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
+#' \code{\link{livpotential_ews}};
+#  \code{\link{timeVAR_ews}}; \code{\link{thresholdAR_ews}}
 #' @importFrom tseries garch
 #' @import quadprog
-#' @examples #
+#' @examples 
 #' data(foldbif)
 #' bdstest_ews(foldbif, ARMAoptim=FALSE, ARMAorder=c(1,0), 
 #'   	       embdim=3, epsilon=0.5, boots=200, 
 #'	       logtransform=FALSE, interpolate=FALSE)
 #' @keywords early-warning
+#' @import graphics
+#' @import grDevices
 #' 
 bdstest_ews <- function(timeseries, ARMAoptim = TRUE, ARMAorder = c(1, 0), GARCHorder = c(0, 
     1), embdim = 3, epsilon = c(0.5, 0.75, 1), boots = 1000, logtransform = FALSE, 
