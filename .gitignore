@@ -1,6 +1,13 @@
-*.Rout
+../.RData
+*Rcheck*
+inst/extras
+inst/extras/..Rcheck
+inst/extras/..Rcheck
 *~
-*.tar.gz
-build.wur.sh
-*.Rcheck
+*/~
+vignettes/*_tutorial.md
+vignettes/figure
+vignettes/*~
+
+
 
