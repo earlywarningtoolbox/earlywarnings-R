@@ -1,8 +1,8 @@
 Package: earlywarnings
 Type: Package
 Title: Early Warning Signals for Critical Transitions in Timeseries
-Version: 1.1.25
-Date: 2022-07-02
+Version: 1.1.26
+Date: 2022-07-05
 Authors@R: c(
         person(given = "Vasilis", 
            family = "Dakos", 
@@ -40,6 +40,7 @@ Imports:
     spam,
     stats
 LazyLoad: yes
+Encoding: UTF-8
 URL: http://www.early-warning-signals.org, http://www.vasilisdakos.info
 License: BSD_2_clause + file LICENSE
 RoxygenNote: 7.2.0
