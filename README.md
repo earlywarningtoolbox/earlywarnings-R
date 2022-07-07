@@ -5,7 +5,12 @@ Signals for Critical Transitions CRAN R package. For installation and
 usage examples, see the [vignette](vignettes/vignette.md). The main
 authors are Vasilis Dakos and Leo Lahti.
 
-The project is based on:
+The Early-Warning-Signals Toolbox provides methods for estimating
+statistical changes in timeseries that can be used for identifying
+nearby critical transitions. The project is based on Dakos and others
+(2012) Methods for Detecting Early Warnings of Critical Transitions in
+Time Series Illustrated Using Simulated Ecological Data. PLOS ONE
+7(7):e41010 with contributions from S.R.  Carpenter, T. Cline.
 
  * Dakos V, Carpenter SR, Brock WA, Ellison AM, Guttal V, et
    al. (2012) Methods for Detecting Early Warnings of Critical

@@ -1,8 +1,8 @@
 Package: earlywarnings
 Type: Package
 Title: Early Warning Signals for Critical Transitions in Timeseries
-Version: 1.1.26
-Date: 2022-07-05
+Version: 1.1.27
+Date: 2022-07-07
 Authors@R: c(
         person(given = "Vasilis", 
            family = "Dakos", 
@@ -16,10 +16,7 @@ Authors@R: c(
 	   )
 Description: The Early-Warning-Signals Toolbox provides methods for estimating
     statistical changes in timeseries that can be used for identifying nearby
-    critical transitions. Based on Dakos et al (2012) Methods for Detecting
-    Early Warnings of Critical Transitions in Time Series Illustrated Using
-    Simulated Ecological Data. PLoS ONE 7(7):e41010 with contributions from S.R.
-    Carpenter, T. Cline.
+    critical transitions. 
 Depends:
     R (>= 3.0.2),
     ggplot2,
