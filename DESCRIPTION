@@ -1,7 +1,7 @@
 Package: earlywarnings
 Type: Package
-Title: Early Warning Signals for Critical Transitions in Timeseries
-Version: 1.1.27
+Title: Early Warning Signals for Critical Transitions in Time Series
+Version: 1.1.28
 Date: 2022-07-07
 Authors@R: c(
         person(given = "Vasilis", 
@@ -15,7 +15,7 @@ Authors@R: c(
            comment = c(ORCID = "0000-0001-5537-637X"))	  
 	   )
 Description: The Early-Warning-Signals Toolbox provides methods for estimating
-    statistical changes in timeseries that can be used for identifying nearby
+    statistical changes in time series that can be used for identifying nearby
     critical transitions. 
 Depends:
     R (>= 3.0.2),
