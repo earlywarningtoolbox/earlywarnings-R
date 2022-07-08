@@ -1,7 +1,7 @@
 ---
 title: "earlywarnings vignette"
 author: "Vasilis Dakos and Leo Lahti"
-date: "2015-07-06"
+date: "2022-07-08"
 output:
   html_document:
     toc: true
@@ -76,7 +76,7 @@ p <- PlotPotential(res$res, title = '',
 print(p)
 ```
 
-![plot of chunk movpotential](figure/movpotential-1.png) 
+![plot of chunk movpotential](figure/movpotential-1.png)
 
 
 ### Licensing and Citations
@@ -92,7 +92,24 @@ citation("earlywarnings")
 ```
 
 ```
-## Error in tools:::.parse_CITATION_file(file, meta$Encoding): non-ASCII input in a CITATION file without a declared encoding
+## Warning in person1(given = given[[i]], family = family[[i]], middle =
+## middle[[i]], : It is recommended to use 'family' instead of 'last'.
+
+## Warning in person1(given = given[[i]], family = family[[i]], middle =
+## middle[[i]], : It is recommended to use 'family' instead of 'last'.
+```
+
+```
+## 
+## To cite earlywarnings in publications use:
+## 
+## 
+## 
+## 
+## 
+## To see these entries in BibTeX format, use 'print(<citation>,
+## bibtex=TRUE)', 'toBibtex(.)', or set
+## 'options(citation.bibtex.max=999)'.
 ```
 
 ### Session info
@@ -105,9 +122,13 @@ sessionInfo()
 ```
 
 ```
-## R version 3.2.1 (2015-06-18)
-## Platform: x86_64-unknown-linux-gnu (64-bit)
-## Running under: Ubuntu 15.04
+## R version 4.2.0 (2022-04-22)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 22.04 LTS
+## 
+## Matrix products: default
+## BLAS:   /home/xxx/bin/R-4.2.0/lib/libRblas.so
+## LAPACK: /home/xxx/bin/R-4.2.0/lib/libRlapack.so
 ## 
 ## locale:
 ##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -121,23 +142,26 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] earlywarnings_1.1.22 tseries_0.10-34      tgp_2.4-11          
-## [4] moments_0.14         ggplot2_1.0.1        knitr_1.10.5        
-## [7] scimapClient_0.2.1  
+## [1] earlywarnings_1.1.28 tseries_0.10-51      tgp_2.4-18          
+## [4] moments_0.14.1       ggplot2_3.3.6       
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.11.6        cluster_2.0.2      magrittr_1.5      
-##  [4] maps_2.3-9         MASS_7.3-41        nortest_1.0-3     
-##  [7] Kendall_2.2        munsell_0.4.2      som_0.3-5         
-## [10] colorspace_1.2-6   lattice_0.20-31    quadprog_1.5-5    
-## [13] stringr_1.0.0      plyr_1.8.3         fields_8.2-1      
-## [16] tools_3.2.1        grid_3.2.1         spam_1.0-1        
-## [19] gtable_0.1.2       KernSmooth_2.23-14 lmtest_0.9-34     
-## [22] digest_0.6.8       RJSONIO_1.3-0      reshape2_1.4.1    
-## [25] formatR_1.2        rpart_4.1-9        evaluate_0.7      
-## [28] maptree_1.4-7      labeling_0.3       stringi_0.5-5     
-## [31] scales_0.2.5       boot_1.3-16        proto_0.3-10      
-## [34] zoo_1.7-12
+##  [1] spam_2.8-0         zoo_1.8-10         tidyselect_1.1.2   nortest_1.0-4     
+##  [5] xfun_0.31          maptree_1.4-8      purrr_0.3.4        lattice_0.20-45   
+##  [9] colorspace_2.0-3   vctrs_0.4.1        generics_0.1.2     viridisLite_0.4.0 
+## [13] utf8_1.2.2         rlang_1.0.2        isoband_0.2.5      pillar_1.7.0      
+## [17] glue_1.6.2         withr_2.5.0        DBI_1.1.3          TTR_0.24.3        
+## [21] lifecycle_1.0.1    quantmod_0.4.20    stringr_1.4.0      fields_13.3       
+## [25] dotCall64_1.0-1    munsell_0.5.0      gtable_0.3.0       evaluate_0.15     
+## [29] labeling_0.4.2     knitr_1.39         lmtest_0.9-40      curl_4.3.2        
+## [33] fansi_1.0.3        highr_0.9          xts_0.12.1         KernSmooth_2.23-20
+## [37] scales_1.2.0       som_0.3-5.1        farver_2.1.0       gridExtra_2.3     
+## [41] Kendall_2.2.1      digest_0.6.29      stringi_1.7.6      dplyr_1.0.9       
+## [45] grid_4.2.0         quadprog_1.5-8     cli_3.3.0          tools_4.2.0       
+## [49] magrittr_2.0.3     maps_3.4.0         tibble_3.1.7       cluster_2.1.3     
+## [53] crayon_1.5.1       pkgconfig_2.0.3    ellipsis_0.3.2     assertthat_0.2.1  
+## [57] viridis_0.6.2      R6_2.5.1           rpart_4.1.16       boot_1.3-28       
+## [61] compiler_4.2.0
 ```
 
 
