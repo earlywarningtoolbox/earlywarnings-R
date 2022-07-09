@@ -36,6 +36,7 @@ Imports:
     som,
     spam,
     stats
+VignetteBuilder: knitr
 LazyLoad: yes
 Encoding: UTF-8
 URL: http://www.early-warning-signals.org, http://www.vasilisdakos.info
