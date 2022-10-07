@@ -35,7 +35,8 @@ Imports:
     lmtest,
     som,
     spam,
-    stats
+    stats,
+    knitr
 VignetteBuilder: knitr
 LazyLoad: yes
 Encoding: UTF-8

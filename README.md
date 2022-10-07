@@ -2,7 +2,7 @@
 
 This repository contains the development version of the Early Warning
 Signals for Critical Transitions CRAN R package. For installation and
-usage examples, see the [vignette](vignettes/vignette.md). The main
+usage examples, see the [vignette](vignettes/vignette.Rmd). The main
 authors are Vasilis Dakos and Leo Lahti.
 
 The Early-Warning-Signals Toolbox provides methods for estimating

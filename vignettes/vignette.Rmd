@@ -25,7 +25,7 @@ earlywarnings R package
 
 ### Installing and loading the release version
 
-Note: if dependencies are missing you may wish to run the [../installation.script](installation.script) first
+<!-- Note: if dependencies are missing you may wish to run the [../installation.script](installation.script) first -->
 
 ```{r install, eval=FALSE}
 install.packages("earlywarnings")
@@ -54,7 +54,7 @@ library(earlywarnings)
 
 ## Potential analysis
 
-Potential analysis, used for instance in [Hirota et al. Science, 334, 232-235.](http://www.sciencemag.org/content/334/6053/232.long)
+Potential analysis, used for instance in [Hirota et al. Science, 334, 232-235.](https://www.science.org/doi/full/10.1126/science.1210657)
 
 ```{r movpotential, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 # Create simulated example data
@@ -78,7 +78,8 @@ print(p)
 This work can be freely used, modified and distributed under the 
 [Two-clause (Free)BSD license](http://en.wikipedia.org/wiki/BSD\_licenses).
 
-Kindly cite the work as 'Vasilis Dakos and Leo Lahti (2014). earlywarnings R package. URL: https://github.com/earlywarningtoolbox/earlywarnings-R/tree/master/earlywarnings'.
+Kindly cite the work as 'Vasilis Dakos and Leo Lahti (2014). earlywarnings R package. URL: https://github.com/earlywarningtoolbox/earlywarnings-R'.
+
 
 ```{r citation}
 citation("earlywarnings")
