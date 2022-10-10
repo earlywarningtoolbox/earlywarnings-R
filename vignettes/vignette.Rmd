@@ -54,7 +54,7 @@ library(earlywarnings)
 
 ## Potential analysis
 
-Potential analysis, used for instance in [Hirota et al. Science, 334, 232-235.](https://www.science.org/doi/full/10.1126/science.1210657)
+ Potential analysis, used for instance in [Hirota et al. Science, 2011, 334, 232-235.]<!--(https://www.science.org/doi/full/10.1126/science.1210657) -->
 
 ```{r movpotential, message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 # Create simulated example data
