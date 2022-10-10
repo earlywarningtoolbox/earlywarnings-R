@@ -2,7 +2,7 @@ Package: earlywarnings
 Type: Package
 Title: Early Warning Signals for Critical Transitions in Time Series
 Version: 1.1.29
-Date: 2022-07-08
+Date: 2022-10-10
 Authors@R: c(
         person(given = "Vasilis", 
            family = "Dakos", 
