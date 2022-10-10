@@ -76,7 +76,7 @@ print(p)
 ### Licensing and Citations
 
 This work can be freely used, modified and distributed under the 
-[Two-clause (Free)BSD license](http://en.wikipedia.org/wiki/BSD\_licenses).
+[Two-clause (Free)BSD license](https://en.wikipedia.org/wiki/BSD\_licenses).
 
 Kindly cite the work as 'Vasilis Dakos and Leo Lahti (2014). earlywarnings R package. URL: https://github.com/earlywarningtoolbox/earlywarnings-R'.
 
